@@ -1,0 +1,202 @@
+theory Seplog
+
+(* extensionnal polymorphic equality *)
+predicate (==) (x y: 'a)
+axiom refl: forall x: 'a. x == x
+axiom sym: forall x y: 'a. x == y -> y == x
+axiom trans: forall x y z: 'a. x == y -> y == z -> x == z
+(* declared equivalent to intentionnal one *)
+axiom ext: forall x y: 'a. x == y <-> x = y
+
+(* we need real set *)
+
+type set 'a
+constant empty_set: set 'a
+function add (x: 'a) (s: set 'a) : set 'a
+
+predicate mem (x: 'a) (s: set 'a)
+
+axiom mem_empty_set: forall x: 'a. not (mem x empty_set)
+axiom mem_add_ax1: forall s: set 'a. forall x x': 'a. mem x (add x' s) <-> x = x' \/ mem x s
+
+axiom set_eq: forall s1 s2: set 'a. (forall x: 'a. mem x s1 <-> mem x s2) -> s1 == s2
+
+lemma add_comm_eq: forall s: set 'a. forall x x': 'a. (add x (add x' s)) == (add x' (add x s))
+lemma add_comm: forall s: set 'a. forall x x': 'a. (add x (add x' s)) = (add x' (add x s))
+
+function inter (s1 s2: set 'a): set 'a
+axiom mem_inter: forall s1 s2: set 'a. forall x: 'a. (mem x s1 /\ mem x s2) <-> mem x (inter s1 s2)
+lemma inter_empty_set_eq: forall s: set 'a. inter empty_set s == empty_set
+lemma inter_empty_set: forall s: set 'a. inter empty_set s = empty_set
+lemma inter_comm_eq: forall s1 s2: set 'a. inter s1 s2 == inter s2 s1
+lemma inter_comm: forall s1 s2: set 'a. inter s1 s2 = inter s2 s1
+lemma inter_assoc_eq: forall s1 s2 s3: set 'a. inter (inter s1 s2) s3 == inter s1 (inter s2 s3)
+lemma inter_assoc: forall s1 s2 s3: set 'a. inter (inter s1 s2) s3 = inter s1 (inter s2 s3)
+
+function union (s1 s2: set 'a): set 'a
+axiom mem_union: forall s1 s2: set 'a. forall x: 'a. (mem x s1 \/ mem x s2) <-> mem x (union s1 s2)
+lemma union_empty_set_eq: forall s: set 'a. union empty_set s == s
+lemma union_empty_set: forall s: set 'a. union empty_set s = s
+lemma union_comm_eq: forall s1 s2: set 'a. union s1 s2 == union s2 s1
+lemma union_comm: forall s1 s2: set 'a. union s1 s2 = union s2 s1
+lemma union_assoc_eq: forall s1 s2 s3: set 'a. union (union s1 s2) s3 == union s1 (union s2 s3)
+lemma union_assoc: forall s1 s2 s3: set 'a. union (union s1 s2) s3 = union s1 (union s2 s3)
+lemma union_is_empty_eq: forall s1 s2: set 'a. union s1 s2 == empty_set <-> s1 == empty_set /\ s2 == empty_set
+lemma union_is_empty: forall s1 s2: set 'a. union s1 s2 = empty_set <-> s1 = empty_set /\ s2 = empty_set
+
+lemma inter_union_distrib_eq: forall s1 s2 s3: set 'a. inter s1 (union s2 s3) == union (inter s1 s2) (inter s1 s3)
+lemma inter_union_distrib: forall s1 s2 s3: set 'a. inter s1 (union s2 s3) = union (inter s1 s2) (inter s1 s3)
+
+function singleton (x: 'a) : set 'a = add x empty_set
+
+function diff (s1 s2: set 'a): set 'a
+axiom mem_diff: forall s1 s2: set 'a. forall x: 'a. (mem x s1 /\ not (mem x s2)) <-> mem x (diff s1 s2)
+lemma diff_inter_eq: forall s1 s2: set 'a. diff s1 s2 == diff s1 (inter s1 s2)
+lemma diff_inter: forall s1 s2: set 'a. diff s1 s2 = diff s1 (inter s1 s2)
+lemma diff_empty_l_eq: forall s: set 'a. diff empty_set s == empty_set
+lemma diff_empty_l: forall s: set 'a. diff empty_set s = empty_set
+lemma diff_empty_r_eq: forall s: set 'a. diff s empty_set == s
+lemma diff_empty_r: forall s: set 'a. diff s empty_set = s
+lemma diff_empty_eq: forall s: set 'a. diff s s == empty_set
+lemma diff_empty: forall s: set 'a. diff s s = empty_set
+
+predicate include (s1 s2: set 'a) = forall x: 'a. mem x s1 -> mem x s2
+lemma include_self: forall s: set 'a. include s s
+lemma include_symm_eq: forall s1 s2: set 'a. (include s1 s2 /\ include s2 s1) <-> s1 == s2
+lemma include_symm: forall s1 s2: set 'a. (include s1 s2 /\ include s2 s1) <-> s1 = s2
+lemma include_inter: forall s1 s2: set 'a. include (inter s1 s2) s1
+lemma include_union: forall s1 s2: set 'a. include s1 (union s1 s2)
+lemma include_diff: forall s1 s2: set 'a. include (diff s1 s2) s1 
+
+predicate is_sigma_alg (s': set (set 'a)) (s: set 'a) =
+	  mem s s' /\
+	  (forall x x': set 'a. (mem x s' /\ mem x' s') -> mem (union x x') s') /\
+	  (forall x: set 'a. mem x s' -> mem (diff s x) s')
+
+(* we need real map *)
+
+type map 'a 'b
+constant empty_map: map 'a 'b
+function ([<-]) (m: map 'a 'b) (x: 'a) (y: 'b): map 'a 'b
+
+use import option.Option
+
+function ([]) (m: map 'a 'b) (x: 'a) : option 'b
+axiom get_ax1: forall x:'a. (empty_map: map 'a 'b)[x] = None
+axiom get_ax2: forall m: map 'a 'b. forall x: 'a. forall y: 'b. forall x': 'a.
+      	       	      x = x' -> (m[x <- y])[x'] = Some y
+axiom get_ax3: forall m: map 'a 'b. forall x: 'a. forall y: 'b. forall x': 'a.
+      	       	      x <> x' -> (m[x <- y])[x'] = m[x']
+axiom map_eq: forall m1 m2: map 'a 'b. (forall x: 'a. m1[x] = m2[x]) -> m1 == m2
+
+lemma map_set_comm_eq: forall m: map 'a 'b. forall x x': 'a. forall y y': 'b.
+      		    	   x <> x' -> m[x <- y][x' <- y'] == m[x' <- y'][x <- y]
+lemma map_set_comm: forall m: map 'a 'b. forall x x': 'a. forall y y': 'b.
+      		    	   x <> x' -> m[x <- y][x' <- y'] = m[x' <- y'][x <- y]
+lemma map_set_contrac_eq: forall m: map 'a 'b. forall x x': 'a. forall y y': 'b.
+      		    	   x = x' -> m[x <- y][x' <- y'] == m[x' <- y']
+lemma map_set_contrac: forall m: map 'a 'b. forall x x': 'a. forall y y': 'b.
+      		    	   x = x' -> m[x <- y][x' <- y'] = m[x' <- y']
+
+function domain (m: map 'a 'b) : set 'a
+axiom domain_empty_map: domain (empty_map: map 'a 'b) = empty_set
+axiom domain_set: forall m: map 'a 'b. forall x: 'a. forall y: 'b. domain m[x <- y] = add x (domain m)
+axiom domain_get_ax1: forall m: map 'a 'b. forall x: 'a. mem x (domain m) -> exists y: 'b. m[x] = Some y
+axiom domain_get_ax2: forall m: map 'a 'b. forall x: 'a. not (mem x (domain m)) -> m[x] = None
+
+predicate disjoint (m1 m2: map 'a 'b) = inter (domain m1) (domain m2) = empty_set
+lemma disjoint_alt: forall m1 m2: map 'a 'b. disjoint m1 m2 <-> inter (domain m1) (domain m2) == empty_set
+lemma disjoint_comm: forall m1 m2: map 'a 'b. disjoint m1 m2 -> disjoint m2 m1
+
+function merge (m1 m2: map 'a 'b) : map 'a 'b
+axiom merge_ax1: forall m1 m2: map 'a 'b. forall x: 'a. mem x (domain m1) -> (merge m1 m2)[x] = m1[x]
+axiom merge_ax2: forall m1 m2: map 'a 'b. forall x: 'a. not (mem x (domain m1)) -> (merge m1 m2)[x] = m2[x]
+lemma merge_domain_mem: forall m1 m2: map 'a 'b. forall x: 'a. mem x (domain (merge m1 m2)) <-> mem x (union (domain m1) (domain m2))
+lemma merge_domain_eq: forall m1 m2: map 'a 'b. domain (merge m1 m2) == union (domain m1) (domain m2)
+lemma merge_domain: forall m1 m2: map 'a 'b. domain (merge m1 m2) = union (domain m1) (domain m2)
+lemma merge_comm_eq: forall m1 m2: map 'a 'b. disjoint m1 m2 -> merge m1 m2 == merge m2 m1
+lemma merge_comm: forall m1 m2: map 'a 'b. disjoint m1 m2 -> merge m1 m2 = merge m2 m1
+lemma merge_assoc_eq: forall m1 m2 m3: map 'a 'b. merge (merge m1 m2) m3 == merge m1 (merge m2 m3)
+lemma merge_assoc: forall m1 m2 m3: map 'a 'b. merge (merge m1 m2) m3 = merge m1 (merge m2 m3)
+lemma merge_empty_map_eq: forall m: map 'a 'b. merge m empty_map == m
+lemma merge_empty_map: forall m: map 'a 'b. merge m empty_map = m
+
+lemma merge_disjoint: forall m m1 m2: map 'a 'b. disjoint m (merge m1 m2) <-> (disjoint m m1 /\ disjoint m m2)
+
+(* seplog *)
+
+type address
+type value
+type memory = map address value
+
+type _assert
+predicate holds (m: memory) (p: _assert)
+
+predicate impl (a1 a2: _assert) = forall m: memory. holds m a1 -> holds m a2
+predicate equiv (a1 a2: _assert) = forall m: memory. holds m a1 <-> holds m a2
+
+constant emp: _assert
+axiom emp_holds: forall m: memory. holds m emp <-> m = empty_map
+lemma emp_holds_eq: forall m: memory. holds m emp <-> m == empty_map
+
+function mapsto (a: address) (v: value): _assert
+axiom mapsto_holds: forall m: memory. forall a: address. forall v: value. holds m (mapsto a v) <-> (m = empty_map[a <- v])
+lemma mapsto_holds_eq: forall m: memory. forall a: address. forall v: value. holds m (mapsto a v) <-> (m == empty_map[a <- v])
+lemma mapsto_holds_elt: forall m: memory. forall a: address. forall v: value. holds m (mapsto a v) <-> (domain m = singleton a /\ m[a] = Some v)
+
+function sepcon (a1 a2: _assert): _assert
+axiom sepcon_holds: forall m: memory. forall a1 a2: _assert.
+      		      holds m (sepcon a1 a2) <-> (exists m1 m2: memory. disjoint m1 m2 /\ merge m1 m2 = m /\ holds m1 a1 /\ holds m2 a2)
+lemma sepcon_holds_eq: forall m: memory. forall a1 a2: _assert.
+      		      holds m (sepcon a1 a2) <-> (exists m1 m2: memory. disjoint m1 m2 /\ merge m1 m2 == m /\ holds m1 a1 /\ holds m2 a2)
+
+(* intermediaite lemma *)
+lemma sepcon_emp_int: forall a1: _assert. forall m: memory. holds m a1 -> disjoint m empty_map /\ merge m empty_map == m /\ holds m a1 /\ holds empty_map emp
+lemma sepcon_emp: forall a1: _assert. equiv (sepcon a1 emp) a1
+
+lemma sepcon_comm: forall a1 a2: _assert. equiv (sepcon a1 a2) (sepcon a2 a1)
+
+(* need Coq for solving exists in goal *)
+(*lemma sepcon_assoc_int: forall a1 a2 a3: _assert. *)
+lemma sepcon_assoc: forall a1 a2 a3: _assert. equiv (sepcon (sepcon a1 a2) a3) (sepcon a1 (sepcon a2 a3))
+
+lemma monotony: forall a1 b1 a2 b2: _assert. impl a1 b1 -> impl a2 b2 -> impl (sepcon a1 a2) (sepcon b1 b2)
+
+function sepimp (a1 a2: _assert): _assert
+axiom sepimp_holds: forall m: memory. forall a1 a2: _assert.
+      		      holds m (sepimp a1 a2) <-> (forall m': memory. (holds m' a1 /\ disjoint m' m) -> holds (merge m m') a2)
+lemma modus_ponens: forall a1 a2: _assert. impl (sepcon a1 (sepimp a1 a2)) a2
+
+(* attempt for recursive predicate ... ba ca marche pas, etonnant non? *)
+
+use import list.Append
+
+function list_header (v: value) (a: address) : value
+
+inductive list_holds (start stop: address) (l: list value) (m: memory) =
+| empty: forall start stop: address. forall m: memory. forall l: list value.
+  	   start = stop ->
+	   m = empty_map ->
+	   l = Nil ->
+	   list_holds start stop l m
+| non_empty: forall start stop: address. forall m: memory. forall l: list value.
+  	     	start <> stop ->
+		forall hd: value. forall tl: list value.
+		       l = Cons hd tl ->
+		       forall m1 m2: memory.
+		       	      disjoint m1 m2 /\ merge m1 m2 = m ->
+			      forall next: address.
+			      	     holds m1 (mapsto start (list_header hd next)) ->
+				     list_holds next stop tl m2 ->
+	     	list_holds start stop l m
+
+(* need some induction for that *)
+axiom list_holds_trans: forall m1 m2: memory. disjoint m1 m2 ->
+      			       forall l1 l2: list value.
+			       forall a1 a2 a3: address.
+			       list_holds a1 a2 l1 m1 ->
+			       list_holds a2 a3 l2 m2 ->
+			       list_holds a1 a3 (l1 ++ l2) (merge m1 m2)
+
+
+end
