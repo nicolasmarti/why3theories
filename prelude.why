@@ -152,7 +152,7 @@ type bitv
 function ([]) bitv int : bool
 function ([<-]) bitv int bool : bitv
 
-axiom bitv_eq: forall b1 b2: bitv. (forall x: int. b1[x] = b2[x]) <-> b1 == b2
+axiom bitv_eq: forall b1 b2: bitv. (forall x: int. (0 <= x /\ x < size) -> b1[x] = b2[x]) <-> b1 == b2
 
 axiom set_out_of_bound: forall bv: bitv. forall i: int. forall b: bool. (i < 0 \/ size <= i) -> bv[i <- b] = bv
 axiom set_diff: forall bv: bitv. forall x1 x2: int. forall b1 b2: bool. x1 <> x2 -> bv[x1 <- b1][x2 <- b2] = bv[x2 <- b2][x1 <- b1]

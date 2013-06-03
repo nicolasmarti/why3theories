@@ -1,72 +1,10 @@
 
-theory BitV
-
-use map.Map
-use import Bool
-use import bool.Bool
-use import int.Int
-use import int.Power
-
-constant size: int
-
-axiom size_lb: size > 0
-
-type bitv = Map.map int bool
-
-function ([]) bitv int : bool
-function ([<-]) bitv int bool : bitv
-
-constant zeros: bitv
-axiom zeros_get: forall i: int. (0 <= i /\ i < size) -> zeros[i] = False
-
-
-constant ones: bitv
-axiom ones: forall i: int. (0 <= i /\ i < size) -> ones[i] = True
-
-function all (b: bool) : bitv
-axiom all: forall b: bool. forall i: int. (0 <= i /\ i < size) -> (all b)[i] = b
-
-
-axiom equality: forall i: int. forall a b: bitv. a[i] = b[i] <-> a = b
- 
-axiom get_out_of_bound: forall bv: bitv. forall i: int. (i < 0 \/ size <= i) -> bv[i] = False
-axiom get_in_bound: forall bv: bitv. forall i: int. (0 <= i /\ i < size) -> bv[i] = Map.([]) bv i
-
-axiom set_out_of_bound: forall bv: bitv. forall i: int. forall b: bool. (i < 0 \/ size <= i) -> bv[i <- b] = bv
-axiom set_in_bound: forall bv: bitv. forall i: int. forall b: bool. (0 <= i /\ i < size) -> bv[i <- b] = Map.([<-]) bv i b
-
-function notbv (b: bitv): bitv 
-axiom notbv_ax: forall b: bitv. forall x: int. (0 <= x /\ x < size) -> (notbv b)[x] = notb b[x]
-
-function andbv (b1 b2: bitv): bitv
-axiom andbv_ax: forall b1 b2: bitv. forall x: int. (0 <= x /\ x < size) -> (andbv b1 b2)[x] = andb b1[x] b2[x]
-
-function orbv (b1 b2: bitv): bitv
-axiom orbv_ax: forall b1 b2: bitv. forall x: int. (0 <= x /\ x < size) -> (orbv b1 b2)[x] = orb b1[x] b2[x]
-
-function to_uint (b: bitv) : int
-axiom bit2uint_zeros: to_uint zeros = 0
-axiom bit2uint_set: forall b: bitv. forall x: int. (0 <= x /\ x < size) -> b[x] = True -> to_uint b = to_uint b[x <- False] + power 2 x
-
-function incr (b: bitv): bitv
-axiom incr_lwb:  forall b: bitv. (incr b)[0] = xorb b[0] True
-axiom incr_nb: forall b: bitv. forall x: int. (0 < x /\ x < size) -> (incr b)[x] = xorb b[x] (andb b[x-1] (notb (incr b)[x-1]))
-
-lemma incr_add_1: forall b: bitv. b <> ones -> to_uint (incr b) = to_uint b + 1
-
-function to_sint (b: bitv) : int
-axiom bit2sint_pos: forall b: bitv. b[size - 1] = False -> to_sint b = to_uint b
-axiom bit2sint_neg: forall b: bitv. b <> ones -> b[size - 1] = True -> to_sint b = - to_uint (incr (notbv b))
- 
-
-
-end
-
 theory Bit16
+
 
 constant size16: int = 16
 
-clone export BitV with constant size = size16
+clone export prelude.BitV with constant size = size16
 
 end
 
@@ -122,7 +60,7 @@ theory Bit8
 
 constant size8: int = 8
 
-clone export BitV with constant size = size8
+clone export prelude.BitV with constant size = size8
 
 end
 
@@ -130,7 +68,7 @@ theory Bit2
 
 constant size2: int = 2
 
-clone export BitV with constant size = size2
+clone export prelude.BitV with constant size = size2
 
 end
 
@@ -138,7 +76,7 @@ theory Bit3
 
 constant size3: int = 3
 
-clone export BitV with constant size = size3
+clone export prelude.BitV with constant size = size3
 
 end
 
@@ -199,23 +137,27 @@ lemma dmux_gate_correct: forall in_ sel: bool. dmux_gate in_ sel = dmuxb in_ sel
 
 use import Bit16
 
+
 clone Bit16Map as Bit16Not with function f = not_gate
 
+use import prelude.Equiv
+
 function not16_gate (a : Bit16.bitv) : Bit16.bitv = Bit16Not.map a
-lemma not16_gate_correct: forall a: Bit16.bitv. (not16_gate a) = notbv a
+lemma not16_gate_correct_equiv: forall a: Bit16.bitv. not16_gate a == notbv a
+lemma not16_gate_correct: forall a: Bit16.bitv. not16_gate a = notbv a
 
 
 clone Bit16Map2 as Bit16And with function f = and_gate
 
 function and16_gate (a b: Bit16.bitv) : Bit16.bitv = Bit16And.map2 a b
-
+lemma and16_gate_correct_equiv: forall a b: Bit16.bitv. and16_gate a b == andbv a b
 lemma and16_gate_correct: forall a b: Bit16.bitv. and16_gate a b = andbv a b 
 
 
 clone Bit16Map2 as Bit16Or with function f = or_gate
 
 function or16_gate (a b: Bit16.bitv) : Bit16.bitv = Bit16Or.map2 a b
-
+lemma or16_gate_correct_equiv: forall a b: Bit16.bitv. or16_gate a b == orbv a b
 lemma or16_gate_correct: forall a b: Bit16.bitv. or16_gate a b = orbv a b 
 
 function mux16b (a b: Bit16.bitv) (sel: bool) : Bit16.bitv =
@@ -227,9 +169,11 @@ function mux16b (a b: Bit16.bitv) (sel: bool) : Bit16.bitv =
 clone Bit16Map3 as Bit16Mux with function f = mux_gate
 
 function mux16_gate (a b: Bit16.bitv) (sel: bool): Bit16.bitv = Bit16Mux.map3 a b (all sel)
+lemma mux16_gate_correct_equiv: forall sel: bool. forall a b: Bit16.bitv. mux16_gate a b sel == mux16b a b sel
 lemma mux16_gate_correct: forall sel: bool. forall a b: Bit16.bitv. mux16_gate a b sel = mux16b a b sel
 
-use Bit8
+use import Bit8
+
 
 function or8way_gate (bv: Bit8.bitv) : bool =
 	 let x1 = or_gate bv[0] bv[1] in
@@ -243,6 +187,7 @@ function or8way_gate (bv: Bit8.bitv) : bool =
 lemma or8way_gate_correct : forall bv: Bit8.bitv.
       or8way_gate bv = orb bv[0] (orb bv[1] (orb bv[2] (orb bv[3] (orb bv[4] (orb bv[5] (orb bv[6] bv[7]))))))
 
+(*
 use Bit2
 
 
@@ -314,9 +259,11 @@ lemma demux8way_gate_correct: forall in_: bool. forall sel: Bit3.bitv.
       		      ((sel[0] = True /\ sel[1] = False /\ sel[2] = True) -> dmux8way_gate in_ sel = (False, False, False, False, False, in_, False, False)) /\
       		      ((sel[0] = True /\ sel[1] = True /\ sel[2] = False) -> dmux8way_gate in_ sel = (False, False, False, False, False, False, in_, False)) /\
       		      ((sel[0] = True /\ sel[1] = True /\ sel[2] = True) -> dmux8way_gate in_ sel = (False, False, False, False, False, False, False, in_))
- 
+
+*) 
 end
 
+(*
 theory Bit1
 constant size1: int = 1
 clone export BitV with constant size = size1
@@ -392,6 +339,9 @@ function add16 (b1 b2: Bit16.bitv) : Bit17.bitv =
 lemma add16_correct: forall b1 b2: Bit16.bitv.
       			 Bit17.to_uint (add16 b1 b2) = Bit16.to_uint b1 + Bit16.to_uint b2
 
+lemma add16_correct2: forall b1 b2: Bit16.bitv.
+      			 Bit17.to_sint (add16 b1 b2) = Bit16.to_sint b1 + Bit16.to_sint b2
+
 
 function incr16 (b1: Bit16.bitv) : Bit17.bitv =
 	 add16 b1 (Bit16.zeros[0 <- True])
@@ -400,3 +350,4 @@ lemma incr16_correct: forall b1: Bit16.bitv.
       			 Bit17.to_uint (incr16 b1) = Bit16.to_uint b1 + 1
 
 end
+*)
