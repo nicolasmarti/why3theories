@@ -1,0 +1,858 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.95"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="2"
+  name="Z3"
+  version="4.3.1"/>
+ <file
+  name="../prelude.why"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Equiv"
+   locfile="../prelude.why"
+   loclnum="1" loccnumb="7" loccnume="12"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Set"
+   locfile="../prelude.why"
+   loclnum="13" loccnumb="7" loccnume="10"
+   verified="true"
+   expanded="false">
+   <goal
+    name="add_comm_eq"
+    locfile="../prelude.why"
+    loclnum="28" loccnumb="6" loccnume="17"
+    sum="79aef78370977002dccfa66336c83a84"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==aaddV1aaddV2V0aaddV2aaddV1V0FF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="add_comm"
+    locfile="../prelude.why"
+    loclnum="29" loccnumb="6" loccnume="14"
+    sum="efcfd40a538d2cf39e1456d9bf08cfc8"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aaddV1aaddV2V0aaddV2aaddV1V0FF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_empty_set_eq"
+    locfile="../prelude.why"
+    loclnum="33" loccnumb="6" loccnume="24"
+    sum="9d42be04365e7b478407a522e6fbcd2d"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==ainteraempty_setV0aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_empty_set"
+    locfile="../prelude.why"
+    loclnum="34" loccnumb="6" loccnume="21"
+    sum="a2424a585d1091b5b0fe1f7c11538c66"
+    proved="true"
+    expanded="false"
+    shape="ainfix =ainteraempty_setV0aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_comm_eq"
+    locfile="../prelude.why"
+    loclnum="35" loccnumb="6" loccnume="19"
+    sum="9b5a106d38e43489abf229bf3c36c9c9"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==ainterV0V1ainterV1V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_comm"
+    locfile="../prelude.why"
+    loclnum="36" loccnumb="6" loccnume="16"
+    sum="7b4634280e419e784167d4cfadd7fb64"
+    proved="true"
+    expanded="false"
+    shape="ainfix =ainterV0V1ainterV1V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_assoc_eq"
+    locfile="../prelude.why"
+    loclnum="37" loccnumb="6" loccnume="20"
+    sum="54d23a719bade40fcf42f1850ff07500"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==ainterainterV0V1V2ainterV0ainterV1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_assoc"
+    locfile="../prelude.why"
+    loclnum="38" loccnumb="6" loccnume="17"
+    sum="230ef0928c21a8fbc90a005f9ec570c7"
+    proved="true"
+    expanded="false"
+    shape="ainfix =ainterainterV0V1V2ainterV0ainterV1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_empty_set_eq"
+    locfile="../prelude.why"
+    loclnum="42" loccnumb="6" loccnume="24"
+    sum="fd355acbe6fb06abe32b46f59c62b63a"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==aunionaempty_setV0V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_empty_set"
+    locfile="../prelude.why"
+    loclnum="43" loccnumb="6" loccnume="21"
+    sum="cf8ba5b88f7f7dc45bc3e94a1f2834ce"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aunionaempty_setV0V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_comm_eq"
+    locfile="../prelude.why"
+    loclnum="44" loccnumb="6" loccnume="19"
+    sum="e6498c5b177c77f5623859dbe6e35e6c"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==aunionV0V1aunionV1V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_comm"
+    locfile="../prelude.why"
+    loclnum="45" loccnumb="6" loccnume="16"
+    sum="43841c0804310e13dbc9cf7378379446"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aunionV0V1aunionV1V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_assoc_eq"
+    locfile="../prelude.why"
+    loclnum="46" loccnumb="6" loccnume="20"
+    sum="dc4c243e60afbbc1baaea3d5e82a1480"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==aunionaunionV0V1V2aunionV0aunionV1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_assoc"
+    locfile="../prelude.why"
+    loclnum="47" loccnumb="6" loccnume="17"
+    sum="8fe4e9ddccb34c787b2b9a7ca69379fe"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aunionaunionV0V1V2aunionV0aunionV1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_is_empty_eq"
+    locfile="../prelude.why"
+    loclnum="48" loccnumb="6" loccnume="23"
+    sum="87b29837cdd3da94320ae8ab0551c9fa"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==V1aempty_setAainfix ==V0aempty_setqainfix ==aunionV0V1aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.19"/>
+    </proof>
+   </goal>
+   <goal
+    name="union_is_empty"
+    locfile="../prelude.why"
+    loclnum="49" loccnumb="6" loccnume="20"
+    sum="8a235030ad99014567f5aca376138be4"
+    proved="true"
+    expanded="false"
+    shape="ainfix =V1aempty_setAainfix =V0aempty_setqainfix =aunionV0V1aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_union_distrib_eq"
+    locfile="../prelude.why"
+    loclnum="51" loccnumb="6" loccnume="28"
+    sum="f8c359315a642a83ed224c6d36edb526"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==ainterV0aunionV1V2aunionainterV0V1ainterV0V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="3.51"/>
+    </proof>
+   </goal>
+   <goal
+    name="inter_union_distrib"
+    locfile="../prelude.why"
+    loclnum="52" loccnumb="6" loccnume="25"
+    sum="0517ca0b2df2ac523fa9632973f0755a"
+    proved="true"
+    expanded="false"
+    shape="ainfix =ainterV0aunionV1V2aunionainterV0V1ainterV0V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_inter_eq"
+    locfile="../prelude.why"
+    loclnum="58" loccnumb="6" loccnume="19"
+    sum="e5dcf0c521924851c2a5d4a30d5c7e7a"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==adiffV0V1adiffV0ainterV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_inter"
+    locfile="../prelude.why"
+    loclnum="59" loccnumb="6" loccnume="16"
+    sum="a2a815f58673546f82f0c9634d1e1a35"
+    proved="true"
+    expanded="false"
+    shape="ainfix =adiffV0V1adiffV0ainterV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_empty_l_eq"
+    locfile="../prelude.why"
+    loclnum="60" loccnumb="6" loccnume="21"
+    sum="c1b378c358691f3a29a49b2115132248"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==adiffaempty_setV0aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_empty_l"
+    locfile="../prelude.why"
+    loclnum="61" loccnumb="6" loccnume="18"
+    sum="3cf5fdeede0b35636f55fb39a66bc9b2"
+    proved="true"
+    expanded="false"
+    shape="ainfix =adiffaempty_setV0aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_empty_r_eq"
+    locfile="../prelude.why"
+    loclnum="62" loccnumb="6" loccnume="21"
+    sum="232e748224f5f2725a30598b204b9235"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==adiffV0aempty_setV0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_empty_r"
+    locfile="../prelude.why"
+    loclnum="63" loccnumb="6" loccnume="18"
+    sum="8a566edd7183c9242662147dbfb318eb"
+    proved="true"
+    expanded="false"
+    shape="ainfix =adiffV0aempty_setV0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_empty_eq"
+    locfile="../prelude.why"
+    loclnum="64" loccnumb="6" loccnume="19"
+    sum="3a4bd8eb01ef1fd9205abf6b2b29de33"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==adiffV0V0aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="diff_empty"
+    locfile="../prelude.why"
+    loclnum="65" loccnumb="6" loccnume="16"
+    sum="4e1e68d28231ae03556e446cf8c76f48"
+    proved="true"
+    expanded="false"
+    shape="ainfix =adiffV0V0aempty_setF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="include_self"
+    locfile="../prelude.why"
+    loclnum="68" loccnumb="6" loccnume="18"
+    sum="2c8ada4f9cba857614401d881f283ed7"
+    proved="true"
+    expanded="false"
+    shape="aincludeV0V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="include_symm_eq"
+    locfile="../prelude.why"
+    loclnum="69" loccnumb="6" loccnume="21"
+    sum="1d0064c25bfacb0b1f7b7a02668e44d3"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==V0V1qaincludeV1V0AaincludeV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="include_symm"
+    locfile="../prelude.why"
+    loclnum="70" loccnumb="6" loccnume="18"
+    sum="73f8d0767e147411ae6203b5d486a61b"
+    proved="true"
+    expanded="false"
+    shape="ainfix =V0V1qaincludeV1V0AaincludeV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="include_inter"
+    locfile="../prelude.why"
+    loclnum="71" loccnumb="6" loccnume="19"
+    sum="c4eed953377c42b8aedf93ed73ce9228"
+    proved="true"
+    expanded="false"
+    shape="aincludeainterV0V1V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="include_union"
+    locfile="../prelude.why"
+    loclnum="72" loccnumb="6" loccnume="19"
+    sum="70ff163618ac1b44b5fa2cc263150cdc"
+    proved="true"
+    expanded="false"
+    shape="aincludeV0aunionV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="include_diff"
+    locfile="../prelude.why"
+    loclnum="73" loccnumb="6" loccnume="18"
+    sum="d3a3de936b081e9a0e4571515dcb6934"
+    proved="true"
+    expanded="false"
+    shape="aincludeadiffV0V1V0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="Map"
+   locfile="../prelude.why"
+   loclnum="82" loccnumb="7" loccnume="10"
+   verified="true"
+   expanded="true">
+   <goal
+    name="map_set_comm_eq"
+    locfile="../prelude.why"
+    loclnum="101" loccnumb="6" loccnume="21"
+    sum="6cdcb65e7cdd6ee17e0d208fe715e7dc"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==amixfix [&lt;-]amixfix [&lt;-]V0V1V3V2V4amixfix [&lt;-]amixfix [&lt;-]V0V2V4V1V3Iainfix =V1V2NFFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="map_set_comm"
+    locfile="../prelude.why"
+    loclnum="103" loccnumb="6" loccnume="18"
+    sum="dd59e733b3ba4ad5ae35c8fa70222a60"
+    proved="true"
+    expanded="false"
+    shape="ainfix =amixfix [&lt;-]amixfix [&lt;-]V0V1V3V2V4amixfix [&lt;-]amixfix [&lt;-]V0V2V4V1V3Iainfix =V1V2NFFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="map_set_contrac_eq"
+    locfile="../prelude.why"
+    loclnum="105" loccnumb="6" loccnume="24"
+    sum="a393d187b46682a0a5cd25b9a1c78a84"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==amixfix [&lt;-]amixfix [&lt;-]V0V1V3V2V4amixfix [&lt;-]V0V2V4Iainfix =V1V2FFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="map_set_contrac"
+    locfile="../prelude.why"
+    loclnum="107" loccnumb="6" loccnume="21"
+    sum="1152723b0df3686d5a463154eaf54225"
+    proved="true"
+    expanded="false"
+    shape="ainfix =amixfix [&lt;-]amixfix [&lt;-]V0V1V3V2V4amixfix [&lt;-]V0V2V4Iainfix =V1V2FFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="disjoint_alt"
+    locfile="../prelude.why"
+    loclnum="117" loccnumb="6" loccnume="18"
+    sum="c848792dd9af29c00ffe6a911a9a9064"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==ainteradomainV0adomainV1aempty_setqadisjointV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="disjoint_comm"
+    locfile="../prelude.why"
+    loclnum="118" loccnumb="6" loccnume="19"
+    sum="322b02a92438fce811c88ecf5cd91dd4"
+    proved="true"
+    expanded="false"
+    shape="adisjointV1V0IadisjointV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_domain_mem"
+    locfile="../prelude.why"
+    loclnum="123" loccnumb="6" loccnume="22"
+    sum="adaee09eedcde257499eded7d91672c5"
+    proved="true"
+    expanded="true"
+    shape="amemV2aunionadomainV0adomainV1qamemV2adomainamergeV0V1FF">
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="1.37"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_domain_eq"
+    locfile="../prelude.why"
+    loclnum="124" loccnumb="6" loccnume="21"
+    sum="5a21d146a2db729d71d13c145548ce55"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==adomainamergeV0V1aunionadomainV0adomainV1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_domain"
+    locfile="../prelude.why"
+    loclnum="125" loccnumb="6" loccnume="18"
+    sum="769363b574ac3b3b65e3dfd9407f5c85"
+    proved="true"
+    expanded="false"
+    shape="ainfix =adomainamergeV0V1aunionadomainV0adomainV1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_comm_eq"
+    locfile="../prelude.why"
+    loclnum="126" loccnumb="6" loccnume="19"
+    sum="ea8b1f53ef708ce5df17eacaa45e446e"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==amergeV0V1amergeV1V0IadisjointV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.20"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_comm"
+    locfile="../prelude.why"
+    loclnum="127" loccnumb="6" loccnume="16"
+    sum="3b6d82f8e384016b30ba86a27c5cb929"
+    proved="true"
+    expanded="false"
+    shape="ainfix =amergeV0V1amergeV1V0IadisjointV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_assoc_eq"
+    locfile="../prelude.why"
+    loclnum="128" loccnumb="6" loccnume="20"
+    sum="efad9ebd3096e1e413329f26e7b3fac9"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==amergeamergeV0V1V2amergeV0amergeV1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="2.16"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_assoc"
+    locfile="../prelude.why"
+    loclnum="129" loccnumb="6" loccnume="17"
+    sum="98f6a344355efe5b1d78b8b18c3249d3"
+    proved="true"
+    expanded="false"
+    shape="ainfix =amergeamergeV0V1V2amergeV0amergeV1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_empty_map_eq"
+    locfile="../prelude.why"
+    loclnum="130" loccnumb="6" loccnume="24"
+    sum="e977a0c2aae6a35d26ee828b3f06d362"
+    proved="true"
+    expanded="false"
+    shape="ainfix ==amergeV0aempty_mapV0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_empty_map"
+    locfile="../prelude.why"
+    loclnum="131" loccnumb="6" loccnume="21"
+    sum="7e1f465fe7969014c9659ddcdb8d8052"
+    proved="true"
+    expanded="false"
+    shape="ainfix =amergeV0aempty_mapV0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="merge_disjoint"
+    locfile="../prelude.why"
+    loclnum="133" loccnumb="6" loccnume="20"
+    sum="f315f8a9fe80765e32deaad500768001"
+    proved="true"
+    expanded="true"
+    shape="adisjointV0V2AadisjointV0V1qadisjointV0amergeV1V2F">
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

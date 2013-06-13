@@ -103,6 +103,10 @@ function or_gate (a b: bool) : bool =
 	 nand_gate x y
 lemma or_gate_correct: forall a b: bool. or_gate a b = orb a b
 
+lemma or_gate_comm: forall a b: bool. or_gate a b = or_gate b a
+
+lemma or_gate_assoc: forall a b c: bool. or_gate (or_gate a b) c = or_gate a (or_gate b c)
+
 function xor_gate (a b: bool) : bool =
 	 let x = nand_gate a b in
 	 let y = nand_gate a x in
@@ -187,8 +191,7 @@ function or8way_gate (bv: Bit8.bitv) : bool =
 lemma or8way_gate_correct : forall bv: Bit8.bitv.
       or8way_gate bv = orb bv[0] (orb bv[1] (orb bv[2] (orb bv[3] (orb bv[4] (orb bv[5] (orb bv[6] bv[7]))))))
 
-(*
-use Bit2
+use import Bit2
 
 
 function mux4way16_gate (a b c d: Bit16.bitv) (sel: Bit2.bitv) : Bit16.bitv =
@@ -203,13 +206,14 @@ lemma mux4way16_gate_correct: forall a b c d: Bit16.bitv. forall sel: Bit2.bitv.
       		      ((sel[0] = True /\ sel[1] = False) -> mux4way16_gate a b c d sel = c) /\
       		      ((sel[0] = True /\ sel[1] = True) -> mux4way16_gate a b c d sel = d)
 
-
-use Bit3
+(*
+use import Bit3
 
 function mux8way16_gate (a b c d e f g h : Bit16.bitv) (sel: Bit3.bitv) : Bit16.bitv =
 	 let x1 = mux4way16_gate a b c d (Bit3.zeros[0 <- sel[1]][1 <- sel[2]]) in
 	 let x2 = mux4way16_gate e f g h (Bit3.zeros[0 <- sel[1]][1 <- sel[2]]) in
 	 mux16_gate x1 x2 sel[0]
+
 
 lemma mux8way16_gate_correct: forall a b c d e f g h: Bit16.bitv. forall sel: Bit3.bitv.
       		      ((sel[0] = False /\ sel[1] = False /\ sel[2] = False) -> mux8way16_gate a b c d e f g h sel = a) /\
@@ -220,7 +224,8 @@ lemma mux8way16_gate_correct: forall a b c d e f g h: Bit16.bitv. forall sel: Bi
       		      ((sel[0] = True /\ sel[1] = False /\ sel[2] = True) -> mux8way16_gate a b c d e f g h sel = f) /\
       		      ((sel[0] = True /\ sel[1] = True /\ sel[2] = False) -> mux8way16_gate a b c d e f g h sel = g) /\
       		      ((sel[0] = True /\ sel[1] = True /\ sel[2] = True) -> mux8way16_gate a b c d e f g h sel = h)
-
+*)
+(*
 function dmux4way_gate (in_: bool) (sel: Bit2.bitv): (bool, bool, bool, bool) =
 	 let x = not_gate sel[0] in
 	 let y = not_gate sel[1] in

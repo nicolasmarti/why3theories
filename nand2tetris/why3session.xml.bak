@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v2//EN" "http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="2">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.95"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="2"
+  name="Spass"
+  version="3.7"/>
+ <prover
+  id="3"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="4.3.1"/>
+ <file
+  name="../nand2tetris.why"
+  verified="false"
+  expanded="true">
+  <theory
+   name="BitV"
+   locfile="../nand2tetris.why"
+   loclnum="2" loccnumb="7" loccnume="11"
+   verified="false"
+   expanded="true">
+   <goal
+    name="two_complement_inv"
+    locfile="../nand2tetris.why"
+    loclnum="58" loccnumb="6" loccnume="24"
+    sum="608b78246a8883f0dc1931c419f73d0a"
+    proved="false"
+    expanded="true"
+    shape="ainfix =atwo_complementatwo_complementV0V0F">
+   </goal>
+  </theory>
+  <theory
+   name="Bit16"
+   locfile="../nand2tetris.why"
+   loclnum="67" loccnumb="7" loccnume="12"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit16Map"
+   locfile="../nand2tetris.why"
+   loclnum="75" loccnumb="7" loccnume="15"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit16Map2"
+   locfile="../nand2tetris.why"
+   loclnum="91" loccnumb="7" loccnume="16"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit16Map3"
+   locfile="../nand2tetris.why"
+   loclnum="107" loccnumb="7" loccnume="16"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit8"
+   locfile="../nand2tetris.why"
+   loclnum="123" loccnumb="7" loccnume="11"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit2"
+   locfile="../nand2tetris.why"
+   loclnum="131" loccnumb="7" loccnume="11"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit3"
+   locfile="../nand2tetris.why"
+   loclnum="139" loccnumb="7" loccnume="11"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Project01"
+   locfile="../nand2tetris.why"
+   loclnum="148" loccnumb="7" loccnume="16"
+   verified="false"
+   expanded="true">
+   <goal
+    name="not_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="159" loccnumb="6" loccnume="22"
+    sum="c9deaa55d083724003e18b06d19cead4"
+    proved="true"
+    expanded="false"
+    shape="ainfix =anot_gateV0anotbV0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="and_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="162" loccnumb="6" loccnume="22"
+    sum="a2f96dd8a1e8beacc8f3856cdb736a0e"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aand_gateV0V1aandbV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="or_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="168" loccnumb="6" loccnume="21"
+    sum="78670294218b6e27bc254adf6735149e"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aor_gateV0V1aorbV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="xor_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="175" loccnumb="6" loccnume="22"
+    sum="ff0cbdf2477c494cabffe54df64db4f6"
+    proved="true"
+    expanded="false"
+    shape="ainfix =axor_gateV0V1axorbV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="mux_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="187" loccnumb="6" loccnume="22"
+    sum="176c6fd4d3242905776127b579d1daa6"
+    proved="true"
+    expanded="false"
+    shape="ainfix =amux_gateV0V1V2amuxbV0V1V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="dmux_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="199" loccnumb="6" loccnume="23"
+    sum="322c93e8811c4cf688da613da24aa978"
+    proved="true"
+    expanded="false"
+    shape="ainfix =admux_gateV0V1admuxbV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="6.97"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="Contr"
+    locfile="../nand2tetris.why"
+    loclnum="205" loccnumb="6" loccnume="11"
+    sum="8e785f32d367e2730041e4660b6f1a61"
+    proved="false"
+    expanded="true"
+    shape="f">
+   </goal>
+   <goal
+    name="not16_gate_correct_ext"
+    locfile="../nand2tetris.why"
+    loclnum="211" loccnumb="6" loccnume="28"
+    sum="e2f104cebbe6f87f8d449a8292a6fc22"
+    proved="false"
+    expanded="false"
+    shape="ainfix =amixfix []anot16_gateV0V1amixfix []anotbvV0V1Iainfix &lt;V1c16Aainfix &lt;=c0V1FF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="not16_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="212" loccnumb="6" loccnume="24"
+    sum="320ac29c77a6119d06eb754f39be9fb7"
+    proved="false"
+    expanded="false"
+    shape="ainfix =anot16_gateV0anotbvV0F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="unknown" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="and16_gate_correct_equiv"
+    locfile="../nand2tetris.why"
+    loclnum="218" loccnumb="6" loccnume="30"
+    sum="0a3bb819ef0a8b02f02ce7fd76c07a19"
+    proved="false"
+    expanded="false"
+    shape="ainfix =amixfix []aand16_gateV0V1V2amixfix []aandbvV0V1V2Iainfix &lt;V2c16Aainfix &lt;=c0V2FF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="and16_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="219" loccnumb="6" loccnume="24"
+    sum="21bf43df00e297ce5463a887c6463d6f"
+    proved="false"
+    expanded="false"
+    shape="ainfix =aand16_gateV0V1aandbvV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="unknown" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="or16_gate_correct_equiv"
+    locfile="../nand2tetris.why"
+    loclnum="225" loccnumb="6" loccnume="29"
+    sum="4f51daee7a3312c5ecdf432580680458"
+    proved="false"
+    expanded="false"
+    shape="ainfix =amixfix []aor16_gateV0V1V2amixfix []aorbvV0V1V2Iainfix &lt;V2c16Aainfix &lt;=c0V2FF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="or16_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="226" loccnumb="6" loccnume="23"
+    sum="ac887e1692b7ac50010782a119c6e961"
+    proved="false"
+    expanded="false"
+    shape="ainfix =aor16_gateV0V1aorbvV0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="unknown" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="mux16_gate_correct_equiv"
+    locfile="../nand2tetris.why"
+    loclnum="237" loccnumb="6" loccnume="30"
+    sum="42f99b21c5dd2a748a86858308d5681a"
+    proved="false"
+    expanded="true"
+    shape="ainfix =amixfix []amux16_gateV1V2V0V3amixfix []amux16bV1V2V0V3Iainfix &lt;V3c16Aainfix &lt;=c0V3FFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.14"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.12"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="unknown" time="5.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+   </goal>
+   <goal
+    name="mux16_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="238" loccnumb="6" loccnume="24"
+    sum="36b30d4a76be715b6fed7f645533121f"
+    proved="false"
+    expanded="true"
+    shape="ainfix =amux16_gateV1V2V0amux16bV1V2V0FF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="unknown" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.01"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.12"/>
+    </proof>
+   </goal>
+   <goal
+    name="or8way_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="251" loccnumb="6" loccnume="25"
+    sum="18bcaa86fb47f5c0fd329a116aba1d33"
+    proved="false"
+    expanded="false"
+    shape="ainfix =aor8way_gateV0aorbamixfix []V0c0aorbamixfix []V0c1aorbamixfix []V0c2aorbamixfix []V0c3aorbamixfix []V0c4aorbamixfix []V0c5aorbamixfix []V0c6amixfix []V0c7F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.12"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="mux4way16_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="263" loccnumb="6" loccnume="28"
+    sum="bd3088ce920bfffd0574630d9cc7553b"
+    proved="false"
+    expanded="false"
+    shape="ainfix =amux4way16_gateV0V1V2V3V4V3Iainfix =amixfix []V4c1aTrueAainfix =amixfix []V4c0aTrueAainfix =amux4way16_gateV0V1V2V3V4V2Iainfix =amixfix []V4c1aFalseAainfix =amixfix []V4c0aTrueAainfix =amux4way16_gateV0V1V2V3V4V1Iainfix =amixfix []V4c1aTrueAainfix =amixfix []V4c0aFalseAainfix =amux4way16_gateV0V1V2V3V4V0Iainfix =amixfix []V4c1aFalseAainfix =amixfix []V4c0aFalseFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="mux8way16_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="277" loccnumb="6" loccnume="28"
+    sum="ed21daf86ad2259a9d2070c7f7f4466d"
+    proved="false"
+    expanded="true"
+    shape="ainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V7Iainfix =amixfix []V8c2aTrueAainfix =amixfix []V8c1aTrueAainfix =amixfix []V8c0aTrueAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V6Iainfix =amixfix []V8c2aFalseAainfix =amixfix []V8c1aTrueAainfix =amixfix []V8c0aTrueAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V5Iainfix =amixfix []V8c2aTrueAainfix =amixfix []V8c1aFalseAainfix =amixfix []V8c0aTrueAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V4Iainfix =amixfix []V8c2aFalseAainfix =amixfix []V8c1aFalseAainfix =amixfix []V8c0aTrueAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V3Iainfix =amixfix []V8c2aTrueAainfix =amixfix []V8c1aTrueAainfix =amixfix []V8c0aFalseAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V2Iainfix =amixfix []V8c2aFalseAainfix =amixfix []V8c1aTrueAainfix =amixfix []V8c0aFalseAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V1Iainfix =amixfix []V8c2aTrueAainfix =amixfix []V8c1aFalseAainfix =amixfix []V8c0aFalseAainfix =amux8way16_gateV0V1V2V3V4V5V6V7V8V0Iainfix =amixfix []V8c2aFalseAainfix =amixfix []V8c1aFalseAainfix =amixfix []V8c0aFalseFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.14"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.25"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.22"/>
+    </proof>
+   </goal>
+   <goal
+    name="demux4way_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="296" loccnumb="6" loccnume="28"
+    sum="a443426d8f9855d2273811d15c7febc7"
+    proved="false"
+    expanded="true"
+    shape="ainfix =admux4way_gateV0V1aTuple4aFalseaFalseaFalseV0Iainfix =amixfix []V1c1aTrueAainfix =amixfix []V1c0aTrueAainfix =admux4way_gateV0V1aTuple4aFalseaFalseV0aFalseIainfix =amixfix []V1c1aFalseAainfix =amixfix []V1c0aTrueAainfix =admux4way_gateV0V1aTuple4aFalseV0aFalseaFalseIainfix =amixfix []V1c1aTrueAainfix =amixfix []V1c0aFalseAainfix =admux4way_gateV0V1aTuple4V0aFalseaFalseaFalseIainfix =amixfix []V1c1aFalseAainfix =amixfix []V1c0aFalseFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.13"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.51"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.14"/>
+    </proof>
+   </goal>
+   <goal
+    name="demux8way_gate_correct"
+    locfile="../nand2tetris.why"
+    loclnum="316" loccnumb="6" loccnume="28"
+    sum="f04563cc4980ed1e2b8ab3bb93e9076e"
+    proved="false"
+    expanded="true"
+    shape="ainfix =admux8way_gateV0V1aTuple8aFalseaFalseaFalseaFalseaFalseaFalseaFalseV0Iainfix =amixfix []V1c2aTrueAainfix =amixfix []V1c1aTrueAainfix =amixfix []V1c0aTrueAainfix =admux8way_gateV0V1aTuple8aFalseaFalseaFalseaFalseaFalseaFalseV0aFalseIainfix =amixfix []V1c2aFalseAainfix =amixfix []V1c1aTrueAainfix =amixfix []V1c0aTrueAainfix =admux8way_gateV0V1aTuple8aFalseaFalseaFalseaFalseaFalseV0aFalseaFalseIainfix =amixfix []V1c2aTrueAainfix =amixfix []V1c1aFalseAainfix =amixfix []V1c0aTrueAainfix =admux8way_gateV0V1aTuple8aFalseaFalseaFalseaFalseV0aFalseaFalseaFalseIainfix =amixfix []V1c2aFalseAainfix =amixfix []V1c1aFalseAainfix =amixfix []V1c0aTrueAainfix =admux8way_gateV0V1aTuple8aFalseaFalseaFalseV0aFalseaFalseaFalseaFalseIainfix =amixfix []V1c2aTrueAainfix =amixfix []V1c1aTrueAainfix =amixfix []V1c0aFalseAainfix =admux8way_gateV0V1aTuple8aFalseaFalseV0aFalseaFalseaFalseaFalseaFalseIainfix =amixfix []V1c2aFalseAainfix =amixfix []V1c1aTrueAainfix =amixfix []V1c0aFalseAainfix =admux8way_gateV0V1aTuple8aFalseV0aFalseaFalseaFalseaFalseaFalseaFalseIainfix =amixfix []V1c2aTrueAainfix =amixfix []V1c1aFalseAainfix =amixfix []V1c0aFalseAainfix =admux8way_gateV0V1aTuple8V0aFalseaFalseaFalseaFalseaFalseaFalseaFalseIainfix =amixfix []V1c2aFalseAainfix =amixfix []V1c1aFalseAainfix =amixfix []V1c0aFalseFF">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="4.99"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.12"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.04"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.23"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="Bit1"
+   locfile="../nand2tetris.why"
+   loclnum="328" loccnumb="7" loccnume="11"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Bit17"
+   locfile="../nand2tetris.why"
+   loclnum="333" loccnumb="7" loccnume="12"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="Project02"
+   locfile="../nand2tetris.why"
+   loclnum="339" loccnumb="7" loccnume="16"
+   verified="false"
+   expanded="true">
+   <goal
+    name="halfadder_correct"
+    locfile="../nand2tetris.why"
+    loclnum="352" loccnumb="6" loccnume="23"
+    sum="e22e8a5d1f8ab770e94db9febac00586"
+    proved="false"
+    expanded="true"
+    shape="ainfix =ato_uintahalfadderV0V1ainfix +ato_uintamixfix [&lt;-]azerosc0V0ato_uintamixfix [&lt;-]azerosc0V1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="fulladder_correct"
+    locfile="../nand2tetris.why"
+    loclnum="360" loccnumb="6" loccnume="23"
+    sum="16f615046737ca19c37ced1acfd0d7de"
+    proved="false"
+    expanded="true"
+    shape="ainfix =ato_uintafulladderV0V1V2ainfix +ainfix +ato_uintamixfix [&lt;-]azerosc0V0ato_uintamixfix [&lt;-]azerosc0V1ato_uintamixfix [&lt;-]azerosc0V2F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="4.97"/>
+    </proof>
+   </goal>
+   <goal
+    name="add16_correct"
+    locfile="../nand2tetris.why"
+    loclnum="400" loccnumb="6" loccnume="19"
+    sum="83a847f059bb6d68be1058490fdcb049"
+    proved="false"
+    expanded="true"
+    shape="ainfix =ato_uintaadd16V0V1ainfix +ato_uintV0ato_uintV1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="4.99"/>
+    </proof>
+   </goal>
+   <goal
+    name="add16_correct2"
+    locfile="../nand2tetris.why"
+    loclnum="403" loccnumb="6" loccnume="20"
+    sum="0d147da72b5a2571fa39e1c0f5fc9f1c"
+    proved="false"
+    expanded="true"
+    shape="ainfix =ato_sintaadd16V0V1ainfix +ato_sintV0ato_sintV1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="4.97"/>
+    </proof>
+   </goal>
+   <goal
+    name="incr16_correct"
+    locfile="../nand2tetris.why"
+    loclnum="410" loccnumb="6" loccnume="20"
+    sum="bba660afcc106d663d80c6d3b1ce2091"
+    proved="false"
+    expanded="true"
+    shape="ainfix =ato_uintaincr16V0ainfix +ato_uintV0c1F">
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="true"
+     archived="false">
+     <result status="timeout" time="5.00"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>
