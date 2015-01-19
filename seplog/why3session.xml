@@ -3,21 +3,19 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="4">
 <prover id="0" name="Alt-Ergo" version="0.99.1" timelimit="15" memlimit="2000"/>
-<file name="../prelude.why" expanded="true">
-<theory name="Equiv" sum="d41d8cd98f00b204e9800998ecf8427e" expanded="true">
-</theory>
-<theory name="Set" sum="a7287066d2bebf6b80f68cf8000bd879" expanded="true">
+<file name="../seplog.why" expanded="true">
+<theory name="Seplog" sum="5a571029b5f13f23676fe7326d6170a3" expanded="true">
  <goal name="add_comm_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="add_comm" expanded="true">
- <proof prover="0"><result status="valid" time="0.02"/></proof>
+ <proof prover="0"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="inter_empty_set_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="inter_empty_set" expanded="true">
- <proof prover="0"><result status="valid" time="0.01"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="inter_comm_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
@@ -41,7 +39,7 @@
  <proof prover="0"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="union_comm" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="union_assoc_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.04"/></proof>
@@ -56,10 +54,10 @@
  <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="inter_union_distrib_eq" expanded="true">
- <proof prover="0"><result status="valid" time="0.33"/></proof>
+ <proof prover="0"><result status="valid" time="0.34"/></proof>
  </goal>
  <goal name="inter_union_distrib" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="diff_inter_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
@@ -71,10 +69,10 @@
  <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="diff_empty_l" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="diff_empty_r_eq" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="diff_empty_r" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
@@ -83,10 +81,10 @@
  <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="diff_empty" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="include_self" expanded="true">
- <proof prover="0"><result status="valid" time="0.01"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="include_symm_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
@@ -98,21 +96,19 @@
  <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="include_union" expanded="true">
- <proof prover="0"><result status="valid" time="0.02"/></proof>
+ <proof prover="0"><result status="valid" time="0.01"/></proof>
  </goal>
  <goal name="include_diff" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
-</theory>
-<theory name="Map" sum="4314e2bdc3fafc52316b1600db2555b2" expanded="true">
  <goal name="map_set_comm_eq" expanded="true">
  <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="map_set_comm" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="map_set_contrac_eq" expanded="true">
- <proof prover="0"><result status="valid" time="0.02"/></proof>
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="map_set_contrac" expanded="true">
  <proof prover="0"><result status="valid" time="0.02"/></proof>
@@ -121,13 +117,13 @@
  <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="disjoint_comm" expanded="true">
- <proof prover="0"><result status="valid" time="0.03"/></proof>
+ <proof prover="0"><result status="valid" time="0.02"/></proof>
  </goal>
  <goal name="merge_domain_mem" expanded="true">
  <proof prover="0"><result status="valid" time="0.10"/></proof>
  </goal>
  <goal name="merge_domain_eq" expanded="true">
- <proof prover="0"><result status="valid" time="0.04"/></proof>
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="merge_domain" expanded="true">
  <proof prover="0"><result status="valid" time="0.03"/></proof>
@@ -136,30 +132,51 @@
  <proof prover="0"><result status="valid" time="0.95"/></proof>
  </goal>
  <goal name="merge_comm" expanded="true">
- <proof prover="0"><result status="valid" time="0.02"/></proof>
+ <proof prover="0"><result status="valid" time="0.04"/></proof>
  </goal>
  <goal name="merge_assoc_eq" expanded="true">
- <proof prover="0"><result status="valid" time="3.64"/></proof>
+ <proof prover="0"><result status="valid" time="3.54"/></proof>
  </goal>
  <goal name="merge_assoc" expanded="true">
  <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="merge_empty_map_eq" expanded="true">
- <proof prover="0"><result status="valid" time="0.04"/></proof>
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="merge_empty_map" expanded="true">
  <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
  <goal name="merge_disjoint" expanded="true">
- <proof prover="0"><result status="valid" time="3.47"/></proof>
+ <proof prover="0"><result status="valid" time="3.36"/></proof>
  </goal>
-</theory>
-<theory name="BitV" sum="b95a8c9b678fc0d015af4c1e671d687b" expanded="true">
- <goal name="incr_add_1" expanded="true">
- <proof prover="0"><result status="unknown" time="0.02"/></proof>
+ <goal name="emp_holds_eq" expanded="true">
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
  </goal>
- <goal name="two_complement_inv" expanded="true">
- <proof prover="0"><result status="unknown" time="0.01"/></proof>
+ <goal name="mapsto_holds_eq" expanded="true">
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
+ </goal>
+ <goal name="mapsto_holds_elt" expanded="true">
+ <proof prover="0"><result status="valid" time="0.05"/></proof>
+ </goal>
+ <goal name="sepcon_holds_eq" expanded="true">
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
+ </goal>
+ <goal name="sepcon_emp_int" expanded="true">
+ <proof prover="0"><result status="valid" time="0.03"/></proof>
+ </goal>
+ <goal name="sepcon_emp" expanded="true">
+ <proof prover="0"><result status="valid" time="0.06"/></proof>
+ </goal>
+ <goal name="sepcon_comm" expanded="true">
+ <proof prover="0"><result status="valid" time="0.17"/></proof>
+ </goal>
+ <goal name="sepcon_assoc" expanded="true">
+ </goal>
+ <goal name="monotony" expanded="true">
+ <proof prover="0"><result status="valid" time="0.04"/></proof>
+ </goal>
+ <goal name="modus_ponens" expanded="true">
+ <proof prover="0"><result status="valid" time="0.11"/></proof>
  </goal>
 </theory>
 </file>

@@ -35,7 +35,7 @@ lemma stable_out1_L2: forall from delay: int. forall k: int. k >= 0 -> stable_ou
 
 axiom sem: forall t: int. stable_in1 t delay -> stable_in2 t delay -> out1 (t + delay) = notb (andb (in1 t) (in2 t))
 lemma stability: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> stable_in2 t (delay + k) -> out1 (t + delay + k) = notb (andb (in1 t) (in2 t))
-lemma stability3: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> stable_in2 t (delay + k) -> stable_out1 (t + delay) k
+lemma stability2: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> stable_in2 t (delay + k) -> stable_out1 (t + delay) k
 
 end
 
@@ -115,3 +115,17 @@ lemma stability3: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + 
 
 
 end
+
+(*
+boilerplate:
+
+import
+
+input, output, and aux wire + stability definition + some lemmas ( to-, from+ )
+cloning gates and connecting wires
+repeat semantics and stability of components
+pose semantics and stability of current
+
+does it scale ?????
+
+*)
