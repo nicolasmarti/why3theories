@@ -1,0 +1,145 @@
+
+theory NAND
+
+use import int.Int
+use import bool.Bool
+
+constant delay: int = 1
+
+function in1 int: bool
+function in2 int: bool
+
+function out1 int: bool 
+axiom sem: forall t: int. out1 (t + delay) = notb (andb (in1 t) (in2 t))
+
+end
+
+theory SR_NAND_LATCH
+
+use import int.Int
+use import bool.Bool
+
+function s_bar int: bool
+function r_bar int: bool
+
+function q int: bool 
+function q_bar int: bool 
+
+clone NAND as Nand1 with function in1 = s_bar, function in2 = q_bar, function out1 = q
+clone NAND as Nand2 with function in1 = q, function in2 = r_bar, function out1 = q_bar
+
+constant delay: int = Nand1.delay + Nand1.delay
+
+lemma set: 
+      forall t: int. 
+        (forall k: int. 0 <= k < delay -> (s_bar (t + k) = false) /\ (r_bar (t + k) = true)) -> 
+	     q (t + delay) =  true /\ q_bar (t + delay) = false
+
+lemma reset: 
+      forall t: int. 
+        (forall k: int. 0 <= k < delay -> (s_bar (t + k) = true) /\ (r_bar (t + k) = false)) -> 
+	     q (t + delay) =  false /\ q_bar (t + delay) = true
+
+lemma memory: 
+      forall t: int. 
+        (forall k: int. 0 <= k < delay -> (s_bar (t + k) = true) /\ (r_bar (t + k) = true)) -> 
+	     q (t + delay) = q t /\ q_bar (t + delay) = q_bar t
+
+      	  
+ end
+
+
+theory NAND3
+
+use import int.Int
+use import bool.Bool
+
+constant delay: int = 1
+
+function in1 int: bool
+function in2 int: bool
+function in3 int: bool
+
+function out1 int: bool 
+axiom sem: forall t: int. out1 (t + delay) = notb (andb (in1 t) (andb (in2 t) (in3 t)))
+
+end
+
+theory POS_EDGE_SR_NAND_LATCH
+
+use import int.Int
+use import bool.Bool
+
+function clock int: bool
+function data int: bool
+
+function q int: bool 
+function q_bar int: bool 
+
+function aux1 int: bool
+function aux2 int: bool
+function aux3 int: bool
+function aux4 int: bool
+
+clone NAND as Nand1 with function in1 = aux4, function in2 = aux2, function out1 = aux1
+clone NAND as Nand2 with function in1 = aux1, function in2 = clock, function out1 = aux2
+clone NAND3 as Nand3 with function in1 = aux2, function in2 = clock, function in3 = aux4, function out1 = aux3
+clone NAND as Nand4 with function in1 = aux3, function in2 = data, function out1 = aux4
+
+clone SR_NAND_LATCH as Latch with function s_bar = aux2, function r_bar = aux3, function q = q, function q_bar = q_bar
+
+(*
+just following:
+
+http://elprojects.blogspot.jp/2011/01/positive-edge-d-flip-flop-using-6-nand.html
+
+How the above circuit works? ....explained below:
+
+When clock=0, aux2 and aux3 are high. keeping the values of Q and Q' intact. 
+At the same time aux4= complement of D and aux1=D.
+Now when clock=1 (at positive edge), the values of aux1 (equal D) and aux4 (complement of D) passes through aux2 and aux3.
+Now aux2=D' and aux3=D which means Q=D and Q'=D'
+
+*)
+
+
+lemma clock_0_aux2_true:
+      forall t: int. 
+        (forall k: int. 0 <= k < Nand2.delay  -> 
+		(clock (t + k) = false)
+	) -> 
+	  aux2 (t + Nand2.delay) = true
+
+lemma clock_0_aux3_true:
+      forall t: int. 
+        (forall k: int. 0 <= k < Nand3.delay  -> 
+		(clock (t + k) = false)
+	) -> 
+	  aux3 (t + Nand3.delay) = true
+
+lemma clock_0_final_latch:
+      forall t: int. 
+        (forall k: int. 0 <= k < Nand3.delay + Latch.delay  -> 
+		(clock (t + k) = false)
+	) -> 
+	  q (t + Nand3.delay + Latch.delay) = q (t + Nand3.delay) /\
+	  q_bar (t + Nand3.delay + Latch.delay) = q_bar (t + Nand3.delay)
+
+
+lemma clock_0_aux4_is_notb_data:
+      forall t: int. 
+        (forall k: int. 0 <= k < Nand3.delay + Nand4.delay  -> 
+		(clock (t + k) = false)
+	) -> 
+	  aux4 (t + Nand3.delay + Nand4.delay) = notb (data (t + Nand4.delay))	  
+
+
+lemma clock_0_aux1_is_data:
+      forall t: int. 
+        (forall k: int. 0 <= k < Nand3.delay + Nand4.delay + Nand1.delay  -> 
+		(clock (t + k) = false)
+	) -> 
+	  aux4 (t + Nand3.delay + Nand4.delay + Nand1.delay) = notb (data (t + Nand3.delay + Nand4.delay))	  
+      
+
+end
