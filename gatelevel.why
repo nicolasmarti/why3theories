@@ -139,7 +139,9 @@ lemma clock_0_aux1_is_data:
         (forall k: int. 0 <= k < Nand3.delay + Nand4.delay + Nand1.delay  -> 
 		(clock (t + k) = false)
 	) -> 
-	  aux4 (t + Nand3.delay + Nand4.delay + Nand1.delay) = notb (data (t + Nand3.delay + Nand4.delay))	  
+	  aux1 (t + Nand3.delay + Nand4.delay + Nand1.delay) = data (t + Nand4.delay)	  
+
+
       
 
 end
