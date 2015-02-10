@@ -141,7 +141,13 @@ lemma clock_0_aux1_is_data:
 	) -> 
 	  aux1 (t + Nand3.delay + Nand4.delay + Nand1.delay) = data (t + Nand4.delay)	  
 
+lemma miracle:
+     forall t: int.
+          (clock t = false /\ clock (t + 1) = false /\ clock (t + 2) = true /\ clock (t + 3) = true /\ clock (t + 4) = true) ->
+	  (forall k: int. 0 <= k <= 2 -> data (t + k) = data t) ->
+	  (q (t + 6) = data t /\ q_bar (t + 6) = not (data t))
 
+			  	 
       
 
 end
