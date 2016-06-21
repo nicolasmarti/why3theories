@@ -1,131 +1,303 @@
-theory BoolExt
-
-use import bool.Bool
-
-lemma notb_inv: forall b: bool. notb (notb b) = b
-
-end
-
-
 theory NAND
+
+(**)
 
 use import int.Int
 use import bool.Bool
-use import BoolExt
 
-constant delay: int
-axiom delay_gt0: delay > 0
+(**)
 
 function in1 int: bool
 function in2 int: bool
 
-function out1 int: bool 
+function out1 int: bool
 
-predicate stable_in1 (from delay: int) = forall k:int. 0 <= k <= delay -> in1 (from + k) = in1 from 
-lemma stable_in1_L1: forall from delay: int. forall k: int. k <= delay -> stable_in1 from delay -> stable_in1 from k
-lemma stable_in1_L2: forall from delay: int. forall k: int. k >= 0 -> stable_in1 from (delay + k) -> stable_in1 (from + k) delay
+(**)
 
-predicate stable_in2 (from delay: int) = forall k:int. 0 <= k <= delay -> in2 (from + k) = in2 from 
-lemma stable_in2_L1: forall from delay: int. forall k: int. k <= delay -> stable_in2 from delay -> stable_in2 from k
-lemma stable_in2_L2: forall from delay: int. forall k: int. k >= 0 -> stable_in2 from (delay + k) -> stable_in2 (from + k) delay
+constant delay : int = 1
 
-predicate stable_out1 (from delay: int) = forall k:int. 0 <= k <= delay -> out1 (from + k) = out1 from
-lemma stable_out1_L1: forall from delay: int. forall k: int. k <= delay -> stable_out1 from delay -> stable_out1 from k
-lemma stable_out1_L2: forall from delay: int. forall k: int. k >= 0 -> stable_out1 from (delay + k) -> stable_out1 (from + k) delay
-
-axiom sem: forall t: int. stable_in1 t delay -> stable_in2 t delay -> out1 (t + delay) = notb (andb (in1 t) (in2 t))
-lemma stability: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> stable_in2 t (delay + k) -> out1 (t + delay + k) = notb (andb (in1 t) (in2 t))
-lemma stability2: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> stable_in2 t (delay + k) -> stable_out1 (t + delay) k
+axiom sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = notb (andb (in1 t) (in2 t))
 
 end
+
+(***************************)
+
+theory NOT_proof
+
+(**)
+
+use import int.Int
+use import bool.Bool
+
+(**)
+
+function in1 int: bool
+
+function out1 int: bool
+
+(**)
+
+clone NAND as Nand with function in1 = in1, function in2 = in1, function out1 = out1
+
+(**)
+
+constant delay : int = Nand.delay
+lemma delay_value: delay = 1
+
+(**)
+
+
+lemma sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = notb (in1 t)
+
+end
+
+
+(*********)
+
 
 theory NOT
 
+(**)
+
 use import int.Int
 use import bool.Bool
-use import BoolExt
+
+(**)
 
 function in1 int: bool
-function out1 int: bool 
 
-clone NAND as Nand1 with function in1 = in1, function in2 = in1, function out1 = out1 
+function out1 int: bool
 
-constant delay: int
-axiom delay_ax: delay = Nand1.delay
-lemma delay_gt0: delay >= 0
+(**)
 
-predicate stable_in1 (from delay: int) = forall k:int. 0 <= k <= delay -> in1 from = in1 (from + k)
-predicate stable_out1 (from delay: int) = forall k:int. 0 <= k <= delay -> out1 from = out1 (from + k)
+constant delay : int = 1
 
-lemma sem: forall t: int. stable_in1 t delay -> out1 (t + delay) = notb (in1 t)
-lemma stability: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> out1 (t + delay + k) = notb (in1 t)
-lemma stability2: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k) -> stable_out1 (t + delay) k
+(**)
+
+(**)
+
+axiom sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = notb (in1 t)
 
 end
 
+(***************************)
 
-theory AND
+theory AND_proof
+
+(**)
 
 use import int.Int
-use import BoolExt
 use import bool.Bool
+
+(**)
 
 function in1 int: bool
 function in2 int: bool
 
+function out1 int: bool
+
+(**)
+
 function aux1 int: bool
 
-function out1 int: bool 
+clone NAND as Nand with function in1 = in1, function in2 = in2, function out1 = aux1
 
-clone NAND as Nand1 with function in1 = in1, function in2 = in2, function out1 = aux1
-clone NOT as Not1 with function in1 = aux1, function out1 = out1
+clone NOT as Not with function in1 = aux1, function out1 = out1
 
-predicate stable_in1 (from delay: int) = forall k:int. 0 <= k <= delay -> in1 (from + k) = in1 from 
-lemma stable_in1_L1: forall from delay: int. forall k: int. k <= delay -> stable_in1 from delay -> stable_in1 from k
-lemma stable_in1_L2: forall from delay: int. forall k: int. k >= 0 -> stable_in1 from (delay + k) -> stable_in1 (from + k) delay
+(**)
 
-predicate stable_in2 (from delay: int) = forall k:int. 0 <= k <= delay -> in2 (from + k) = in2 from
-lemma stable_in2_L1: forall from delay: int. forall k: int. k <= delay -> stable_in2 from delay -> stable_in2 from k
-lemma stable_in2_L2: forall from delay: int. forall k: int. k >= 0 -> stable_in2 from (delay + k) -> stable_in2 (from + k) delay
+constant delay : int = Nand.delay + Not.delay
+lemma delay_value: delay = 2
 
-predicate stable_aux1 (from delay: int) = forall k:int. 0 <= k <= delay -> aux1 (from + k) = aux1 from 
-lemma stable_aux1_L1: forall from delay: int. forall k: int. k <= delay -> stable_aux1 from delay -> stable_aux1 from k
-lemma stable_aux1_L2: forall from delay: int. forall k: int. k >= 0 -> stable_aux1 from (delay + k) -> stable_aux1 (from + k) delay
+(**)
 
-predicate stable_out1 (from delay: int) = forall k:int. 0 <= k <= delay -> out1 (from + k) = out1 from 
-lemma stable_out1_L1: forall from delay: int. forall k: int. k <= delay -> stable_out1 from delay -> stable_out1 from k
-lemma stable_out1_L2: forall from delay: int. forall k: int. k >= 0 -> stable_out1 from (delay + k) -> stable_out1 (from + k) delay
+lemma Nand_int: forall t t': int.
+      		delay + t <= t' ->
+		(forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+		forall k: int. Nand.delay + t <= k <= t' ->
+		       aux1 k = notb (andb (in1 t) (in2 t))
 
+lemma Not_int: forall t t': int.
+      		delay + t <= t' ->
+		(forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+		forall k: int. Not.delay + Nand.delay +  t <= k <= t' ->
+		       out1 k = notb (notb (andb (in1 t) (in2 t)))
 
-constant delay: int
-axiom delay_ax: delay = Nand1.delay + Not1.delay
-lemma delay_gt0: delay >= 0
+(**)
 
-lemma sem_Nand1: forall t: int. stable_in1 t Nand1.delay -> stable_in2 t Nand1.delay -> aux1 (t + Nand1.delay) = notb (andb (in1 t) (in2 t))
-lemma stability_Nand1: forall t: int. forall k: int. k >= 0 -> stable_in1 t (Nand1.delay + k) -> stable_in2 t (Nand1.delay + k) -> aux1 (t +  Nand1.delay + k) = notb (andb (in1 t) (in2 t))
-lemma stability_Nand2: forall t: int. forall k: int. k >= 0 -> stable_in1 t (Nand1.delay + k) -> stable_in2 t (Nand1.delay + k) -> stable_aux1 (t + Nand1.delay) k
-
-lemma sem_Not1: forall t: int. stable_aux1 t Not1.delay -> out1 (t + Not1.delay) = notb (aux1 t)
-lemma stability_Not2: forall t: int. forall k: int. k >= 0 -> stable_aux1 t (Not1.delay + k) -> stable_out1 (t + Not1.delay) k
-
-lemma sem: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k)-> stable_in2 t (delay + k) -> out1 (t + delay) = andb (in1 t) (in2 t)
-lemma stability1: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k)-> stable_in2 t (delay + k) -> out1 (t + delay + k) = andb (in1 t) (in2 t)
-lemma stability2: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k)-> stable_in2 t (delay + k) -> out1 (t + delay + k) = out1 (t + delay)
-lemma stability3: forall t: int. forall k: int. k >= 0 -> stable_in1 t (delay + k)-> stable_in2 t (delay + k) -> stable_out1 (t + delay) k
-
+lemma sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = andb (in1 t) (in2 t)
 
 end
 
-(*
-boilerplate:
+(*********)
 
-import
+theory AND
 
-input, output, and aux wire + stability definition + some lemmas ( to-, from+ )
-cloning gates and connecting wires
-repeat semantics and stability of components
-pose semantics and stability of current
+(**)
 
-does it scale ?????
+use import int.Int
+use import bool.Bool
 
-*)
+(**)
+
+function in1 int: bool
+function in2 int: bool
+
+function out1 int: bool
+
+(**)
+
+
+(**)
+
+constant delay : int = 2
+
+(**)
+
+axiom sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = andb (in1 t) (in2 t)
+
+end
+
+(***************************)
+
+theory OR_proof
+
+(**)
+
+use import int.Int
+use import bool.Bool
+
+(**)
+
+function in1 int: bool
+function in2 int: bool
+
+function out1 int: bool
+
+(**)
+
+function aux1 int: bool
+clone NOT as Not1 with function in1 = in1, function out1 = aux1
+
+function aux2 int: bool
+clone NOT as Not2 with function in1 = in2, function out1 = aux2
+
+clone NAND as Nand with function in1 = aux1, function in2 = aux2, function out1 = out1
+
+(**)
+
+constant delay : int = Nand.delay + Not1.delay
+lemma delay_value: delay = 2
+
+(**)
+
+lemma Not1_int: forall t t': int.
+      		delay + t <= t' ->
+		(forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+		forall k: int. Not1.delay + t <= k <= t' ->
+		       aux1 k = notb (in1 t)
+
+lemma Not2_int: forall t t': int.
+      		delay + t <= t' ->
+		(forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+		forall k: int. Not2.delay + t <= k <= t' ->
+		       aux2 k = notb (in2 t)
+
+lemma Nand_int: forall t t': int.
+      		delay + t <= t' ->
+		(forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+		forall k: int. Nand.delay + Not2.delay + t <= k <= t' ->
+		       out1 k = notb (andb (notb (in1 t)) (notb (in2 t)))
+
+(**)
+
+
+lemma sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = orb (in1 t) (in2 t)
+
+end
+
+(*********)
+
+
+theory OR
+
+(**)
+
+use import int.Int
+use import bool.Bool
+
+(**)
+
+function in1 int: bool
+function in2 int: bool
+
+function out1 int: bool
+
+(**)
+
+(**)
+
+constant delay : int = 2
+
+(**)
+
+axiom sem: forall t t' dtstab: int.
+      	   (dtstab >= delay /\ t' >= dtstab + t) ->
+	   (forall k: int. t <= k <= t' ->
+	    	   in1 k = in1 t /\ in2 k = in2 t) ->
+           forall t1 t1': int.
+	   ( t <= t1 /\ t1' <= t' /\ t1 + delay <= t1' ) ->
+	   forall k: int. delay + t1 <= k <= t1' ->
+	      out1 k = orb (in1 t) (in2 t)
+
+end
+
+(***************************)
+
