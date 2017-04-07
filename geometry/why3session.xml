@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"http://why3.lri.fr/why3session.dtd">
+<why3session shape_version="4">
+<prover id="0" name="Alt-Ergo" version="1.30" timelimit="5" memlimit="1000"/>
+<file name="../geometry.why" expanded="true">
+<theory name="Geom" sum="635138d5007fc782a1f8d2289e59d206" expanded="true">
+ <goal name="distinct_ineq" expanded="true">
+ <proof prover="0"><result status="valid" time="0.01" steps="15"/></proof>
+ </goal>
+ <goal name="distinct_comm" expanded="true">
+ <proof prover="0"><result status="valid" time="0.00" steps="8"/></proof>
+ </goal>
+ <goal name="eq_mod_refl" expanded="true">
+ <proof prover="0"><result status="valid" time="0.01" steps="6"/></proof>
+ </goal>
+ <goal name="eq_dist_angle" expanded="true">
+ <proof prover="0"><result status="valid" time="0.01" steps="23"/></proof>
+ </goal>
+</theory>
+<theory name="EquiTriangle" sum="baf6ae0b3e5a6015645948cac5d6b03c" expanded="true">
+ <goal name="all_distinct" expanded="true">
+ <proof prover="0"><result status="valid" time="0.01" steps="10"/></proof>
+ </goal>
+ <goal name="all_angles_exists" expanded="true">
+ <proof prover="0"><result status="valid" time="0.14" steps="173"/></proof>
+ </goal>
+ <goal name="all_angles_exists_and_are_equal" expanded="true">
+ <proof prover="0"><result status="valid" time="0.08" steps="85"/></proof>
+ </goal>
+ <goal name="l" expanded="true">
+ <proof prover="0"><result status="valid" time="0.02" steps="71"/></proof>
+ </goal>
+ <goal name="l2" expanded="true">
+ <proof prover="0"><result status="valid" time="0.01" steps="49"/></proof>
+ </goal>
+ <goal name="g" expanded="true">
+ <proof prover="0"><result status="valid" time="0.02" steps="39"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

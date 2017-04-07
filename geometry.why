@@ -1,0 +1,87 @@
+theory Geom
+
+use import int.Int
+use import real.RealInfix
+use import real.FromInt
+
+type point
+
+type distance = real
+
+function measure_distance point point: distance
+
+axiom measure_distance_geq_zero: forall p1 p2: point. measure_distance p1 p2 >=. 0.0
+axiom point_eq: forall p1 p2: point. measure_distance p1 p2 = 0.0 <-> p1 = p2
+axiom dist_symm: forall p1 p2: point. measure_distance p1 p2 = measure_distance p2 p1
+axiom tri_ineq: forall p1 p2 p3: point. measure_distance p1 p2 +. measure_distance p2 p3 >=. measure_distance p1 p3
+axiom point_at_distance_exists: forall p1: point. forall d: distance. exists p2: point. measure_distance p1 p2 = d
+
+predicate distinct (p1 p2: point) = measure_distance p1 p2 >. 0.0
+lemma distinct_ineq: forall p1 p2: point. distinct p1 p2 <-> p1 <> p2
+lemma distinct_comm: forall p1 p2: point. distinct p1 p2 -> distinct p2 p1
+
+predicate is_between (p p1 p2: point) = measure_distance p1 p +. measure_distance p p2 = measure_distance p1 p2  
+predicate is_aligned (p p1 p2: point) = is_between p p1 p2 \/ is_between p1 p2 p \/ is_between p2 p p1
+
+type angle = real
+
+constant pi: angle
+axiom pi_pos: pi >. 0.0
+
+predicate measure_angle (p1 p2 p3: point) (a: angle)
+
+predicate (==) (a1 a2: angle) = exists k: int. a1 = a2 +. (from_int k) *. 2.0 *. pi
+
+lemma eq_mod_refl: forall a1 a2: angle. a1 = a2 -> a1 == a2
+
+axiom measure_angle_exists: forall p1 p2 p3. (distinct p1 p2 /\ distinct p2 p3 /\ distinct p1 p2) <-> (exists a. measure_angle p1 p2 p3 a)
+
+axiom measure_angle_modulo: forall p1 p2 p3: point. forall a1 a2: angle. measure_angle p1 p2 p3 a1 -> a1 == a2 -> measure_angle p1 p2 p3 a2
+
+axiom measure_angle_comm: forall p1 p2 p3: point. forall a1 a2: angle. measure_angle p1 p2 p3 a1 -> measure_angle p3 p2 p1 a2 -> a1 +. a2 == 0.0
+
+axiom measure_angle_triangle: forall p1 p2 p3: point. forall a1 a2 a3: angle. measure_angle p1 p2 p3 a1 -> measure_angle p3 p2 p1 a2 -> measure_angle p2 p3 p1 a2 -> a1 +. a2 +. a3 == pi
+
+function angle_distance distance distance angle: distance
+
+axiom angle_distance_comm: forall d1 d2. forall a: angle. angle_distance d1 d2 a = angle_distance d2 d1 a
+axiom angle_distance_eq_diff: forall d1 d2. forall a1 a2: angle. angle_distance d1 d2 a1 = angle_distance d1 d2 a2 -> a1 +. a2 == 0.0
+axiom measure_angle_semantics: forall p1 p2 p3: point. forall a: angle. measure_angle p1 p2 p3 a <-> angle_distance (measure_distance p1 p2) (measure_distance p1 p3) a = measure_distance p2 p3
+
+lemma eq_dist_angle: forall p1 p2 p3: point. measure_distance p1 p2 = measure_distance p2 p3 -> forall a: angle. measure_angle p2 p1 p3 a <-> measure_angle p2 p3 p1 a
+
+
+end
+
+theory EquiTriangle
+
+
+use import int.Int
+use import real.RealInfix
+use import real.FromInt
+
+use import Geom
+
+function p1: point
+function p2: point
+function p3: point
+
+axiom ax1: distinct p1 p2
+axiom equal_dist: measure_distance p1 p2 = measure_distance p1 p3 /\ measure_distance p1 p2 = measure_distance p3 p2
+
+lemma all_distinct: distinct p1 p2 /\ distinct p1 p3 /\ distinct p3 p2
+
+lemma all_angles_exists: (exists a. measure_angle p1 p2 p3 a) /\ (exists a. measure_angle p2 p3 p1 a) /\ (exists a. measure_angle p3 p1 p2 a)
+
+lemma all_angles_exists_and_are_equal: exists a. measure_angle p1 p2 p3 a /\ measure_angle p2 p3 p1 a /\ measure_angle p3 p1 p2 a
+
+lemma l: forall a:angle.
+      	 	measure_angle p1 p2 p3 a -> measure_angle p2 p3 p1 a -> measure_angle p3 p1 p2 a -> a +. a +. a == pi
+
+lemma l2: forall a: angle.
+      	 	measure_angle p1 p2 p3 a -> measure_angle p2 p3 p1 a -> measure_angle p3 p1 p2 a -> 3.0 *. a == pi
+
+lemma g: exists a: angle.
+      	 	measure_angle p1 p2 p3 a /\ measure_angle p2 p3 p1 a /\ measure_angle p3 p1 p2 a /\ 3.0 *. a == pi
+
+end
