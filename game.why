@@ -1,0 +1,85 @@
+theory Game
+
+(*
+
+This is a resolution of problem 2.9 (page 114) from Harrison's book:
+
+HANDBOOK OF PRACTICAL LOGIC
+AND AUTOMATED REASONING
+
+Show how to construct a digital circuit with three inputs a, b and c
+and three outputs that are the respective negations ¬a, ¬b and ¬c,
+using an arbitrary number of ‘AND’ and ‘OR’ gates but at most two
+‘NOT’ gates (inverters).
+
+*)
+
+(* the three inputs *)
+
+predicate a
+predicate b
+predicate c
+
+(* we build three simple predicate: *)
+
+
+(* this predicate asserts all inputs are true *)
+predicate all_true = a /\ b /\ c
+
+(* this predicate asserts that at least two input are true (therefore is implied by all_true) *)
+predicate at_least_two_true = (a /\ b) \/ (b /\ c) \/ (c /\ a)
+
+(* this predicate asserts that at least one input is true (therefore is implied by previous predicate *)
+predicate at_least_one_true = a \/ b \/ c
+
+(* first negation used: from at_least_two_true we build the negation, which assert that at most one input is true *)
+predicate at_most_one_true = not (at_least_two_true)
+lemma at_most_one_true_semantics: at_most_one_true <-> ( (a /\ not b /\ not c) \/ (not a /\ b /\ not c) \/ (not a /\ not b /\ c) \/ (not a /\ not b /\ not c) )
+
+(* from predicate above, we can use it in conjunction with at_least_one_true in order to assert that exactly one input is true *)
+predicate exactly_one_true = at_most_one_true /\ at_least_one_true
+lemma exactly_one_true_semantics: exactly_one_true <-> ( (a /\ not b /\ not c) \/ (not a /\ b /\ not c) \/ (not a /\ not b /\ c) )
+
+(* from all predicate so far, we can create one that assert that exactly one input is true or all are true *)
+predicate exactly_one_or_all_true = exactly_one_true \/ all_true
+
+(* second negation used: negating previous predicate assert that exactly none are true or exactly two are true *)
+predicate exactly_two_or_none_true = not ( exactly_one_or_all_true )
+lemma exactly_two_or_none_true_semantics: exactly_two_or_none_true <-> ( (a /\ b /\ not c) \/ (not a /\ b /\ c) \/ (a /\ not b /\ c) \/ (not a /\ not b /\ not c) )
+
+(* and we can therefore discriminate the assertion that exactly two input are true *)
+predicate exactly_two_true = exactly_two_or_none_true /\ at_least_two_true
+lemma exactly_two_true_semantics: exactly_two_true <-> ( (a /\ b /\ not c) \/ (not a /\ b /\ c) \/ (a /\ not b /\ c) )
+
+(* and we can also discriminate the assertion that none inputs are true *)
+predicate exactly_none_true = exactly_two_or_none_true /\ at_most_one_true
+lemma exactly_none_true_semantics: exactly_none_true <-> (not a /\ not b /\ not c)
+
+(* and now this is quite simple, because we can discriminate all cases in a disjoint manner *)
+predicate not_a =
+   (* case when all input are false => not a is true *)
+   exactly_none_true \/
+   (* case when exactly one is true => not a is true only if b \/ c is true *)
+   (exactly_one_true /\ (b \/ c) ) \/
+   (* case when exactly two are true => not a is true only if b /\ c is true *)
+   (exactly_two_true /\ b /\ c )
+   (* and if all are true not a is false, so nothing to add here *)
+
+(* finally the proof that our predicate is equivalent to not a *)
+lemma not_a_correct: not_a <-> not a
+
+(* and this is trivial for the two other inputs *)
+predicate not_b =
+   exactly_none_true \/
+   (exactly_one_true /\ (a \/ c) ) \/
+   (exactly_two_true /\ a /\ c )
+lemma not_b_correct: not_b <-> not b
+   
+predicate not_c =
+   exactly_none_true \/
+   (exactly_one_true /\ (a \/ b) ) \/
+   (exactly_two_true /\ a /\ b )
+lemma not_c_correct: not_c <-> not c
+
+
+end
