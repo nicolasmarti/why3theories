@@ -106,7 +106,7 @@ axiom domain_get_ax2: forall m: map 'a 'b. forall x: 'a. not (mem x (domain m)) 
 
 predicate disjoint (m1 m2: map 'a 'b) = inter (domain m1) (domain m2) = empty_set
 lemma disjoint_alt: forall m1 m2: map 'a 'b. disjoint m1 m2 <-> inter (domain m1) (domain m2) == empty_set
-lemma disjoint_comm: forall m1 m2: map 'a 'b. disjoint m1 m2 -> disjoint m2 m1
+lemma disjoint_comm: forall m1 m2: map 'a 'b. disjoint m1 m2 <-> disjoint m2 m1
 
 function merge (m1 m2: map 'a 'b) : map 'a 'b
 axiom merge_ax1: forall m1 m2: map 'a 'b. forall x: 'a. mem x (domain m1) -> (merge m1 m2)[x] = m1[x]
