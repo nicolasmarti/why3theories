@@ -1,3 +1,5 @@
+(**************************)
+
 theory Wire
 
 use import int.Int
@@ -21,6 +23,8 @@ function ([_..]) t int: Wire.t
 
 end
 
+(*************************)
+
 theory NAND
 
 use import Wire
@@ -37,6 +41,8 @@ constant delay: int = 1
 axiom nand_sem: forall t: int.  out0[t] = notb (andb in0[t-delay] in1[t-delay])
 
 end
+
+(*********)
 
 theory NOT
 
@@ -59,7 +65,171 @@ lemma not_sem:
 
 end
 
+(*********)
 
+theory AND
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use NAND
+use NOT
+
+function in0: Wire.t
+function in1: Wire.t
+function out0: Wire.t
+
+constant delay: int = NAND.delay + NOT.delay
+
+function aux0: Wire.t
+clone NAND as NAND1 with function in0 = in0, function in1 = in1, function out0 = aux0
+clone NOT as NOT1 with function in0 = aux0, function out0 = out0
+
+lemma and_sem:
+	forall t: int.
+	out0[t] = andb in0[t-delay] in1[t-delay]
+
+end
+
+(*********)
+
+theory OR
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use NAND
+use NOT
+
+function in0: Wire.t
+function in1: Wire.t
+function out0: Wire.t
+
+constant delay: int = NAND.delay + NOT.delay
+
+function aux0: Wire.t
+clone NOT as NOT1 with function in0 = in0, function out0 = aux0
+function aux1: Wire.t
+clone NOT as NOT2 with function in0 = in1, function out0 = aux1
+clone NAND as NAND1 with function in0 = aux0, function in1 = aux1, function out0 = out0
+
+lemma or_sem:
+	forall t: int.
+	out0[t] = orb in0[t-delay] in1[t-delay]
+
+end
+
+(*********)
+
+theory XOR
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use NAND
+use NOT
+use OR
+use AND
+
+function in0: Wire.t
+function in1: Wire.t
+function out0: Wire.t
+
+constant delay: int = OR.delay + AND.delay
+
+function aux0: Wire.t
+clone OR as OR1 with function in0 = in0, function in1 = in1, function out0 = aux0
+function aux1: Wire.t
+clone NAND as NAND1 with function in0 = in0, function in1 = in1, function out0 = aux1
+clone AND as AND1 with function in0 = aux0, function in1 = aux1, function out0 = out0
+
+
+lemma xor_sem:
+      forall t: int.
+	(forall k. t - delay <= k < t ->
+	  in0[k] = in0[t-delay] /\ in1[k] = in1[t-delay]) ->
+	out0[t] = xorb in0[t-delay] in1[t-delay]
+
+end
+
+(*********)
+
+theory MUX
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use AND
+use NOT
+use OR
+
+function in0: Wire.t
+function in1: Wire.t
+function sel: Wire.t
+function out0: Wire.t
+
+constant delay: int = AND.delay + NOT.delay + OR.delay
+
+function aux0: Wire.t
+clone NOT as NOT1 with function in0 = sel, function out0 = aux0
+
+function aux1: Wire.t
+clone AND as AND1 with function in0 = in0, function in1 = sel, function out0 = aux1
+
+function aux2: Wire.t
+clone AND as AND2 with function in0 = in1, function in1 = aux0, function out0 = aux2
+
+clone OR as OR1 with function in0 = aux1, function in1 = aux2, function out0 = out0
+
+lemma mux_sem:
+	forall t: int.
+	(forall k. t - delay <= k < t ->
+	  in0[k] = in0[t-delay] /\ in1[k] = in1[t-delay] /\ sel[k] = sel[t-delay]) ->
+	out0[t] = if sel[t-delay] then in0[t-delay] else in1[t-delay]
+
+
+end
+
+(*********)
+
+theory DMUX
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use AND
+use NOT
+use OR
+
+function in0: Wire.t
+function sel: Wire.t
+function out0: Wire.t
+function out1: Wire.t
+
+constant delay: int = AND.delay + NOT.delay + OR.delay
+
+function aux0: Wire.t
+clone NOT as NOT1 with function in0 = sel, function out0 = aux0
+
+clone AND as AND1 with function in0 = in0, function in1 = aux0, function out0 = out0
+clone AND as AND2 with function in0 = in0, function in1 = sel, function out0 = out1
+
+lemma dmux_sem:
+	forall t: int.
+	(forall k. t - delay <= k < t ->
+	  in0[k] = in0[t-delay] /\ sel[k] = sel[t-delay]) ->
+	out0[t] = if sel[t-delay] then false else in0[t-delay] /\
+	out1[t] = if sel[t-delay] then in0[t-delay] else false
+
+
+end
+
+(*********)
 
 theory NOTV
 
@@ -139,96 +309,205 @@ lemma notv_sem:
 
 end
 
-theory AND
+(*********)
 
-use import Wire
-use import WireVector
-use import int.Int
-use import bool.Bool
-use NAND
-use NOT
-
-function in0: Wire.t
-function in1: Wire.t
-function out0: Wire.t
-
-constant delay: int = NAND.delay + NOT.delay
-
-function aux0: Wire.t
-clone NAND as NAND1 with function in0 = in0, function in1 = in1, function out0 = aux0
-clone NOT as NOT1 with function in0 = aux0, function out0 = out0
-
-lemma and_sem:
-	forall t: int.
-	out0[t] = andb in0[t-delay] in1[t-delay]
-
-end
-
-theory OR
-
-use import Wire
-use import WireVector
-use import int.Int
-use import bool.Bool
-use NAND
-use NOT
-
-function in0: Wire.t
-function in1: Wire.t
-function out0: Wire.t
-
-constant delay: int = NAND.delay + NOT.delay
-
-function aux0: Wire.t
-clone NOT as NOT1 with function in0 = in0, function out0 = aux0
-function aux1: Wire.t
-clone NOT as NOT2 with function in0 = in1, function out0 = aux1
-clone NAND as NAND1 with function in0 = aux0, function in1 = aux1, function out0 = out0
-
-lemma or_sem:
-	forall t: int.
-	out0[t] = orb in0[t-delay] in1[t-delay]
-
-end
-
-theory MUX
+theory ANDV
 
 use import Wire
 use import WireVector
 use import int.Int
 use import bool.Bool
 use AND
-use NOT
-use OR
 
-function in0: Wire.t
-function in1: Wire.t
-function sel: Wire.t
-function out0: Wire.t
+function in0: WireVector.t
+function in1: WireVector.t
+function out0: WireVector.t
 
-constant delay: int = AND.delay + NOT.delay + OR.delay
+constant delay: int = AND.delay
 
-function aux0: Wire.t
-clone NOT as NOT1 with function in0 = sel, function out0 = aux0
+function in0_0: Wire.t = in0[0 ..]
+function in0_1: Wire.t = in0[1 ..]
+function in0_2: Wire.t = in0[2 ..]
+function in0_3: Wire.t = in0[3 ..]
+function in0_4: Wire.t = in0[4 ..]
+function in0_5: Wire.t = in0[5 ..]
+function in0_6: Wire.t = in0[6 ..]
+function in0_7: Wire.t = in0[7 ..]
+function in0_8: Wire.t = in0[8 ..]
+function in0_9: Wire.t = in0[9 ..]
+function in0_10: Wire.t = in0[10 ..]
+function in0_11: Wire.t = in0[11 ..]
+function in0_12: Wire.t = in0[12 ..]
+function in0_13: Wire.t = in0[13 ..]
+function in0_14: Wire.t = in0[14 ..]
+function in0_15: Wire.t = in0[15 ..]
 
-function aux1: Wire.t
-clone AND as AND1 with function in0 = in0, function in1 = sel, function out0 = aux1
+function in1_0: Wire.t = in1[0 ..]
+function in1_1: Wire.t = in1[1 ..]
+function in1_2: Wire.t = in1[2 ..]
+function in1_3: Wire.t = in1[3 ..]
+function in1_4: Wire.t = in1[4 ..]
+function in1_5: Wire.t = in1[5 ..]
+function in1_6: Wire.t = in1[6 ..]
+function in1_7: Wire.t = in1[7 ..]
+function in1_8: Wire.t = in1[8 ..]
+function in1_9: Wire.t = in1[9 ..]
+function in1_10: Wire.t = in1[10 ..]
+function in1_11: Wire.t = in1[11 ..]
+function in1_12: Wire.t = in1[12 ..]
+function in1_13: Wire.t = in1[13 ..]
+function in1_14: Wire.t = in1[14 ..]
+function in1_15: Wire.t = in1[15 ..]
 
-function aux2: Wire.t
-clone AND as AND2 with function in0 = in1, function in1 = aux0, function out0 = aux2
 
-clone OR as OR1 with function in0 = aux1, function in1 = aux2, function out0 = out0
+function out0_0: Wire.t = out0[0 ..]
+function out0_1: Wire.t = out0[1 ..]
+function out0_2: Wire.t = out0[2 ..]
+function out0_3: Wire.t = out0[3 ..]
+function out0_4: Wire.t = out0[4 ..]
+function out0_5: Wire.t = out0[5 ..]
+function out0_6: Wire.t = out0[6 ..]
+function out0_7: Wire.t = out0[7 ..]
+function out0_8: Wire.t = out0[8 ..]
+function out0_9: Wire.t = out0[9 ..]
+function out0_10: Wire.t = out0[10 ..]
+function out0_11: Wire.t = out0[11 ..]
+function out0_12: Wire.t = out0[12 ..]
+function out0_13: Wire.t = out0[13 ..]
+function out0_14: Wire.t = out0[14 ..]
+function out0_15: Wire.t = out0[15 ..]
 
-lemma mux_sem:
+clone AND as AND1 with function in0 = in0_0, function in1 = in1_0, function out0 = out0_0
+clone AND as AND2 with function in0 = in0_1, function in1 = in1_1, function out0 = out0_1
+clone AND as AND3 with function in0 = in0_2, function in1 = in1_2, function out0 = out0_2
+clone AND as AND4 with function in0 = in0_3, function in1 = in1_3, function out0 = out0_3
+clone AND as AND5 with function in0 = in0_4, function in1 = in1_4, function out0 = out0_4
+clone AND as AND6 with function in0 = in0_5, function in1 = in1_5, function out0 = out0_5
+clone AND as AND7 with function in0 = in0_6, function in1 = in1_6, function out0 = out0_6
+clone AND as AND8 with function in0 = in0_7, function in1 = in1_7, function out0 = out0_7
+clone AND as AND9 with function in0 = in0_8, function in1 = in1_8, function out0 = out0_8
+clone AND as AND10 with function in0 = in0_9, function in1 = in1_9, function out0 = out0_9
+clone AND as AND11 with function in0 = in0_10, function in1 = in1_10, function out0 = out0_10
+clone AND as AND12 with function in0 = in0_11, function in1 = in1_11, function out0 = out0_11
+clone AND as AND13 with function in0 = in0_12, function in1 = in1_12, function out0 = out0_12
+clone AND as AND14 with function in0 = in0_13, function in1 = in1_13, function out0 = out0_13
+clone AND as AND15 with function in0 = in0_14, function in1 = in1_14, function out0 = out0_14
+clone AND as AND16 with function in0 = in0_15, function in1 = in1_15, function out0 = out0_15
+
+
+constant width : int = 16
+
+lemma andv_sem:
 	forall t: int.
 	(forall k. t - delay <= k < t ->
-	  in0[k] = in0[t-delay] /\ in1[k] = in1[t-delay] /\ sel[k] = sel[t-delay]) ->
-	out0[t] = if sel[t-delay] then in0[t-delay] else in1[t-delay]
-
+	 forall n. 0 <= n < width ->
+	  in0[n ..][k] = in0[n ..][t-delay] /\
+	  in1[n ..][k] = in1[n ..][t-delay]) ->
+	forall n. 0 <= n < width ->
+	out0[n ..][t] = andb in0[n ..][t-delay] in1[n ..][t-delay]
 
 end
 
+(*********)
 
+theory ORV
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use OR
+
+function in0: WireVector.t
+function in1: WireVector.t
+function out0: WireVector.t
+
+constant delay: int = OR.delay
+
+function in0_0: Wire.t = in0[0 ..]
+function in0_1: Wire.t = in0[1 ..]
+function in0_2: Wire.t = in0[2 ..]
+function in0_3: Wire.t = in0[3 ..]
+function in0_4: Wire.t = in0[4 ..]
+function in0_5: Wire.t = in0[5 ..]
+function in0_6: Wire.t = in0[6 ..]
+function in0_7: Wire.t = in0[7 ..]
+function in0_8: Wire.t = in0[8 ..]
+function in0_9: Wire.t = in0[9 ..]
+function in0_10: Wire.t = in0[10 ..]
+function in0_11: Wire.t = in0[11 ..]
+function in0_12: Wire.t = in0[12 ..]
+function in0_13: Wire.t = in0[13 ..]
+function in0_14: Wire.t = in0[14 ..]
+function in0_15: Wire.t = in0[15 ..]
+
+function in1_0: Wire.t = in1[0 ..]
+function in1_1: Wire.t = in1[1 ..]
+function in1_2: Wire.t = in1[2 ..]
+function in1_3: Wire.t = in1[3 ..]
+function in1_4: Wire.t = in1[4 ..]
+function in1_5: Wire.t = in1[5 ..]
+function in1_6: Wire.t = in1[6 ..]
+function in1_7: Wire.t = in1[7 ..]
+function in1_8: Wire.t = in1[8 ..]
+function in1_9: Wire.t = in1[9 ..]
+function in1_10: Wire.t = in1[10 ..]
+function in1_11: Wire.t = in1[11 ..]
+function in1_12: Wire.t = in1[12 ..]
+function in1_13: Wire.t = in1[13 ..]
+function in1_14: Wire.t = in1[14 ..]
+function in1_15: Wire.t = in1[15 ..]
+
+
+function out0_0: Wire.t = out0[0 ..]
+function out0_1: Wire.t = out0[1 ..]
+function out0_2: Wire.t = out0[2 ..]
+function out0_3: Wire.t = out0[3 ..]
+function out0_4: Wire.t = out0[4 ..]
+function out0_5: Wire.t = out0[5 ..]
+function out0_6: Wire.t = out0[6 ..]
+function out0_7: Wire.t = out0[7 ..]
+function out0_8: Wire.t = out0[8 ..]
+function out0_9: Wire.t = out0[9 ..]
+function out0_10: Wire.t = out0[10 ..]
+function out0_11: Wire.t = out0[11 ..]
+function out0_12: Wire.t = out0[12 ..]
+function out0_13: Wire.t = out0[13 ..]
+function out0_14: Wire.t = out0[14 ..]
+function out0_15: Wire.t = out0[15 ..]
+
+clone OR as OR1 with function in0 = in0_0, function in1 = in1_0, function out0 = out0_0
+clone OR as OR2 with function in0 = in0_1, function in1 = in1_1, function out0 = out0_1
+clone OR as OR3 with function in0 = in0_2, function in1 = in1_2, function out0 = out0_2
+clone OR as OR4 with function in0 = in0_3, function in1 = in1_3, function out0 = out0_3
+clone OR as OR5 with function in0 = in0_4, function in1 = in1_4, function out0 = out0_4
+clone OR as OR6 with function in0 = in0_5, function in1 = in1_5, function out0 = out0_5
+clone OR as OR7 with function in0 = in0_6, function in1 = in1_6, function out0 = out0_6
+clone OR as OR8 with function in0 = in0_7, function in1 = in1_7, function out0 = out0_7
+clone OR as OR9 with function in0 = in0_8, function in1 = in1_8, function out0 = out0_8
+clone OR as OR10 with function in0 = in0_9, function in1 = in1_9, function out0 = out0_9
+clone OR as OR11 with function in0 = in0_10, function in1 = in1_10, function out0 = out0_10
+clone OR as OR12 with function in0 = in0_11, function in1 = in1_11, function out0 = out0_11
+clone OR as OR13 with function in0 = in0_12, function in1 = in1_12, function out0 = out0_12
+clone OR as OR14 with function in0 = in0_13, function in1 = in1_13, function out0 = out0_13
+clone OR as OR15 with function in0 = in0_14, function in1 = in1_14, function out0 = out0_14
+clone OR as OR16 with function in0 = in0_15, function in1 = in1_15, function out0 = out0_15
+
+
+constant width : int = 16
+
+lemma orv_sem:
+	forall t: int.
+	(forall k. t - delay <= k < t ->
+	 forall n. 0 <= n < width ->
+	  in0[n ..][k] = in0[n ..][t-delay] /\
+	  in1[n ..][k] = in1[n ..][t-delay]) ->
+	forall n. 0 <= n < width ->
+	out0[n ..][t] = orb in0[n ..][t-delay] in1[n ..][t-delay]
+
+end
+
+(*********)
 
 
 theory MUXV
@@ -329,6 +608,7 @@ lemma muxv_sem:
 
 end
 
+(*********)
 
 theory MUX4WAY16
 
