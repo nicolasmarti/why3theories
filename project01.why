@@ -610,6 +610,76 @@ end
 
 (*********)
 
+
+theory OR8WAY
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use OR
+
+function in0: WireVector.t
+function out0: Wire.t
+
+constant delay: int = OR.delay + OR.delay + OR.delay
+
+function in0_0: Wire.t = in0[0 ..]
+function in0_1: Wire.t = in0[1 ..]
+function in0_2: Wire.t = in0[2 ..]
+function in0_3: Wire.t = in0[3 ..]
+function in0_4: Wire.t = in0[4 ..]
+function in0_5: Wire.t = in0[5 ..]
+function in0_6: Wire.t = in0[6 ..]
+function in0_7: Wire.t = in0[7 ..]
+function in0_8: Wire.t = in0[8 ..]
+
+
+function aux01: Wire.t
+clone OR as OR01 with function in0 = in0_0, function in1 = in0_1, function out0 = aux01
+
+function aux23: Wire.t
+clone OR as OR23 with function in0 = in0_2, function in1 = in0_3, function out0 = aux23
+
+function aux45: Wire.t
+clone OR as OR45 with function in0 = in0_4, function in1 = in0_5, function out0 = aux45
+
+function aux67: Wire.t
+clone OR as OR67 with function in0 = in0_6, function in1 = in0_7, function out0 = aux67
+
+function aux0123: Wire.t
+clone OR as OR0123 with function in0 = aux01, function in1 = aux23, function out0 = aux0123
+
+function aux4567: Wire.t
+clone OR as OR4567 with function in0 = aux45, function in1 = aux67, function out0 = aux4567
+
+clone OR as OR01234567 with function in0 = aux0123, function in1 = aux4567, function out0 = out0
+
+constant width : int = 16
+
+lemma or8way_sem:
+	forall t: int.
+	(forall k. t - delay <= k < t ->
+	 forall n. 0 <= n < width ->
+	  in0[n ..][k] = in0[n ..][t-delay]
+	  ) ->
+	out0[t] = orb in0[0 ..][t-delay] 
+		      (orb in0[1 ..][t-delay] 
+		      	   (orb in0[2 ..][t-delay] 
+		  	   	(orb in0[3 ..][t-delay] 
+		  		     (orb in0[4 ..][t-delay] 
+		  		     	  (orb in0[5 ..][t-delay] 
+		  			       (orb in0[6 ..][t-delay] in0[7 ..][t-delay]
+					       )
+					  )
+				     )
+				)
+		           )
+		      )
+end
+
+(*********)
+
 theory MUX4WAY16
 
 use import Wire
@@ -651,7 +721,7 @@ clone MUXV as MUXV2 with function in0 = in2, function in1 = in3, function sel = 
 
 clone MUXV as MUXV3 with function in0 = aux0, function in1 = aux1, function sel = sel_1, function out0 = out0
 
-lemma muxv_sem:
+lemma sem:
 	forall t: int.
         stab_hyp t delay ->
 	forall n. 0 <= n < width -> 
@@ -660,14 +730,82 @@ lemma muxv_sem:
 	     if sel[1 ..][t-delay] then (
 	     	in0[n ..][t-delay]
 	     ) else (
-	        out0[n ..][t]
+	        in2[n ..][t-delay]
 	     )
 	  ) else (
 	     if sel[1 ..][t-delay] then (
-	        out0[n ..][t]
+	        in1[n ..][t-delay]
 	     ) else (
-	        out0[n ..][t]
+	        in3[n ..][t-delay]
 	     )
 	  )
+
+end
+
+(*********)
+
+theory MUX8WAY16
+
+use import Wire
+use import WireVector
+use import int.Int
+use import bool.Bool
+use MUXV
+
+function in0: WireVector.t
+function in1: WireVector.t
+function in2: WireVector.t
+function in3: WireVector.t
+function in4: WireVector.t
+function in5: WireVector.t
+function in6: WireVector.t
+function in7: WireVector.t
+function sel: WireVector.t
+function out0: WireVector.t
+
+constant delay: int = MUXV.delay * 3
+
+constant width : int = 16
+
+predicate stab_hyp (t: int) (delay: int) = (forall k. t - delay <= k < t ->
+	 (forall n. 0 <= n < width ->
+	  in0[n ..][k] = in0[n ..][t-delay] /\
+	  in1[n ..][k] = in1[n ..][t-delay] /\
+	  in2[n ..][k] = in2[n ..][t-delay] /\
+	  in3[n ..][k] = in3[n ..][t-delay] /\
+	  in4[n ..][k] = in3[n ..][t-delay] /\
+	  in5[n ..][k] = in3[n ..][t-delay] /\
+	  in6[n ..][k] = in3[n ..][t-delay] /\
+	  in7[n ..][k] = in3[n ..][t-delay]
+	  ) /\
+	  (forall n. 0 <= n < 3 ->
+	   sel[n ..][k] = sel[n ..][t-delay])
+	  )
+
+
+function sel_0: Wire.t = sel[0 ..]
+function sel_1: Wire.t = sel[1 ..]
+function sel_2: Wire.t = sel[2 ..]
+
+function aux01: WireVector.t
+clone MUXV as MUXV01 with function in0 = in0, function in1 = in1, function sel = sel_0, function out0 = aux01
+
+function aux23: WireVector.t
+clone MUXV as MUXV23 with function in0 = in2, function in1 = in3, function sel = sel_0, function out0 = aux23
+
+function aux45: WireVector.t
+clone MUXV as MUXV45 with function in0 = in4, function in1 = in5, function sel = sel_0, function out0 = aux45
+
+function aux67: WireVector.t
+clone MUXV as MUXV67 with function in0 = in6, function in1 = in7, function sel = sel_0, function out0 = aux67
+
+
+function aux0123: WireVector.t
+clone MUXV as MUXV0123 with function in0 = aux01, function in1 = aux23, function sel = sel_1, function out0 = aux0123
+
+function aux4567: WireVector.t
+clone MUXV as MUXV4567 with function in0 = aux45, function in1 = aux67, function sel = sel_1, function out0 = aux4567
+
+clone MUXV as MUXV012344567 with function in0 = aux0123, function in1 = aux4567, function sel = sel_2, function out0 = aux4567
 
 end
