@@ -309,10 +309,52 @@ clone prelude.Mux as Mux13 with constant a = A.w13, constant b = B.w13, constant
 clone prelude.Mux as Mux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant out = Out.w14
 clone prelude.Mux as Mux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant out = Out.w15
 
-
 use import prelude.Mux16
 
 lemma correctness: Mux16.specification a b sel out
+
+end
+
+(**)
+
+(************)
+
+theory DMux16
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant in0: wire16
+constant sel: wire
+
+constant a: wire16
+constant b: wire16
+
+clone prelude.Wire16 as A with constant w = a
+clone prelude.Wire16 as B with constant w = b
+clone prelude.Wire16 as In with constant w = in0
+
+clone prelude.DMux as DMux0 with constant a = A.w0, constant b = B.w0, constant sel = sel, constant in0 = In.w0
+clone prelude.DMux as DMux1 with constant a = A.w1, constant b = B.w1, constant sel = sel, constant in0 = In.w1
+clone prelude.DMux as DMux2 with constant a = A.w2, constant b = B.w2, constant sel = sel, constant in0 = In.w2
+clone prelude.DMux as DMux3 with constant a = A.w3, constant b = B.w3, constant sel = sel, constant in0 = In.w3
+clone prelude.DMux as DMux4 with constant a = A.w4, constant b = B.w4, constant sel = sel, constant in0 = In.w4
+clone prelude.DMux as DMux5 with constant a = A.w5, constant b = B.w5, constant sel = sel, constant in0 = In.w5
+clone prelude.DMux as DMux6 with constant a = A.w6, constant b = B.w6, constant sel = sel, constant in0 = In.w6
+clone prelude.DMux as DMux7 with constant a = A.w7, constant b = B.w7, constant sel = sel, constant in0 = In.w7
+clone prelude.DMux as DMux8 with constant a = A.w8, constant b = B.w8, constant sel = sel, constant in0 = In.w8
+clone prelude.DMux as DMux9 with constant a = A.w9, constant b = B.w9, constant sel = sel, constant in0 = In.w9
+clone prelude.DMux as DMux10 with constant a = A.w10, constant b = B.w10, constant sel = sel, constant in0 = In.w10
+clone prelude.DMux as DMux11 with constant a = A.w11, constant b = B.w11, constant sel = sel, constant in0 = In.w11
+clone prelude.DMux as DMux12 with constant a = A.w12, constant b = B.w12, constant sel = sel, constant in0 = In.w12
+clone prelude.DMux as DMux13 with constant a = A.w13, constant b = B.w13, constant sel = sel, constant in0 = In.w13
+clone prelude.DMux as DMux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant in0 = In.w14
+clone prelude.DMux as DMux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant in0 = In.w15
+
+use import prelude.DMux16
+
+lemma correctness: DMux16.specification in0 sel a b
 
 end
 
@@ -372,7 +414,6 @@ constant out: wire16
 
 clone prelude.Wire2 as Sel with constant w = sel
 
-
 constant aux_ab: wire16
 clone prelude.Mux16 as Mux_ab with constant a = a, constant b = b, constant sel = Sel.w1, constant out = aux_ab
 
@@ -425,4 +466,72 @@ use import prelude.Mux8Way16
 lemma correctness: Mux8Way16.specification a b c d e f g h sel out
 
 end
+
+(**)
+
+theory DMux4Way16
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant in0: wire16
+constant sel: wire2
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+
+clone prelude.Wire2 as Sel with constant w = sel
+
+constant aux0: wire16
+constant aux1: wire16
+clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel.w1, constant a = aux0, constant b = aux1
+clone prelude.DMux16 as DMux1 with constant in0 = aux0, constant sel = Sel.w0, constant a = a, constant b = b
+clone prelude.DMux16 as DMux2 with constant in0 = aux1, constant sel = Sel.w0, constant a = c, constant b = d
+
+use import prelude.DMux4Way16
+
+lemma correctness: DMux4Way16.specification in0 sel a b c d
+
+end
+
+(**)
+
+theory DMux8Way16
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant in0: wire16
+constant sel: wire3
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant e: wire16
+constant f: wire16
+constant g: wire16
+constant h: wire16
+
+clone prelude.Wire3 as Sel3 with constant w = sel
+clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2
+
+constant aux0: wire16
+constant aux1: wire16
+clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel3.w0, constant a = aux0, constant b = aux1
+clone prelude.DMux4Way16 as DMux1 with constant in0 = aux0, constant sel = Sel2.w, constant a = a, constant b = b, constant c = c, constant d = d
+clone prelude.DMux4Way16 as DMux2 with constant in0 = aux1, constant sel = Sel2.w, constant a = e, constant b = f, constant c = g, constant d = h
+
+use import prelude.DMux8Way16
+
+lemma correctness: DMux8Way16.specification in0 sel a b c d e f g h
+
+end
+
+
+
 

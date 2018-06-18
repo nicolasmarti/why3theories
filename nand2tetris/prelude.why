@@ -357,6 +357,26 @@ end
 
 (************)
 
+theory DMux16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant in0: wire16
+constant sel: wire
+
+constant a: wire16
+constant b: wire16
+
+predicate specification (in0: wire16) (sel: wire) (a: wire16) (b: wire16) = forall w: d16. forall t: int. (a[w][t], b[w][t]) = if sel[t] then (false, in0[w][t]) else (in0[w][t], false)
+
+axiom correctness: specification in0 sel a b
+
+end
+
+(************)
+
 theory Or8Way
 
 use import int.Int
@@ -459,9 +479,9 @@ predicate specification (in0: wire16) (sel: wire2) (a: wire16) (b: wire16) (c: w
           (a[w][t], b[w][t], c[w][t], d[w][t]) =
           if sel[0:d2][t] then (
              if sel[1:d2][t] then
-                (false, false, false, d[w][t])
+                (false, false, false, in0[w][t])
              else
-                (false, false, c[w][t], false)
+                (false, false, in0[w][t], false)
           ) else (
              if sel[1:d2][t] then
                 (false, in0[w][t], false, false)
@@ -493,15 +513,15 @@ constant f: wire16
 constant g: wire16
 constant h: wire16
 
-predicate specification (in0: wire16) (sel: wire3) (a: wire16) (b: wire16) (c: wire16) (d: wire16) = forall w: d16. forall t: int.
+predicate specification (in0: wire16) (sel: wire3) (a: wire16) (b: wire16) (c: wire16) (d: wire16) (e: wire16) (f: wire16) (g: wire16) (h: wire16) = forall w: d16. forall t: int.
           (a[w][t], b[w][t], c[w][t], d[w][t], e[w][t], f[w][t], g[w][t], h[w][t]) =
           if sel[0:d3][t] then (
 
           if sel[1:d3][t] then (
              if sel[2:d3][t] then
-                (false, false, false, false, false, false, false, d[w][t])
+                (false, false, false, false, false, false, false, in0[w][t])
              else
-                (false, false, false, false, false, false, c[w][t], false)
+                (false, false, false, false, false, false, in0[w][t], false)
           ) else (
              if sel[2:d3][t] then
                 (false, false, false, false, false, in0[w][t], false, false)
@@ -513,9 +533,9 @@ predicate specification (in0: wire16) (sel: wire3) (a: wire16) (b: wire16) (c: w
 
           if sel[1:d3][t] then (
              if sel[2:d3][t] then
-                (false, false, false, d[w][t], false, false, false, false)
+                (false, false, false, in0[w][t], false, false, false, false)
              else
-                (false, false, c[w][t], false, false, false, false, false)
+                (false, false, in0[w][t], false, false, false, false, false)
           ) else (
              if sel[2:d3][t] then
                 (false, in0[w][t], false, false, false, false, false, false)
@@ -525,7 +545,7 @@ predicate specification (in0: wire16) (sel: wire3) (a: wire16) (b: wire16) (c: w
 
           )
 
-axiom correctness: specification in0 sel a b c d 
+axiom correctness: specification in0 sel a b c d e f g h
 
 end
 
