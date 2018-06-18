@@ -441,27 +441,91 @@ end
 
 (************)
 
-theory Mux4Way16
+theory DMux4Way16
 
 use import int.Int
 use import bool.Bool
 use import Prelude
 
+constant in0: wire16
+constant sel: wire2
+
 constant a: wire16
 constant b: wire16
 constant c: wire16
 constant d: wire16
-constant sel: wire2
-constant out: wire16
 
-predicate specification (a: wire16) (b: wire16) (c: wire16) (d: wire16) (sel: wire2) (out: wire16) = forall w: d16. forall t: int.
-          out[w][t] = if sel[0:d2][t] then (
-                         if sel[1:d2][t] then d[w][t] else c[w][t]
-                      ) else (
-                         if sel[1:d2][t] then b[w][t] else a[w][t]
-                      )
+predicate specification (in0: wire16) (sel: wire2) (a: wire16) (b: wire16) (c: wire16) (d: wire16) = forall w: d16. forall t: int.
+          (a[w][t], b[w][t], c[w][t], d[w][t]) =
+          if sel[0:d2][t] then (
+             if sel[1:d2][t] then
+                (false, false, false, d[w][t])
+             else
+                (false, false, c[w][t], false)
+          ) else (
+             if sel[1:d2][t] then
+                (false, in0[w][t], false, false)
+             else
+                (in0[w][t], false, false, false)
+          )
 
-axiom correctness: specification a b c d sel out
+axiom correctness: specification in0 sel a b c d 
+
+end
+
+(************)
+
+theory DMux8Way16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant in0: wire16
+constant sel: wire3
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant e: wire16
+constant f: wire16
+constant g: wire16
+constant h: wire16
+
+predicate specification (in0: wire16) (sel: wire3) (a: wire16) (b: wire16) (c: wire16) (d: wire16) = forall w: d16. forall t: int.
+          (a[w][t], b[w][t], c[w][t], d[w][t], e[w][t], f[w][t], g[w][t], h[w][t]) =
+          if sel[0:d3][t] then (
+
+          if sel[1:d3][t] then (
+             if sel[2:d3][t] then
+                (false, false, false, false, false, false, false, d[w][t])
+             else
+                (false, false, false, false, false, false, c[w][t], false)
+          ) else (
+             if sel[2:d3][t] then
+                (false, false, false, false, false, in0[w][t], false, false)
+             else
+                (false, false, false, false, in0[w][t], false, false, false)
+          )
+
+          ) else (
+
+          if sel[1:d3][t] then (
+             if sel[2:d3][t] then
+                (false, false, false, d[w][t], false, false, false, false)
+             else
+                (false, false, c[w][t], false, false, false, false, false)
+          ) else (
+             if sel[2:d3][t] then
+                (false, in0[w][t], false, false, false, false, false, false)
+             else
+                (in0[w][t], false, false, false, false, false, false, false)
+          )
+
+          )
+
+axiom correctness: specification in0 sel a b c d 
 
 end
 
