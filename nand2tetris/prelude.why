@@ -1,0 +1,472 @@
+(**************************)
+
+theory Prelude
+
+(**)
+
+type map 'a 'b
+function ([]) (map 'a 'b) (x: 'a): 'b
+
+(**)
+
+type d2 = < range 0 1 >
+meta coercion function d2'int
+type v2 'a = map d2 'a
+
+type d3 = < range 0 2 >
+meta coercion function d3'int
+type v3 'a = map d3 'a
+
+type d4 = < range 0 3 >
+meta coercion function d4'int
+type v4 'a = map d4 'a
+
+type d8 = < range 0 7 >
+meta coercion function d8'int
+type v8 'a = map d8 'a
+
+type d16 = < range 0 15 >
+meta coercion function d16'int
+type v16 'a = map d16 'a
+
+(**)
+
+type wire = map int bool
+type wire2 = v2 wire
+type wire3 = v3 wire
+type wire8 = v8 wire
+type wire16 = v16 wire
+
+end
+
+(************)
+
+theory Wire2
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant w: wire2
+constant w0: wire
+constant w1: wire
+
+axiom ax0: w[0:d2] = w0
+axiom ax1: w[1:d2] = w1
+
+end
+
+(**)
+
+theory Wire3
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant w: wire3
+constant w0: wire
+constant w1: wire
+constant w2: wire
+
+axiom ax0: w[0:d3] = w0
+axiom ax1: w[1:d3] = w1
+axiom ax2: w[2:d3] = w2
+
+end
+
+(**)
+
+theory Wire8
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant w: wire8
+constant w0: wire
+constant w1: wire
+constant w2: wire
+constant w3: wire
+constant w4: wire
+constant w5: wire
+constant w6: wire
+constant w7: wire
+
+axiom ax0: w[0:d8] = w0
+axiom ax1: w[1:d8] = w1
+axiom ax2: w[2:d8] = w2
+axiom ax3: w[3:d8] = w3
+axiom ax4: w[4:d8] = w4
+axiom ax5: w[5:d8] = w5
+axiom ax6: w[6:d8] = w6
+axiom ax7: w[7:d8] = w7
+
+end
+
+(**)
+
+theory Wire16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant w: wire16
+constant w0: wire
+constant w1: wire
+constant w2: wire
+constant w3: wire
+constant w4: wire
+constant w5: wire
+constant w6: wire
+constant w7: wire
+constant w8: wire
+constant w9: wire
+constant w10: wire
+constant w11: wire
+constant w12: wire
+constant w13: wire
+constant w14: wire
+constant w15: wire
+
+
+axiom ax0: w[0:d16] = w0
+axiom ax1: w[1:d16] = w1
+axiom ax2: w[2:d16] = w2
+axiom ax3: w[3:d16] = w3
+axiom ax4: w[4:d16] = w4
+axiom ax5: w[5:d16] = w5
+axiom ax6: w[6:d16] = w6
+axiom ax7: w[7:d16] = w7
+axiom ax8: w[8:d16] = w8
+axiom ax9: w[9:d16] = w9
+axiom ax10: w[10:d16] = w10
+axiom ax11: w[11:d16] = w11
+axiom ax12: w[12:d16] = w12
+axiom ax13: w[13:d16] = w13
+axiom ax14: w[14:d16] = w14
+axiom ax15: w[15:d16] = w15
+
+end
+
+(************)
+
+theory Nand
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+predicate specification (a: wire) (b: wire) (out: wire) = forall t: int. out[t] = notb (andb a[t] b[t])
+
+axiom correctness: specification a b out
+
+end
+
+(************)
+
+theory Not
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+
+constant out: wire
+
+predicate specification (a: wire) (out: wire) = forall t: int. out[t] = notb a[t]
+
+axiom correctness: specification a out
+
+end
+
+
+(************)
+
+theory And
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+predicate specification (a: wire) (b: wire) (out: wire) = forall t: int. out[t] = andb a[t] b[t]
+
+axiom correctness: specification a b out
+
+end
+
+(************)
+
+theory Or
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+predicate specification (a: wire) (b: wire) (out: wire) = forall t: int. out[t] = orb a[t] b[t]
+
+axiom correctness: specification a b out
+
+end
+
+(************)
+
+theory Xor
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+predicate specification (a: wire) (b: wire) (out: wire) = forall t: int. out[t] = xorb a[t] b[t]
+
+axiom correctness: specification a b out
+
+end
+
+(************)
+
+theory Mux
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+constant sel: wire
+constant out: wire
+
+predicate specification (a: wire) (b: wire) (sel: wire) (out: wire) = forall t: int. out[t] = if sel[t] then b[t] else a[t]
+
+axiom correctness: specification a b sel out
+
+end
+
+(************)
+
+theory DMux
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant in0: wire
+constant sel: wire
+constant a: wire
+constant b: wire
+
+predicate specification (in0: wire) (sel: wire) (a: wire) (b: wire) = forall t: int. (a[t], b[t]) = if sel[t] then (false, in0[t]) else (in0[t], false)
+
+axiom correctness: specification in0 sel a b
+
+end
+
+(************)
+
+theory Not16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant out: wire16
+
+predicate specification (a: wire16) (out: wire16) = forall w: d16. forall t: int. out[w][t] = notb a[w][t]
+
+axiom correctness: specification a out
+
+end
+
+(************)
+
+theory And16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+constant out: wire16
+
+predicate specification (a: wire16) (b: wire16) (out: wire16) = forall w: d16. forall t: int. out[w][t] = andb a[w][t] b[w][t]
+
+axiom correctness: specification a b out
+
+end
+
+(************)
+
+theory Or16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+constant out: wire16
+
+predicate specification (a: wire16) (b: wire16) (out: wire16) = forall w: d16. forall t: int. out[w][t] = orb a[w][t] b[w][t]
+
+axiom correctness: specification a b out
+
+end
+
+(************)
+
+theory Mux16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+constant sel: wire
+constant out: wire16
+
+predicate specification (a: wire16) (b: wire16) (sel: wire) (out: wire16) = forall w: d16. forall t: int. out[w][t] = if sel[t] then b[w][t] else a[w][t]
+
+axiom correctness: specification a b sel out
+
+end
+
+(************)
+
+theory Or8Way
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant in0: wire8
+constant out: wire
+
+predicate specification (in0: wire8) (out: wire) = forall t: int. out[t] = orb in0[0:d8][t] (orb in0[1:d8][t] (orb in0[2:d8][t] (orb in0[3:d8][t] (orb in0[4:d8][t] (orb in0[5:d8][t] (orb in0[6:d8][t] in0[7:d8][t]))))))
+
+axiom correctness: specification in0 out
+
+end
+
+(************)
+
+theory Mux4Way16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant sel: wire2
+constant out: wire16
+
+predicate specification (a: wire16) (b: wire16) (c: wire16) (d: wire16) (sel: wire2) (out: wire16) = forall w: d16. forall t: int.
+          out[w][t] = if sel[0:d2][t] then (
+                         if sel[1:d2][t] then d[w][t] else c[w][t]
+                      ) else (
+                         if sel[1:d2][t] then b[w][t] else a[w][t]
+                      )
+
+axiom correctness: specification a b c d sel out
+
+end
+
+(************)
+
+theory Mux8Way16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant e: wire16
+constant f: wire16
+constant g: wire16
+constant h: wire16
+
+constant sel: wire3
+constant out: wire16
+
+predicate specification (a: wire16) (b: wire16) (c: wire16) (d: wire16)(e: wire16) (f: wire16) (g: wire16) (h: wire16) (sel: wire3) (out: wire16) = forall w: d16. forall t: int.
+          out[w][t] = if sel[0:d3][t] then (
+                        if sel[1:d3][t] then (
+                           if sel[2:d3][t] then h[w][t] else g[w][t]
+                        ) else (
+                           if sel[2:d3][t] then f[w][t] else e[w][t]
+                        )
+                      ) else (
+                        if sel[1:d3][t] then (
+                           if sel[2:d3][t] then d[w][t] else c[w][t]
+                        ) else (
+                           if sel[2:d3][t] then b[w][t] else a[w][t]
+                        )
+                      )
+
+                      
+
+axiom correctness: specification a b c d e f g h sel out
+
+end
+
+(************)
+
+theory Mux4Way16
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant sel: wire2
+constant out: wire16
+
+predicate specification (a: wire16) (b: wire16) (c: wire16) (d: wire16) (sel: wire2) (out: wire16) = forall w: d16. forall t: int.
+          out[w][t] = if sel[0:d2][t] then (
+                         if sel[1:d2][t] then d[w][t] else c[w][t]
+                      ) else (
+                         if sel[1:d2][t] then b[w][t] else a[w][t]
+                      )
+
+axiom correctness: specification a b c d sel out
+
+end
+
+
+
+
+
+

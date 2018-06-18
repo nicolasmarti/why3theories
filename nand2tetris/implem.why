@@ -1,0 +1,428 @@
+(**)
+
+theory NotImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+
+constant out: wire
+
+clone prelude.Nand as Nand0 with constant a = a, constant b = a, constant out = out
+
+use import prelude.Not
+
+lemma correctness: Not.specification a out
+
+end
+
+(**)
+
+theory AndImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+constant aux: wire
+clone prelude.Nand as Nand0 with constant a = a, constant b = b, constant out = aux
+clone prelude.Not as Not0 with constant a = aux, constant out = out
+
+use import prelude.And
+
+lemma correctness: And.specification a b out
+
+end
+
+(**)
+
+theory OrImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+constant aux_neg_a: wire
+clone prelude.Not as Nota with constant a = a, constant out = aux_neg_a
+
+constant aux_neg_b: wire
+clone prelude.Not as Notb with constant a = b, constant out = aux_neg_b
+
+clone prelude.Nand as Nand0 with constant a = aux_neg_a, constant b = aux_neg_b, constant out = out
+
+use import prelude.Or
+
+lemma correctness: Or.specification a b out
+
+end
+
+(**)
+
+theory XorImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+constant b: wire
+
+constant out: wire
+
+constant aux_neg_a: wire
+clone prelude.Not as Nota with constant a = a, constant out = aux_neg_a
+
+constant aux_neg_b: wire
+clone prelude.Not as Notb with constant a = b, constant out = aux_neg_b
+
+constant aux0: wire
+clone prelude.Or as Or0 with constant a = aux_neg_a, constant b = aux_neg_b, constant out = aux0
+
+constant aux1: wire
+clone prelude.Or as Or1 with constant a = a, constant b = b, constant out = aux1
+
+clone prelude.Nand as Nand0 with constant a = aux0, constant b = aux1, constant out = out
+
+use import prelude.Xor
+
+lemma correctness: Xor.specification a b out
+
+end
+
+(**)
+
+theory MuxImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+constant b: wire
+constant sel: wire
+
+constant out: wire
+
+constant aux0: wire
+clone prelude.Not as Not0 with constant a = sel, constant out = aux0
+
+constant aux1: wire
+clone prelude.And as And0 with constant a = a, constant b = aux0, constant out = aux1
+
+constant aux2: wire
+clone prelude.And as And1 with constant a = b, constant b = sel, constant out = aux2
+
+clone prelude.And as Or0 with constant a = aux1, constant b = aux2, constant out = out
+
+use import prelude.Mux
+
+lemma correctness: Mux.specification a b sel out
+
+end
+
+(**)
+
+theory DMuxImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant in0: wire
+constant sel: wire
+constant a: wire
+constant b: wire
+
+constant aux0: wire
+clone prelude.Not as Not0 with constant a = sel, constant out = aux0
+
+constant aux1: wire
+clone prelude.And as And0 with constant a = in0, constant b = aux0, constant out = a
+
+constant aux2: wire
+clone prelude.And as And1 with constant a = in0, constant b = sel, constant out = b
+
+use import prelude.DMux
+
+lemma correctness: DMux.specification in0 sel a b
+
+end
+
+(**)
+
+theory Not16Implem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire16
+constant out: wire16
+
+clone prelude.Wire16 as A with constant w = a
+clone prelude.Wire16 as Out with constant w = out
+
+clone prelude.Not as Not0 with constant a = A.w0, constant out = Out.w0
+clone prelude.Not as Not1 with constant a = A.w1, constant out = Out.w1
+clone prelude.Not as Not2 with constant a = A.w2, constant out = Out.w2
+clone prelude.Not as Not3 with constant a = A.w3, constant out = Out.w3
+clone prelude.Not as Not4 with constant a = A.w4, constant out = Out.w4
+clone prelude.Not as Not5 with constant a = A.w5, constant out = Out.w5
+clone prelude.Not as Not6 with constant a = A.w6, constant out = Out.w6
+clone prelude.Not as Not7 with constant a = A.w7, constant out = Out.w7
+clone prelude.Not as Not8 with constant a = A.w8, constant out = Out.w8
+clone prelude.Not as Not9 with constant a = A.w9, constant out = Out.w9
+clone prelude.Not as Not10 with constant a = A.w10, constant out = Out.w10
+clone prelude.Not as Not11 with constant a = A.w11, constant out = Out.w11
+clone prelude.Not as Not12 with constant a = A.w12, constant out = Out.w12
+clone prelude.Not as Not13 with constant a = A.w13, constant out = Out.w13
+clone prelude.Not as Not14 with constant a = A.w14, constant out = Out.w14
+clone prelude.Not as Not15 with constant a = A.w15, constant out = Out.w15
+
+use import prelude.Not16
+
+lemma correctness: Not16.specification a out
+
+end
+
+(**)
+
+theory And16Implem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire16
+constant b: wire16
+constant out: wire16
+
+clone prelude.Wire16 as A with constant w = a
+clone prelude.Wire16 as B with constant w = b
+clone prelude.Wire16 as Out with constant w = out
+
+clone prelude.And as And0 with constant a = A.w0, constant b = B.w0, constant out = Out.w0
+clone prelude.And as And1 with constant a = A.w1, constant b = B.w1, constant out = Out.w1
+clone prelude.And as And2 with constant a = A.w2, constant b = B.w2, constant out = Out.w2
+clone prelude.And as And3 with constant a = A.w3, constant b = B.w3, constant out = Out.w3
+clone prelude.And as And4 with constant a = A.w4, constant b = B.w4, constant out = Out.w4
+clone prelude.And as And5 with constant a = A.w5, constant b = B.w5, constant out = Out.w5
+clone prelude.And as And6 with constant a = A.w6, constant b = B.w6, constant out = Out.w6
+clone prelude.And as And7 with constant a = A.w7, constant b = B.w7, constant out = Out.w7
+clone prelude.And as And8 with constant a = A.w8, constant b = B.w8, constant out = Out.w8
+clone prelude.And as And9 with constant a = A.w9, constant b = B.w9, constant out = Out.w9
+clone prelude.And as And10 with constant a = A.w10, constant b = B.w10, constant out = Out.w10
+clone prelude.And as And11 with constant a = A.w11, constant b = B.w11, constant out = Out.w11
+clone prelude.And as And12 with constant a = A.w12, constant b = B.w12, constant out = Out.w12
+clone prelude.And as And13 with constant a = A.w13, constant b = B.w13, constant out = Out.w13
+clone prelude.And as And14 with constant a = A.w14, constant b = B.w14, constant out = Out.w14
+clone prelude.And as And15 with constant a = A.w15, constant b = B.w15, constant out = Out.w15
+
+use import prelude.And16
+
+lemma correctness: And16.specification a b out
+
+end
+
+(**)
+
+theory Or16Implem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire16
+constant b: wire16
+constant out: wire16
+
+clone prelude.Wire16 as A with constant w = a
+clone prelude.Wire16 as B with constant w = b
+clone prelude.Wire16 as Out with constant w = out
+
+clone prelude.Or as Or0 with constant a = A.w0, constant b = B.w0, constant out = Out.w0
+clone prelude.Or as Or1 with constant a = A.w1, constant b = B.w1, constant out = Out.w1
+clone prelude.Or as Or2 with constant a = A.w2, constant b = B.w2, constant out = Out.w2
+clone prelude.Or as Or3 with constant a = A.w3, constant b = B.w3, constant out = Out.w3
+clone prelude.Or as Or4 with constant a = A.w4, constant b = B.w4, constant out = Out.w4
+clone prelude.Or as Or5 with constant a = A.w5, constant b = B.w5, constant out = Out.w5
+clone prelude.Or as Or6 with constant a = A.w6, constant b = B.w6, constant out = Out.w6
+clone prelude.Or as Or7 with constant a = A.w7, constant b = B.w7, constant out = Out.w7
+clone prelude.Or as Or8 with constant a = A.w8, constant b = B.w8, constant out = Out.w8
+clone prelude.Or as Or9 with constant a = A.w9, constant b = B.w9, constant out = Out.w9
+clone prelude.Or as Or10 with constant a = A.w10, constant b = B.w10, constant out = Out.w10
+clone prelude.Or as Or11 with constant a = A.w11, constant b = B.w11, constant out = Out.w11
+clone prelude.Or as Or12 with constant a = A.w12, constant b = B.w12, constant out = Out.w12
+clone prelude.Or as Or13 with constant a = A.w13, constant b = B.w13, constant out = Out.w13
+clone prelude.Or as Or14 with constant a = A.w14, constant b = B.w14, constant out = Out.w14
+clone prelude.Or as Or15 with constant a = A.w15, constant b = B.w15, constant out = Out.w15
+
+use import prelude.Or16
+
+lemma correctness: Or16.specification a b out
+
+end
+
+(**)
+
+theory Mux16Implem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire16
+constant b: wire16
+constant sel: wire
+constant out: wire16
+
+clone prelude.Wire16 as A with constant w = a
+clone prelude.Wire16 as B with constant w = b
+clone prelude.Wire16 as Out with constant w = out
+
+clone prelude.Mux as Mux0 with constant a = A.w0, constant b = B.w0, constant sel = sel, constant out = Out.w0
+clone prelude.Mux as Mux1 with constant a = A.w1, constant b = B.w1, constant sel = sel, constant out = Out.w1
+clone prelude.Mux as Mux2 with constant a = A.w2, constant b = B.w2, constant sel = sel, constant out = Out.w2
+clone prelude.Mux as Mux3 with constant a = A.w3, constant b = B.w3, constant sel = sel, constant out = Out.w3
+clone prelude.Mux as Mux4 with constant a = A.w4, constant b = B.w4, constant sel = sel, constant out = Out.w4
+clone prelude.Mux as Mux5 with constant a = A.w5, constant b = B.w5, constant sel = sel, constant out = Out.w5
+clone prelude.Mux as Mux6 with constant a = A.w6, constant b = B.w6, constant sel = sel, constant out = Out.w6
+clone prelude.Mux as Mux7 with constant a = A.w7, constant b = B.w7, constant sel = sel, constant out = Out.w7
+clone prelude.Mux as Mux8 with constant a = A.w8, constant b = B.w8, constant sel = sel, constant out = Out.w8
+clone prelude.Mux as Mux9 with constant a = A.w9, constant b = B.w9, constant sel = sel, constant out = Out.w9
+clone prelude.Mux as Mux10 with constant a = A.w10, constant b = B.w10, constant sel = sel, constant out = Out.w10
+clone prelude.Mux as Mux11 with constant a = A.w11, constant b = B.w11, constant sel = sel, constant out = Out.w11
+clone prelude.Mux as Mux12 with constant a = A.w12, constant b = B.w12, constant sel = sel, constant out = Out.w12
+clone prelude.Mux as Mux13 with constant a = A.w13, constant b = B.w13, constant sel = sel, constant out = Out.w13
+clone prelude.Mux as Mux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant out = Out.w14
+clone prelude.Mux as Mux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant out = Out.w15
+
+
+use import prelude.Mux16
+
+lemma correctness: Mux16.specification a b sel out
+
+end
+
+(**)
+
+theory Or8WayImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant in0: wire8
+constant out: wire
+
+clone prelude.Wire8 as In0 with constant w = in0
+
+constant aux01: wire
+clone prelude.Or as Or01 with constant a = In0.w0, constant b = In0.w1, constant out = aux01
+
+constant aux23: wire
+clone prelude.Or as Or23 with constant a = In0.w2, constant b = In0.w3, constant out = aux23
+
+constant aux45: wire
+clone prelude.Or as Or45 with constant a = In0.w4, constant b = In0.w5, constant out = aux45
+
+constant aux67: wire
+clone prelude.Or as Or67 with constant a = In0.w6, constant b = In0.w7, constant out = aux67
+
+constant aux0123: wire
+clone prelude.Or as Or0123 with constant a = aux01, constant b = aux23, constant out = aux0123
+
+constant aux4567: wire
+clone prelude.Or as Or4567 with constant a = aux45, constant b = aux67, constant out = aux4567
+
+clone prelude.Or as Or01234567 with constant a = aux0123, constant b = aux4567, constant out = out
+
+use import prelude.Or8Way
+
+lemma correctness: Or8Way.specification in0 out
+
+end
+
+(**)
+
+theory Mux4Way16
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant sel: wire2
+constant out: wire16
+
+clone prelude.Wire2 as Sel with constant w = sel
+
+
+constant aux_ab: wire16
+clone prelude.Mux16 as Mux_ab with constant a = a, constant b = b, constant sel = Sel.w1, constant out = aux_ab
+
+constant aux_cd: wire16
+clone prelude.Mux16 as Mux_cd with constant a = c, constant b = d, constant sel = Sel.w1, constant out = aux_cd
+
+clone prelude.Mux16 as Mux_abcd with constant a = aux_ab, constant b = aux_cd, constant sel = Sel.w0, constant out = out
+
+
+use import prelude.Mux4Way16
+
+lemma correctness: Mux4Way16.specification a b c d sel out
+
+end
+
+(**)
+
+theory Mux8Way16
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire16
+constant b: wire16
+constant c: wire16
+constant d: wire16
+constant e: wire16
+constant f: wire16
+constant g: wire16
+constant h: wire16
+
+constant sel: wire3
+constant out: wire16
+
+clone prelude.Wire3 as Sel3 with constant w = sel
+clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2
+
+constant aux0: wire16
+clone prelude.Mux4Way16 as Mux0 with constant a = a, constant b = b, constant c = c, constant d = d, constant sel = Sel2.w, constant out = aux0
+
+constant aux1: wire16
+clone prelude.Mux4Way16 as Mux1 with constant a = e, constant b = f, constant c = g, constant d = h, constant sel = Sel2.w, constant out = aux1
+
+clone prelude.Mux16 as Mux3 with constant a = aux0, constant b = aux1, constant sel = Sel3.w0, constant out = out
+
+
+use import prelude.Mux8Way16
+
+lemma correctness: Mux8Way16.specification a b c d e f g h sel out
+
+end
+
