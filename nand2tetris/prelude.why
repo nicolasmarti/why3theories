@@ -150,7 +150,9 @@ axiom ax15: w[15:d16] = w15
 
 end
 
-(************)
+(****************)
+(*  primitives  *)     
+(****************)
 
 theory Nand
 
@@ -168,6 +170,11 @@ predicate specification (a: wire) (b: wire) (out: wire) = forall t: int. out[t] 
 axiom correctness: specification a b out
 
 end
+
+(****************)
+(*  project 01  *)     
+(****************)
+
 
 (************)
 
@@ -549,8 +556,59 @@ axiom correctness: specification in0 sel a b c d e f g h
 
 end
 
+(****************)
+(*  project 02  *)     
+(****************)
+
+theory HalfAdder
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+
+constant sum: wire
+constant carry: wire
+
+(**)
+
+predicate specification (a: wire) (b: wire) (sum: wire) (carry: wire) =
+          forall t: int.
+                 (if a[t] then 1 else 0) + (if b[t] then 1 else 0) =
+                 (if sum[t] then 1 else 0) + (if carry[t] then 2 else 0)
+
+axiom correctness: specification a b sum carry
 
 
+end
+
+
+theory FullAdder
+
+use import int.Int
+use import bool.Bool
+use import Prelude
+
+constant a: wire
+constant b: wire
+constant c: wire
+
+constant sum: wire
+constant carry: wire
+
+(**)
+
+predicate specification (a: wire) (b: wire) (c: wire) (sum: wire) (carry: wire) =
+          forall t: int.
+                 (if a[t] then 1 else 0) + (if b[t] then 1 else 0) + (if c[t] then 1 else 0) =
+                 (if sum[t] then 1 else 0) + (if carry[t] then 2 else 0)
+
+axiom correctness: specification a b c sum carry
+
+
+end
 
 
 

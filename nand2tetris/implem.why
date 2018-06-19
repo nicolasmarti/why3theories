@@ -1,3 +1,7 @@
+(****************)
+(*  project 01  *)     
+(****************)
+
 (**)
 
 theory NotImplem
@@ -532,6 +536,71 @@ lemma correctness: DMux8Way16.specification in0 sel a b c d e f g h
 
 end
 
+(****************)
+(*  project 02  *)     
+(****************)
 
+theory HalfAdderImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+constant b: wire
+
+constant sum: wire
+constant carry: wire
+
+(**)
+
+clone prelude.Xor as Xor0 with constant a = a, constant b = b, constant out = sum
+clone prelude.And as And0 with constant a = a, constant b = b, constant out = carry
+
+use import prelude.HalfAdder
+
+lemma correctness: HalfAdder.specification a b sum carry
+
+
+end
+
+(****)
+
+theory FullAdderImplem
+
+use import int.Int
+use import bool.Bool
+use import prelude.Prelude
+
+constant a: wire
+constant b: wire
+constant c: wire
+
+constant sum: wire
+constant carry: wire
+
+(**)
+
+constant aux: wire
+clone prelude.Xor as Xor0 with constant a = a, constant b = b, constant out = aux
+clone prelude.Xor as Xor1 with constant a = aux, constant b = c, constant out = sum
+
+constant aux1: wire
+clone prelude.And as And0 with constant a = a, constant b = b, constant out = aux1
+constant aux2: wire
+clone prelude.And as And1 with constant a = a, constant b = c, constant out = aux2
+constant aux3: wire
+clone prelude.And as And2 with constant a = b, constant b = c, constant out = aux3
+
+constant aux4: wire
+clone prelude.Or as Or0 with constant a = aux1, constant b = aux2, constant out = aux4
+clone prelude.Or as Or1 with constant a = aux4, constant b = aux3, constant out = carry
+
+use import prelude.FullAdder
+
+lemma correctness: FullAdder.specification a b c sum carry
+
+
+end
 
 
