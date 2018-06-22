@@ -2,6 +2,8 @@
 
 theory Prelude
 
+use import int.Int
+
 (**)
 
 type map 'a 'b
@@ -36,6 +38,34 @@ type wire2 = v2 wire
 type wire3 = v3 wire
 type wire8 = v8 wire
 type wire16 = v16 wire
+
+function power2 (n: int): int
+axiom power2_ax0: power2 0 = 1
+axiom power2_ax1: forall n: int. n > 0 -> power2 n = 2 * power2 (n-1)
+
+function bit2int (b: bool) (w: int): int = if b then power2 w else 0
+
+function wire16_toint (w: wire16): map int int
+axiom wire16_toint: forall w: wire16.
+                    forall t: int.
+                           (wire16_toint w)[t] =
+                           bit2int w[0:d16][t] 0 +
+                           bit2int w[1:d16][t] 1 +                           
+                           bit2int w[2:d16][t] 2 +                           
+                           bit2int w[3:d16][t] 3 +                           
+                           bit2int w[4:d16][t] 4 +                           
+                           bit2int w[5:d16][t] 5 +                           
+                           bit2int w[6:d16][t] 6 +                           
+                           bit2int w[7:d16][t] 7 +                           
+                           bit2int w[8:d16][t] 8 +                           
+                           bit2int w[9:d16][t] 9 +                           
+                           bit2int w[10:d16][t] 10 +                           
+                           bit2int w[11:d16][t] 11 +                           
+                           bit2int w[12:d16][t] 12 +                           
+                           bit2int w[13:d16][t] 13 +                           
+                           bit2int w[14:d16][t] 14 +                           
+                           bit2int w[15:d16][t] 15                           
+
 
 end
 
@@ -609,6 +639,27 @@ axiom correctness: specification a b c sum carry
 
 
 end
+
+(**********)
+
+theory Add16
+
+use import Prelude
+
+constant a: wire16
+constant b: wire16
+
+constant sum: wire16
+constant carry: wire
+
+(**)
+
+predicate specification (a: wire16) (b: wire16) (sum: wire16) (carry: wire) =
+          
+
+
+
+
 
 
 
