@@ -39,6 +39,13 @@ type wire3 = v3 wire
 type wire8 = v8 wire
 type wire16 = v16 wire
 
+constant wtrue: wire
+axiom wtrue_ax: forall t: int. wtrue[t] = true
+
+constant wfalse: wire
+axiom wfalse_ax: forall t: int. wfalse[t] = false
+
+
 function power2 (n: int): int
 axiom power2_ax0: power2 0 = 1
 axiom power2_ax1: forall n: int. n > 0 -> power2 n = 2 * power2 (n-1)
@@ -644,6 +651,7 @@ end
 
 theory Add16
 
+use import int.Int
 use import Prelude
 
 constant a: wire16
@@ -655,7 +663,36 @@ constant carry: wire
 (**)
 
 predicate specification (a: wire16) (b: wire16) (sum: wire16) (carry: wire) =
-          
+                        forall t: int.
+                        (wire16_toint sum)[t] + bit2int carry[t] 16 =
+                        (wire16_toint a)[t] + (wire16_toint b)[t]
+
+axiom correctness: specification a b sum carry
+
+end
+
+(**********)
+
+theory Inc16
+
+use import int.Int
+use import Prelude
+
+constant in0: wire16
+
+constant out0: wire16
+constant carry: wire
+
+(**)
+
+predicate specification (in0: wire16) (out0: wire16) (carry: wire) =
+                        forall t: int.
+                        (wire16_toint out0)[t] + bit2int carry[t] 16 =
+                        (wire16_toint in0)[t] + 1
+
+axiom correctness: specification in0 out0 carry
+
+end
 
 
 

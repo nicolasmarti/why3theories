@@ -551,4 +551,91 @@ lemma correctness: FullAdder.specification a b c sum carry
 
 end
 
+(**)
 
+
+theory Add16Implem
+
+use import int.Int
+use import prelude.Prelude
+
+constant a: wire16
+constant b: wire16
+
+constant sum: wire16
+constant carry: wire
+
+(**)
+
+clone prelude.Wire16 as A with constant w = a
+clone prelude.Wire16 as B with constant w = b
+clone prelude.Wire16 as Sum with constant w = sum
+
+clone prelude.HalfAdder as HA0 with constant a = A.w0, constant b = B.w0, constant sum = Sum.w0
+clone prelude.FullAdder as FA1 with constant a = A.w1, constant b = B.w1, constant c = HA0.carry, constant sum = Sum.w1
+clone prelude.FullAdder as FA2 with constant a = A.w2, constant b = B.w2, constant c = FA1.carry, constant sum = Sum.w2
+clone prelude.FullAdder as FA3 with constant a = A.w3, constant b = B.w3, constant c = FA2.carry, constant sum = Sum.w3
+clone prelude.FullAdder as FA4 with constant a = A.w4, constant b = B.w4, constant c = FA3.carry, constant sum = Sum.w4
+clone prelude.FullAdder as FA5 with constant a = A.w5, constant b = B.w5, constant c = FA4.carry, constant sum = Sum.w5
+clone prelude.FullAdder as FA6 with constant a = A.w6, constant b = B.w6, constant c = FA5.carry, constant sum = Sum.w6
+clone prelude.FullAdder as FA7 with constant a = A.w7, constant b = B.w7, constant c = FA6.carry, constant sum = Sum.w7
+clone prelude.FullAdder as FA8 with constant a = A.w8, constant b = B.w8, constant c = FA7.carry, constant sum = Sum.w8
+clone prelude.FullAdder as FA9 with constant a = A.w9, constant b = B.w9, constant c = FA8.carry, constant sum = Sum.w9
+clone prelude.FullAdder as FA10 with constant a = A.w10, constant b = B.w10, constant c = FA9.carry, constant sum = Sum.w10
+clone prelude.FullAdder as FA11 with constant a = A.w11, constant b = B.w11, constant c = FA10.carry, constant sum = Sum.w11
+clone prelude.FullAdder as FA12 with constant a = A.w12, constant b = B.w12, constant c = FA11.carry, constant sum = Sum.w12
+clone prelude.FullAdder as FA13 with constant a = A.w13, constant b = B.w13, constant c = FA12.carry, constant sum = Sum.w13
+clone prelude.FullAdder as FA14 with constant a = A.w14, constant b = B.w14, constant c = FA13.carry, constant sum = Sum.w14
+clone prelude.FullAdder as FA15 with constant a = A.w15, constant b = B.w15, constant c = FA14.carry, constant sum = Sum.w15, constant carry = carry
+
+(**)
+
+use import prelude.Add16
+
+lemma correctness: Add16.specification a b sum carry
+
+end
+
+(**********)
+
+theory Inc16
+
+use import int.Int
+use import prelude.Prelude
+
+constant in0: wire16
+
+constant out0: wire16
+constant carry: wire
+
+(**)
+
+clone prelude.Wire16 as In0 with constant w = in0
+clone prelude.Wire16 as Out0 with constant w = out0
+
+clone prelude.HalfAdder as HA0 with constant a = In0.w0, constant b = wtrue, constant sum = Out0.w0
+clone prelude.HalfAdder as HA1 with constant a = In0.w1, constant b = HA0.carry, constant sum = Out0.w1
+clone prelude.HalfAdder as HA2 with constant a = In0.w2, constant b = HA1.carry, constant sum = Out0.w2
+clone prelude.HalfAdder as HA3 with constant a = In0.w3, constant b = HA2.carry, constant sum = Out0.w3
+clone prelude.HalfAdder as HA4 with constant a = In0.w4, constant b = HA3.carry, constant sum = Out0.w4
+clone prelude.HalfAdder as HA5 with constant a = In0.w5, constant b = HA4.carry, constant sum = Out0.w5
+clone prelude.HalfAdder as HA6 with constant a = In0.w6, constant b = HA5.carry, constant sum = Out0.w6
+clone prelude.HalfAdder as HA7 with constant a = In0.w7, constant b = HA6.carry, constant sum = Out0.w7
+clone prelude.HalfAdder as HA8 with constant a = In0.w8, constant b = HA7.carry, constant sum = Out0.w8
+clone prelude.HalfAdder as HA9 with constant a = In0.w9, constant b = HA8.carry, constant sum = Out0.w9
+clone prelude.HalfAdder as HA10 with constant a = In0.w10, constant b = HA9.carry, constant sum = Out0.w10
+clone prelude.HalfAdder as HA11 with constant a = In0.w11, constant b = HA10.carry, constant sum = Out0.w11
+clone prelude.HalfAdder as HA12 with constant a = In0.w12, constant b = HA11.carry, constant sum = Out0.w12
+clone prelude.HalfAdder as HA13 with constant a = In0.w13, constant b = HA12.carry, constant sum = Out0.w13
+clone prelude.HalfAdder as HA14 with constant a = In0.w14, constant b = HA13.carry, constant sum = Out0.w14
+clone prelude.HalfAdder as HA15 with constant a = In0.w15, constant b = HA14.carry, constant sum = Out0.w15, constant carry = carry
+
+
+
+(**)
+
+use import prelude.Inc16
+
+lemma correctness: Inc16.specification in0 out0 carry
+
+end
