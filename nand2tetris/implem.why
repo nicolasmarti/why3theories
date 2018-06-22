@@ -35,9 +35,8 @@ constant b: wire
 
 constant out: wire
 
-constant aux: wire
-clone prelude.Nand as Nand0 with constant a = a, constant b = b, constant out = aux
-clone prelude.Not as Not0 with constant a = aux, constant out = out
+clone prelude.Nand as Nand0 with constant a = a, constant b = b
+clone prelude.Not as Not0 with constant a = Nand0.out, constant out = out
 
 use import prelude.And
 
@@ -58,13 +57,9 @@ constant b: wire
 
 constant out: wire
 
-constant aux_neg_a: wire
-clone prelude.Not as Nota with constant a = a, constant out = aux_neg_a
-
-constant aux_neg_b: wire
-clone prelude.Not as Notb with constant a = b, constant out = aux_neg_b
-
-clone prelude.Nand as Nand0 with constant a = aux_neg_a, constant b = aux_neg_b, constant out = out
+clone prelude.Not as Nota with constant a = a
+clone prelude.Not as Notb with constant a = b
+clone prelude.Nand as Nand0 with constant a = Nota.out, constant b = Notb.out, constant out = out
 
 use import prelude.Or
 
@@ -85,19 +80,11 @@ constant b: wire
 
 constant out: wire
 
-constant aux_neg_a: wire
-clone prelude.Not as Nota with constant a = a, constant out = aux_neg_a
-
-constant aux_neg_b: wire
-clone prelude.Not as Notb with constant a = b, constant out = aux_neg_b
-
-constant aux0: wire
-clone prelude.Or as Or0 with constant a = aux_neg_a, constant b = aux_neg_b, constant out = aux0
-
-constant aux1: wire
-clone prelude.Or as Or1 with constant a = a, constant b = b, constant out = aux1
-
-clone prelude.Nand as Nand0 with constant a = aux0, constant b = aux1, constant out = out
+clone prelude.Not as Nota with constant a = a
+clone prelude.Not as Notb with constant a = b
+clone prelude.Or as Or0 with constant a = Nota.out, constant b = Notb.out
+clone prelude.Or as Or1 with constant a = a, constant b = b
+clone prelude.Nand as Nand0 with constant a = Or0.out, constant b = Or1.out, constant out = out
 
 use import prelude.Xor
 
@@ -119,16 +106,11 @@ constant sel: wire
 
 constant out: wire
 
-constant aux0: wire
-clone prelude.Not as Not0 with constant a = sel, constant out = aux0
 
-constant aux1: wire
-clone prelude.And as And0 with constant a = a, constant b = aux0, constant out = aux1
-
-constant aux2: wire
-clone prelude.And as And1 with constant a = b, constant b = sel, constant out = aux2
-
-clone prelude.And as Or0 with constant a = aux1, constant b = aux2, constant out = out
+clone prelude.Not as Not0 with constant a = sel
+clone prelude.And as And0 with constant a = a, constant b = Not0.out
+clone prelude.And as And1 with constant a = b, constant b = sel
+clone prelude.And as Or0 with constant a = And0.out, constant b = And1.out, constant out = out
 
 use import prelude.Mux
 
@@ -149,13 +131,8 @@ constant sel: wire
 constant a: wire
 constant b: wire
 
-constant aux0: wire
-clone prelude.Not as Not0 with constant a = sel, constant out = aux0
-
-constant aux1: wire
-clone prelude.And as And0 with constant a = in0, constant b = aux0, constant out = a
-
-constant aux2: wire
+clone prelude.Not as Not0 with constant a = sel
+clone prelude.And as And0 with constant a = in0, constant b = Not0.out, constant out = a
 clone prelude.And as And1 with constant a = in0, constant b = sel, constant out = b
 
 use import prelude.DMux
@@ -375,25 +352,13 @@ constant out: wire
 
 clone prelude.Wire8 as In0 with constant w = in0
 
-constant aux01: wire
-clone prelude.Or as Or01 with constant a = In0.w0, constant b = In0.w1, constant out = aux01
-
-constant aux23: wire
-clone prelude.Or as Or23 with constant a = In0.w2, constant b = In0.w3, constant out = aux23
-
-constant aux45: wire
-clone prelude.Or as Or45 with constant a = In0.w4, constant b = In0.w5, constant out = aux45
-
-constant aux67: wire
-clone prelude.Or as Or67 with constant a = In0.w6, constant b = In0.w7, constant out = aux67
-
-constant aux0123: wire
-clone prelude.Or as Or0123 with constant a = aux01, constant b = aux23, constant out = aux0123
-
-constant aux4567: wire
-clone prelude.Or as Or4567 with constant a = aux45, constant b = aux67, constant out = aux4567
-
-clone prelude.Or as Or01234567 with constant a = aux0123, constant b = aux4567, constant out = out
+clone prelude.Or as Or01 with constant a = In0.w0, constant b = In0.w1
+clone prelude.Or as Or23 with constant a = In0.w2, constant b = In0.w3
+clone prelude.Or as Or45 with constant a = In0.w4, constant b = In0.w5
+clone prelude.Or as Or67 with constant a = In0.w6, constant b = In0.w7
+clone prelude.Or as Or0123 with constant a = Or01.out, constant b = Or23.out
+clone prelude.Or as Or4567 with constant a = Or45.out, constant b = Or67.out
+clone prelude.Or as Or01234567 with constant a = Or0123.out, constant b = Or4567.out, constant out = out
 
 use import prelude.Or8Way
 
@@ -417,14 +382,9 @@ constant sel: wire2
 constant out: wire16
 
 clone prelude.Wire2 as Sel with constant w = sel
-
-constant aux_ab: wire16
-clone prelude.Mux16 as Mux_ab with constant a = a, constant b = b, constant sel = Sel.w1, constant out = aux_ab
-
-constant aux_cd: wire16
-clone prelude.Mux16 as Mux_cd with constant a = c, constant b = d, constant sel = Sel.w1, constant out = aux_cd
-
-clone prelude.Mux16 as Mux_abcd with constant a = aux_ab, constant b = aux_cd, constant sel = Sel.w0, constant out = out
+clone prelude.Mux16 as Mux_ab with constant a = a, constant b = b, constant sel = Sel.w1
+clone prelude.Mux16 as Mux_cd with constant a = c, constant b = d, constant sel = Sel.w1
+clone prelude.Mux16 as Mux_abcd with constant a = Mux_ab.out, constant b = Mux_cd.out, constant sel = Sel.w0, constant out = out
 
 
 use import prelude.Mux4Way16
@@ -456,13 +416,10 @@ constant out: wire16
 clone prelude.Wire3 as Sel3 with constant w = sel
 clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2
 
-constant aux0: wire16
-clone prelude.Mux4Way16 as Mux0 with constant a = a, constant b = b, constant c = c, constant d = d, constant sel = Sel2.w, constant out = aux0
+clone prelude.Mux4Way16 as Mux0 with constant a = a, constant b = b, constant c = c, constant d = d, constant sel = Sel2.w
+clone prelude.Mux4Way16 as Mux1 with constant a = e, constant b = f, constant c = g, constant d = h, constant sel = Sel2.w
 
-constant aux1: wire16
-clone prelude.Mux4Way16 as Mux1 with constant a = e, constant b = f, constant c = g, constant d = h, constant sel = Sel2.w, constant out = aux1
-
-clone prelude.Mux16 as Mux3 with constant a = aux0, constant b = aux1, constant sel = Sel3.w0, constant out = out
+clone prelude.Mux16 as Mux3 with constant a = Mux0.out, constant b = Mux1.out, constant sel = Sel3.w0, constant out = out
 
 
 use import prelude.Mux8Way16
@@ -489,11 +446,9 @@ constant d: wire16
 
 clone prelude.Wire2 as Sel with constant w = sel
 
-constant aux0: wire16
-constant aux1: wire16
-clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel.w1, constant a = aux0, constant b = aux1
-clone prelude.DMux16 as DMux1 with constant in0 = aux0, constant sel = Sel.w0, constant a = a, constant b = b
-clone prelude.DMux16 as DMux2 with constant in0 = aux1, constant sel = Sel.w0, constant a = c, constant b = d
+clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel.w1
+clone prelude.DMux16 as DMux1 with constant in0 = DMux0.a, constant sel = Sel.w0, constant a = a, constant b = b
+clone prelude.DMux16 as DMux2 with constant in0 = DMux0.b, constant sel = Sel.w0, constant a = c, constant b = d
 
 use import prelude.DMux4Way16
 
@@ -524,11 +479,9 @@ constant h: wire16
 clone prelude.Wire3 as Sel3 with constant w = sel
 clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2
 
-constant aux0: wire16
-constant aux1: wire16
-clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel3.w0, constant a = aux0, constant b = aux1
-clone prelude.DMux4Way16 as DMux1 with constant in0 = aux0, constant sel = Sel2.w, constant a = a, constant b = b, constant c = c, constant d = d
-clone prelude.DMux4Way16 as DMux2 with constant in0 = aux1, constant sel = Sel2.w, constant a = e, constant b = f, constant c = g, constant d = h
+clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel3.w0
+clone prelude.DMux4Way16 as DMux1 with constant in0 = DMux0.a, constant sel = Sel2.w, constant a = a, constant b = b, constant c = c, constant d = d
+clone prelude.DMux4Way16 as DMux2 with constant in0 = DMux0.b, constant sel = Sel2.w, constant a = e, constant b = f, constant c = g, constant d = h
 
 use import prelude.DMux8Way16
 
@@ -581,20 +534,15 @@ constant carry: wire
 
 (**)
 
-constant aux: wire
-clone prelude.Xor as Xor0 with constant a = a, constant b = b, constant out = aux
-clone prelude.Xor as Xor1 with constant a = aux, constant b = c, constant out = sum
+clone prelude.Xor as Xor0 with constant a = a, constant b = b
+clone prelude.Xor as Xor1 with constant a = Xor0.out, constant b = c, constant out = sum
 
-constant aux1: wire
-clone prelude.And as And0 with constant a = a, constant b = b, constant out = aux1
-constant aux2: wire
-clone prelude.And as And1 with constant a = a, constant b = c, constant out = aux2
-constant aux3: wire
-clone prelude.And as And2 with constant a = b, constant b = c, constant out = aux3
+clone prelude.And as And0 with constant a = a, constant b = b
+clone prelude.And as And1 with constant a = a, constant b = c
+clone prelude.And as And2 with constant a = b, constant b = c
 
-constant aux4: wire
-clone prelude.Or as Or0 with constant a = aux1, constant b = aux2, constant out = aux4
-clone prelude.Or as Or1 with constant a = aux4, constant b = aux3, constant out = carry
+clone prelude.Or as Or0 with constant a = And0.out, constant b = And1.out
+clone prelude.Or as Or1 with constant a = Or0.out, constant b = And2.out, constant out = carry
 
 use import prelude.FullAdder
 
