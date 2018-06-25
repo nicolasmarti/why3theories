@@ -630,8 +630,6 @@ clone prelude.HalfAdder as HA13 with constant a = In0.w13, constant b = HA12.car
 clone prelude.HalfAdder as HA14 with constant a = In0.w14, constant b = HA13.carry, constant sum = Out0.w14
 clone prelude.HalfAdder as HA15 with constant a = In0.w15, constant b = HA14.carry, constant sum = Out0.w15, constant carry = carry
 
-
-
 (**)
 
 use import prelude.Inc16

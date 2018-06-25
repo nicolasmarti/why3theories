@@ -42,8 +42,12 @@ type wire16 = v16 wire
 constant wtrue: wire
 axiom wtrue_ax: forall t: int. wtrue[t] = true
 
+
 constant wfalse: wire
 axiom wfalse_ax: forall t: int. wfalse[t] = false
+
+constant w16false: wire16
+axiom w16false_ax: forall x: d16, t: int. w16false[x][t] = false
 
 
 function power2 (n: int): int
@@ -693,6 +697,54 @@ predicate specification (in0: wire16) (out0: wire16) (carry: wire) =
 axiom correctness: specification in0 out0 carry
 
 end
+
+(*********)
+
+
+theory ALU
+
+use import int.Int
+use import Prelude
+
+constant x: wire16
+constant y: wire16
+constant zx: wire
+constant nx: wire
+constant zy: wire
+constant ny: wire
+constant f: wire
+constant no: wire
+
+constant out0: wire16
+          
+ (* Implementation: the ALU logic manipulates the x and y inputs  *)
+ (* and operates on the resulting values, as follows:  *)
+ (* if (zx == 1) set x = 0  *)
+ (* 16-bit constant  *)
+ (* if (nx == 1) set x = !x  *)
+ (* bitwise not  *)
+ (* if (zy == 1) set y = 0  *)
+ (* 16-bit constant  *)
+ (* if (ny == 1) set y = !y  *)
+ (* bitwise not  *)
+ (* if (f == 1) set out = x + y  *)
+ (* integer 2's complement addition  *)
+ (* if (f == 0) set out = x & y  *)
+ (* bitwise and  *)
+ (* if (no == 1) set out = !out  *)
+ (* bitwise not  *)
+ (* if (out == 0) set zr = 1  *)
+ (* if (out < 0) set ng = 1 *)
+
+(* predicate specification (x: wire16) (y: wire16) (zx: wire) (nx: wire) (zy: wire) (ny: wire) = *)
+(*           forall t: int. *)
+(*           let x = if zx then w16_false else x in *)
+(*           let x = if nx then  else x in *)
+          
+
+end
+
+
 
 
 
