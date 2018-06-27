@@ -346,6 +346,11 @@ predicate specification (a: wire16) (out: wire16) = forall w: d16. forall t: int
 
 axiom correctness: specification a out
 
+function f (a: wire16): wire16
+axiom ax_f: forall a out: wire16.
+            specification a out <-> f a = out
+
+
 end
 
 (************)
@@ -363,6 +368,11 @@ constant out: wire16
 predicate specification (a: wire16) (b: wire16) (out: wire16) = forall w: d16. forall t: int. out[w][t] = andb a[w][t] b[w][t]
 
 axiom correctness: specification a b out
+
+function f (a: wire16) (b: wire16): wire16
+axiom ax_f: forall a b out: wire16.
+            specification a b out <-> f a b = out
+
 
 end
 
@@ -400,6 +410,10 @@ constant out: wire16
 predicate specification (a: wire16) (b: wire16) (sel: wire) (out: wire16) = forall w: d16. forall t: int. out[w][t] = if sel[t] then b[w][t] else a[w][t]
 
 axiom correctness: specification a b sel out
+
+function f (a: wire16) (b: wire16) (sel: wire): wire16
+axiom ax_f: forall a b out: wire16, sel: wire.
+            specification a b sel out <-> f a b sel = out
 
 end
 
@@ -673,6 +687,11 @@ predicate specification (a: wire16) (b: wire16) (sum: wire16) (carry: wire) =
 
 axiom correctness: specification a b sum carry
 
+function f (a: wire16) (b: wire16): (wire16, wire)
+axiom ax_f: forall a b sum: wire16, carry: wire.
+            specification a b sum carry <-> f a b = (sum, carry)
+
+
 end
 
 (**********)
@@ -736,11 +755,21 @@ constant out0: wire16
  (* if (out == 0) set zr = 1  *)
  (* if (out < 0) set ng = 1 *)
 
-(* predicate specification (x: wire16) (y: wire16) (zx: wire) (nx: wire) (zy: wire) (ny: wire) = *)
-(*           forall t: int. *)
-(*           let x = if zx then w16_false else x in *)
-(*           let x = if nx then  else x in *)
-          
+use Mux16
+use Not16
+use Add16
+use And16
+
+ predicate specification (x: wire16) (y: wire16) (zx: wire) (nx: wire) (zy: wire) (ny: wire) (f: wire) (no: wire) = 
+           let x1 = Mux16.f w16false x zx in
+           let x2 = Mux16.f (Not16.f x1) x1 nx in
+           let y1 = Mux16.f w16false y zy in
+           let y2 = Mux16.f (Not16.f y1) y1 ny in
+           let (sum, carry) = Add16.f x2 y2 in
+           let r = Mux16.f sum (And16.f x2 y2) f in
+           let out = Mux16.f (Not16.f r) r no in
+           true
+           
 
 end
 
