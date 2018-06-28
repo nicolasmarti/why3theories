@@ -760,7 +760,7 @@ use Not16
 use Add16
 use And16
 
- predicate specification (x: wire16) (y: wire16) (zx: wire) (nx: wire) (zy: wire) (ny: wire) (f: wire) (no: wire) = 
+ predicate specification (x: wire16) (y: wire16) (zx: wire) (nx: wire) (zy: wire) (ny: wire) (f: wire) (no: wire) (out0: wire16) = 
            let x1 = Mux16.f w16false x zx in
            let x2 = Mux16.f (Not16.f x1) x1 nx in
            let y1 = Mux16.f w16false y zy in
@@ -768,7 +768,7 @@ use And16
            let (sum, carry) = Add16.f x2 y2 in
            let r = Mux16.f sum (And16.f x2 y2) f in
            let out = Mux16.f (Not16.f r) r no in
-           true
+           forall x: d16, t: int. out[x][t] = out0[x][t]
            
 
 end
