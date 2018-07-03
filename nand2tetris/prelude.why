@@ -2,7 +2,7 @@
 
 theory Prelude
 
-use import int.Int
+use int.Int
 
 (**)
 
@@ -84,9 +84,9 @@ end
 
 theory Wire2
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant w: wire2
 constant w0: wire
@@ -101,9 +101,9 @@ end
 
 theory Wire3
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant w: wire3
 constant w0: wire
@@ -120,9 +120,9 @@ end
 
 theory Wire8
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant w: wire8
 constant w0: wire
@@ -149,9 +149,9 @@ end
 
 theory Wire16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant w: wire16
 constant w0: wire
@@ -197,9 +197,9 @@ end
 
 theory Nand
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -221,9 +221,9 @@ end
 
 theory Not
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 
@@ -240,9 +240,9 @@ end
 
 theory And
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -259,9 +259,9 @@ end
 
 theory Or
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -278,9 +278,9 @@ end
 
 theory Xor
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -297,9 +297,9 @@ end
 
 theory Mux
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -316,9 +316,9 @@ end
 
 theory DMux
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant in0: wire
 constant sel: wire
@@ -335,9 +335,9 @@ end
 
 theory Not16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire16
 constant out: wire16
@@ -357,9 +357,9 @@ end
 
 theory And16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire16
 constant b: wire16
@@ -380,9 +380,9 @@ end
 
 theory Or16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire16
 constant b: wire16
@@ -398,9 +398,9 @@ end
 
 theory Mux16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire16
 constant b: wire16
@@ -421,9 +421,9 @@ end
 
 theory DMux16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant in0: wire16
 constant sel: wire
@@ -441,9 +441,9 @@ end
 
 theory Or8Way
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant in0: wire8
 constant out: wire
@@ -458,9 +458,9 @@ end
 
 theory Mux4Way16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire16
 constant b: wire16
@@ -484,9 +484,9 @@ end
 
 theory Mux8Way16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire16
 constant b: wire16
@@ -525,9 +525,9 @@ end
 
 theory DMux4Way16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant in0: wire16
 constant sel: wire2
@@ -559,9 +559,9 @@ end
 
 theory DMux8Way16
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant in0: wire16
 constant sel: wire3
@@ -617,9 +617,9 @@ end
 
 theory HalfAdder
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -642,9 +642,9 @@ end
 
 theory FullAdder
 
-use import int.Int
-use import bool.Bool
-use import Prelude
+use int.Int
+use bool.Bool
+use Prelude
 
 constant a: wire
 constant b: wire
@@ -669,8 +669,8 @@ end
 
 theory Add16
 
-use import int.Int
-use import Prelude
+use int.Int
+use Prelude
 
 constant a: wire16
 constant b: wire16
@@ -687,9 +687,10 @@ predicate specification (a: wire16) (b: wire16) (sum: wire16) (carry: wire) =
 
 axiom correctness: specification a b sum carry
 
-function f (a: wire16) (b: wire16): (wire16, wire)
+function f_sum (a: wire16) (b: wire16): wire16
+function f_carry (a: wire16) (b: wire16): wire
 axiom ax_f: forall a b sum: wire16, carry: wire.
-            specification a b sum carry <-> f a b = (sum, carry)
+            specification a b sum carry <-> (f_sum a b = sum /\ f_carry a b = carry)
 
 
 end
@@ -698,8 +699,8 @@ end
 
 theory Inc16
 
-use import int.Int
-use import Prelude
+use int.Int
+use Prelude
 
 constant in0: wire16
 
@@ -722,8 +723,8 @@ end
 
 theory ALU
 
-use import int.Int
-use import Prelude
+use int.Int
+use Prelude
 
 constant x: wire16
 constant y: wire16
@@ -765,7 +766,7 @@ use And16
            let x2 = Mux16.f (Not16.f x1) x1 nx in
            let y1 = Mux16.f w16false y zy in
            let y2 = Mux16.f (Not16.f y1) y1 ny in
-           let (sum, carry) = Add16.f x2 y2 in
+           let sum = Add16.f_sum x2 y2 in
            let r = Mux16.f sum (And16.f x2 y2) f in
            let out = Mux16.f (Not16.f r) r no in
            forall x: d16, t: int. out[x][t] = out0[x][t]

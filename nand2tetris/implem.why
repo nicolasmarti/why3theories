@@ -6,17 +6,17 @@
 
 theory NotImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 
 constant out: wire
 
-clone prelude.Nand as Nand0 with constant a = a, constant b = a, constant out = out
+clone prelude.Nand as Nand0 with constant a = a, constant b = a, constant out = out, axiom .
 
-use import prelude.Not
+use prelude.Not
 
 lemma correctness: Not.specification a out
 
@@ -26,19 +26,19 @@ end
 
 theory AndImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 constant b: wire
 
 constant out: wire
 
-clone prelude.Nand as Nand0 with constant a = a, constant b = b
-clone prelude.Not as Not0 with constant a = Nand0.out, constant out = out
+clone prelude.Nand as Nand0 with constant a = a, constant b = b, axiom .
+clone prelude.Not as Not0 with constant a = Nand0.out, constant out = out, axiom .
 
-use import prelude.And
+use prelude.And
 
 lemma correctness: And.specification a b out
 
@@ -48,20 +48,20 @@ end
 
 theory OrImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 constant b: wire
 
 constant out: wire
 
-clone prelude.Not as Nota with constant a = a
-clone prelude.Not as Notb with constant a = b
-clone prelude.Nand as Nand0 with constant a = Nota.out, constant b = Notb.out, constant out = out
+clone prelude.Not as Nota with constant a = a, axiom .
+clone prelude.Not as Notb with constant a = b, axiom .
+clone prelude.Nand as Nand0 with constant a = Nota.out, constant b = Notb.out, constant out = out, axiom .
 
-use import prelude.Or
+use prelude.Or
 
 lemma correctness: Or.specification a b out
 
@@ -71,22 +71,22 @@ end
 
 theory XorImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 constant b: wire
 
 constant out: wire
 
-clone prelude.Not as Nota with constant a = a
-clone prelude.Not as Notb with constant a = b
-clone prelude.Or as Or0 with constant a = Nota.out, constant b = Notb.out
-clone prelude.Or as Or1 with constant a = a, constant b = b
-clone prelude.Nand as Nand0 with constant a = Or0.out, constant b = Or1.out, constant out = out
+clone prelude.Not as Nota with constant a = a, axiom .
+clone prelude.Not as Notb with constant a = b, axiom .
+clone prelude.Or as Or0 with constant a = Nota.out, constant b = Notb.out, axiom .
+clone prelude.Or as Or1 with constant a = a, constant b = b, axiom .
+clone prelude.Nand as Nand0 with constant a = Or0.out, constant b = Or1.out, constant out = out, axiom .
 
-use import prelude.Xor
+use prelude.Xor
 
 lemma correctness: Xor.specification a b out
 
@@ -96,9 +96,9 @@ end
 
 theory MuxImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 constant b: wire
@@ -107,12 +107,12 @@ constant sel: wire
 constant out: wire
 
 
-clone prelude.Not as Not0 with constant a = sel
-clone prelude.And as And0 with constant a = a, constant b = Not0.out
-clone prelude.And as And1 with constant a = b, constant b = sel
-clone prelude.And as Or0 with constant a = And0.out, constant b = And1.out, constant out = out
+clone prelude.Not as Not0 with constant a = sel, axiom .
+clone prelude.And as And0 with constant a = a, constant b = Not0.out, axiom .
+clone prelude.And as And1 with constant a = b, constant b = sel, axiom .
+clone prelude.And as Or0 with constant a = And0.out, constant b = And1.out, constant out = out, axiom .
 
-use import prelude.Mux
+use prelude.Mux
 
 lemma correctness: Mux.specification a b sel out
 
@@ -122,20 +122,20 @@ end
 
 theory DMuxImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant in0: wire
 constant sel: wire
 constant a: wire
 constant b: wire
 
-clone prelude.Not as Not0 with constant a = sel
-clone prelude.And as And0 with constant a = in0, constant b = Not0.out, constant out = a
-clone prelude.And as And1 with constant a = in0, constant b = sel, constant out = b
+clone prelude.Not as Not0 with constant a = sel, axiom .
+clone prelude.And as And0 with constant a = in0, constant b = Not0.out, constant out = a, axiom .
+clone prelude.And as And1 with constant a = in0, constant b = sel, constant out = b, axiom .
 
-use import prelude.DMux
+use prelude.DMux
 
 lemma correctness: DMux.specification in0 sel a b
 
@@ -145,34 +145,34 @@ end
 
 theory Not16Implem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire16
 constant out: wire16
 
-clone prelude.Wire16 as A with constant w = a
-clone prelude.Wire16 as Out with constant w = out
+clone prelude.Wire16 as A with constant w = a, axiom .
+clone prelude.Wire16 as Out with constant w = out, axiom .
 
-clone prelude.Not as Not0 with constant a = A.w0, constant out = Out.w0
-clone prelude.Not as Not1 with constant a = A.w1, constant out = Out.w1
-clone prelude.Not as Not2 with constant a = A.w2, constant out = Out.w2
-clone prelude.Not as Not3 with constant a = A.w3, constant out = Out.w3
-clone prelude.Not as Not4 with constant a = A.w4, constant out = Out.w4
-clone prelude.Not as Not5 with constant a = A.w5, constant out = Out.w5
-clone prelude.Not as Not6 with constant a = A.w6, constant out = Out.w6
-clone prelude.Not as Not7 with constant a = A.w7, constant out = Out.w7
-clone prelude.Not as Not8 with constant a = A.w8, constant out = Out.w8
-clone prelude.Not as Not9 with constant a = A.w9, constant out = Out.w9
-clone prelude.Not as Not10 with constant a = A.w10, constant out = Out.w10
-clone prelude.Not as Not11 with constant a = A.w11, constant out = Out.w11
-clone prelude.Not as Not12 with constant a = A.w12, constant out = Out.w12
-clone prelude.Not as Not13 with constant a = A.w13, constant out = Out.w13
-clone prelude.Not as Not14 with constant a = A.w14, constant out = Out.w14
-clone prelude.Not as Not15 with constant a = A.w15, constant out = Out.w15
+clone prelude.Not as Not0 with constant a = A.w0, constant out = Out.w0, axiom .
+clone prelude.Not as Not1 with constant a = A.w1, constant out = Out.w1, axiom .
+clone prelude.Not as Not2 with constant a = A.w2, constant out = Out.w2, axiom .
+clone prelude.Not as Not3 with constant a = A.w3, constant out = Out.w3, axiom .
+clone prelude.Not as Not4 with constant a = A.w4, constant out = Out.w4, axiom .
+clone prelude.Not as Not5 with constant a = A.w5, constant out = Out.w5, axiom .
+clone prelude.Not as Not6 with constant a = A.w6, constant out = Out.w6, axiom .
+clone prelude.Not as Not7 with constant a = A.w7, constant out = Out.w7, axiom .
+clone prelude.Not as Not8 with constant a = A.w8, constant out = Out.w8, axiom .
+clone prelude.Not as Not9 with constant a = A.w9, constant out = Out.w9, axiom .
+clone prelude.Not as Not10 with constant a = A.w10, constant out = Out.w10, axiom .
+clone prelude.Not as Not11 with constant a = A.w11, constant out = Out.w11, axiom .
+clone prelude.Not as Not12 with constant a = A.w12, constant out = Out.w12, axiom .
+clone prelude.Not as Not13 with constant a = A.w13, constant out = Out.w13, axiom .
+clone prelude.Not as Not14 with constant a = A.w14, constant out = Out.w14, axiom .
+clone prelude.Not as Not15 with constant a = A.w15, constant out = Out.w15, axiom .
 
-use import prelude.Not16
+use prelude.Not16
 
 lemma correctness: Not16.specification a out
 
@@ -182,36 +182,36 @@ end
 
 theory And16Implem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire16
 constant b: wire16
 constant out: wire16
 
-clone prelude.Wire16 as A with constant w = a
-clone prelude.Wire16 as B with constant w = b
-clone prelude.Wire16 as Out with constant w = out
+clone prelude.Wire16 as A with constant w = a, axiom .
+clone prelude.Wire16 as B with constant w = b, axiom .
+clone prelude.Wire16 as Out with constant w = out, axiom .
 
-clone prelude.And as And0 with constant a = A.w0, constant b = B.w0, constant out = Out.w0
-clone prelude.And as And1 with constant a = A.w1, constant b = B.w1, constant out = Out.w1
-clone prelude.And as And2 with constant a = A.w2, constant b = B.w2, constant out = Out.w2
-clone prelude.And as And3 with constant a = A.w3, constant b = B.w3, constant out = Out.w3
-clone prelude.And as And4 with constant a = A.w4, constant b = B.w4, constant out = Out.w4
-clone prelude.And as And5 with constant a = A.w5, constant b = B.w5, constant out = Out.w5
-clone prelude.And as And6 with constant a = A.w6, constant b = B.w6, constant out = Out.w6
-clone prelude.And as And7 with constant a = A.w7, constant b = B.w7, constant out = Out.w7
-clone prelude.And as And8 with constant a = A.w8, constant b = B.w8, constant out = Out.w8
-clone prelude.And as And9 with constant a = A.w9, constant b = B.w9, constant out = Out.w9
-clone prelude.And as And10 with constant a = A.w10, constant b = B.w10, constant out = Out.w10
-clone prelude.And as And11 with constant a = A.w11, constant b = B.w11, constant out = Out.w11
-clone prelude.And as And12 with constant a = A.w12, constant b = B.w12, constant out = Out.w12
-clone prelude.And as And13 with constant a = A.w13, constant b = B.w13, constant out = Out.w13
-clone prelude.And as And14 with constant a = A.w14, constant b = B.w14, constant out = Out.w14
-clone prelude.And as And15 with constant a = A.w15, constant b = B.w15, constant out = Out.w15
+clone prelude.And as And0 with constant a = A.w0, constant b = B.w0, constant out = Out.w0, axiom .
+clone prelude.And as And1 with constant a = A.w1, constant b = B.w1, constant out = Out.w1, axiom .
+clone prelude.And as And2 with constant a = A.w2, constant b = B.w2, constant out = Out.w2, axiom .
+clone prelude.And as And3 with constant a = A.w3, constant b = B.w3, constant out = Out.w3, axiom .
+clone prelude.And as And4 with constant a = A.w4, constant b = B.w4, constant out = Out.w4, axiom .
+clone prelude.And as And5 with constant a = A.w5, constant b = B.w5, constant out = Out.w5, axiom .
+clone prelude.And as And6 with constant a = A.w6, constant b = B.w6, constant out = Out.w6, axiom .
+clone prelude.And as And7 with constant a = A.w7, constant b = B.w7, constant out = Out.w7, axiom .
+clone prelude.And as And8 with constant a = A.w8, constant b = B.w8, constant out = Out.w8, axiom .
+clone prelude.And as And9 with constant a = A.w9, constant b = B.w9, constant out = Out.w9, axiom .
+clone prelude.And as And10 with constant a = A.w10, constant b = B.w10, constant out = Out.w10, axiom .
+clone prelude.And as And11 with constant a = A.w11, constant b = B.w11, constant out = Out.w11, axiom .
+clone prelude.And as And12 with constant a = A.w12, constant b = B.w12, constant out = Out.w12, axiom .
+clone prelude.And as And13 with constant a = A.w13, constant b = B.w13, constant out = Out.w13, axiom .
+clone prelude.And as And14 with constant a = A.w14, constant b = B.w14, constant out = Out.w14, axiom .
+clone prelude.And as And15 with constant a = A.w15, constant b = B.w15, constant out = Out.w15, axiom .
 
-use import prelude.And16
+use prelude.And16
 
 lemma correctness: And16.specification a b out
 
@@ -221,36 +221,36 @@ end
 
 theory Or16Implem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire16
 constant b: wire16
 constant out: wire16
 
-clone prelude.Wire16 as A with constant w = a
-clone prelude.Wire16 as B with constant w = b
-clone prelude.Wire16 as Out with constant w = out
+clone prelude.Wire16 as A with constant w = a, axiom .
+clone prelude.Wire16 as B with constant w = b, axiom .
+clone prelude.Wire16 as Out with constant w = out, axiom .
 
-clone prelude.Or as Or0 with constant a = A.w0, constant b = B.w0, constant out = Out.w0
-clone prelude.Or as Or1 with constant a = A.w1, constant b = B.w1, constant out = Out.w1
-clone prelude.Or as Or2 with constant a = A.w2, constant b = B.w2, constant out = Out.w2
-clone prelude.Or as Or3 with constant a = A.w3, constant b = B.w3, constant out = Out.w3
-clone prelude.Or as Or4 with constant a = A.w4, constant b = B.w4, constant out = Out.w4
-clone prelude.Or as Or5 with constant a = A.w5, constant b = B.w5, constant out = Out.w5
-clone prelude.Or as Or6 with constant a = A.w6, constant b = B.w6, constant out = Out.w6
-clone prelude.Or as Or7 with constant a = A.w7, constant b = B.w7, constant out = Out.w7
-clone prelude.Or as Or8 with constant a = A.w8, constant b = B.w8, constant out = Out.w8
-clone prelude.Or as Or9 with constant a = A.w9, constant b = B.w9, constant out = Out.w9
-clone prelude.Or as Or10 with constant a = A.w10, constant b = B.w10, constant out = Out.w10
-clone prelude.Or as Or11 with constant a = A.w11, constant b = B.w11, constant out = Out.w11
-clone prelude.Or as Or12 with constant a = A.w12, constant b = B.w12, constant out = Out.w12
-clone prelude.Or as Or13 with constant a = A.w13, constant b = B.w13, constant out = Out.w13
-clone prelude.Or as Or14 with constant a = A.w14, constant b = B.w14, constant out = Out.w14
-clone prelude.Or as Or15 with constant a = A.w15, constant b = B.w15, constant out = Out.w15
+clone prelude.Or as Or0 with constant a = A.w0, constant b = B.w0, constant out = Out.w0, axiom .
+clone prelude.Or as Or1 with constant a = A.w1, constant b = B.w1, constant out = Out.w1, axiom .
+clone prelude.Or as Or2 with constant a = A.w2, constant b = B.w2, constant out = Out.w2, axiom .
+clone prelude.Or as Or3 with constant a = A.w3, constant b = B.w3, constant out = Out.w3, axiom .
+clone prelude.Or as Or4 with constant a = A.w4, constant b = B.w4, constant out = Out.w4, axiom .
+clone prelude.Or as Or5 with constant a = A.w5, constant b = B.w5, constant out = Out.w5, axiom .
+clone prelude.Or as Or6 with constant a = A.w6, constant b = B.w6, constant out = Out.w6, axiom .
+clone prelude.Or as Or7 with constant a = A.w7, constant b = B.w7, constant out = Out.w7, axiom .
+clone prelude.Or as Or8 with constant a = A.w8, constant b = B.w8, constant out = Out.w8, axiom .
+clone prelude.Or as Or9 with constant a = A.w9, constant b = B.w9, constant out = Out.w9, axiom .
+clone prelude.Or as Or10 with constant a = A.w10, constant b = B.w10, constant out = Out.w10, axiom .
+clone prelude.Or as Or11 with constant a = A.w11, constant b = B.w11, constant out = Out.w11, axiom .
+clone prelude.Or as Or12 with constant a = A.w12, constant b = B.w12, constant out = Out.w12, axiom .
+clone prelude.Or as Or13 with constant a = A.w13, constant b = B.w13, constant out = Out.w13, axiom .
+clone prelude.Or as Or14 with constant a = A.w14, constant b = B.w14, constant out = Out.w14, axiom .
+clone prelude.Or as Or15 with constant a = A.w15, constant b = B.w15, constant out = Out.w15, axiom .
 
-use import prelude.Or16
+use prelude.Or16
 
 lemma correctness: Or16.specification a b out
 
@@ -260,37 +260,37 @@ end
 
 theory Mux16Implem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire16
 constant b: wire16
 constant sel: wire
 constant out: wire16
 
-clone prelude.Wire16 as A with constant w = a
-clone prelude.Wire16 as B with constant w = b
-clone prelude.Wire16 as Out with constant w = out
+clone prelude.Wire16 as A with constant w = a, axiom .
+clone prelude.Wire16 as B with constant w = b, axiom .
+clone prelude.Wire16 as Out with constant w = out, axiom .
 
-clone prelude.Mux as Mux0 with constant a = A.w0, constant b = B.w0, constant sel = sel, constant out = Out.w0
-clone prelude.Mux as Mux1 with constant a = A.w1, constant b = B.w1, constant sel = sel, constant out = Out.w1
-clone prelude.Mux as Mux2 with constant a = A.w2, constant b = B.w2, constant sel = sel, constant out = Out.w2
-clone prelude.Mux as Mux3 with constant a = A.w3, constant b = B.w3, constant sel = sel, constant out = Out.w3
-clone prelude.Mux as Mux4 with constant a = A.w4, constant b = B.w4, constant sel = sel, constant out = Out.w4
-clone prelude.Mux as Mux5 with constant a = A.w5, constant b = B.w5, constant sel = sel, constant out = Out.w5
-clone prelude.Mux as Mux6 with constant a = A.w6, constant b = B.w6, constant sel = sel, constant out = Out.w6
-clone prelude.Mux as Mux7 with constant a = A.w7, constant b = B.w7, constant sel = sel, constant out = Out.w7
-clone prelude.Mux as Mux8 with constant a = A.w8, constant b = B.w8, constant sel = sel, constant out = Out.w8
-clone prelude.Mux as Mux9 with constant a = A.w9, constant b = B.w9, constant sel = sel, constant out = Out.w9
-clone prelude.Mux as Mux10 with constant a = A.w10, constant b = B.w10, constant sel = sel, constant out = Out.w10
-clone prelude.Mux as Mux11 with constant a = A.w11, constant b = B.w11, constant sel = sel, constant out = Out.w11
-clone prelude.Mux as Mux12 with constant a = A.w12, constant b = B.w12, constant sel = sel, constant out = Out.w12
-clone prelude.Mux as Mux13 with constant a = A.w13, constant b = B.w13, constant sel = sel, constant out = Out.w13
-clone prelude.Mux as Mux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant out = Out.w14
-clone prelude.Mux as Mux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant out = Out.w15
+clone prelude.Mux as Mux0 with constant a = A.w0, constant b = B.w0, constant sel = sel, constant out = Out.w0, axiom .
+clone prelude.Mux as Mux1 with constant a = A.w1, constant b = B.w1, constant sel = sel, constant out = Out.w1, axiom .
+clone prelude.Mux as Mux2 with constant a = A.w2, constant b = B.w2, constant sel = sel, constant out = Out.w2, axiom .
+clone prelude.Mux as Mux3 with constant a = A.w3, constant b = B.w3, constant sel = sel, constant out = Out.w3, axiom .
+clone prelude.Mux as Mux4 with constant a = A.w4, constant b = B.w4, constant sel = sel, constant out = Out.w4, axiom .
+clone prelude.Mux as Mux5 with constant a = A.w5, constant b = B.w5, constant sel = sel, constant out = Out.w5, axiom .
+clone prelude.Mux as Mux6 with constant a = A.w6, constant b = B.w6, constant sel = sel, constant out = Out.w6, axiom .
+clone prelude.Mux as Mux7 with constant a = A.w7, constant b = B.w7, constant sel = sel, constant out = Out.w7, axiom .
+clone prelude.Mux as Mux8 with constant a = A.w8, constant b = B.w8, constant sel = sel, constant out = Out.w8, axiom .
+clone prelude.Mux as Mux9 with constant a = A.w9, constant b = B.w9, constant sel = sel, constant out = Out.w9, axiom .
+clone prelude.Mux as Mux10 with constant a = A.w10, constant b = B.w10, constant sel = sel, constant out = Out.w10, axiom .
+clone prelude.Mux as Mux11 with constant a = A.w11, constant b = B.w11, constant sel = sel, constant out = Out.w11, axiom .
+clone prelude.Mux as Mux12 with constant a = A.w12, constant b = B.w12, constant sel = sel, constant out = Out.w12, axiom .
+clone prelude.Mux as Mux13 with constant a = A.w13, constant b = B.w13, constant sel = sel, constant out = Out.w13, axiom .
+clone prelude.Mux as Mux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant out = Out.w14, axiom .
+clone prelude.Mux as Mux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant out = Out.w15, axiom .
 
-use import prelude.Mux16
+use prelude.Mux16
 
 lemma correctness: Mux16.specification a b sel out
 
@@ -302,9 +302,9 @@ end
 
 theory DMux16
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant in0: wire16
 constant sel: wire
@@ -312,28 +312,28 @@ constant sel: wire
 constant a: wire16
 constant b: wire16
 
-clone prelude.Wire16 as A with constant w = a
-clone prelude.Wire16 as B with constant w = b
-clone prelude.Wire16 as In with constant w = in0
+clone prelude.Wire16 as A with constant w = a, axiom .
+clone prelude.Wire16 as B with constant w = b, axiom .
+clone prelude.Wire16 as In with constant w = in0, axiom .
 
-clone prelude.DMux as DMux0 with constant a = A.w0, constant b = B.w0, constant sel = sel, constant in0 = In.w0
-clone prelude.DMux as DMux1 with constant a = A.w1, constant b = B.w1, constant sel = sel, constant in0 = In.w1
-clone prelude.DMux as DMux2 with constant a = A.w2, constant b = B.w2, constant sel = sel, constant in0 = In.w2
-clone prelude.DMux as DMux3 with constant a = A.w3, constant b = B.w3, constant sel = sel, constant in0 = In.w3
-clone prelude.DMux as DMux4 with constant a = A.w4, constant b = B.w4, constant sel = sel, constant in0 = In.w4
-clone prelude.DMux as DMux5 with constant a = A.w5, constant b = B.w5, constant sel = sel, constant in0 = In.w5
-clone prelude.DMux as DMux6 with constant a = A.w6, constant b = B.w6, constant sel = sel, constant in0 = In.w6
-clone prelude.DMux as DMux7 with constant a = A.w7, constant b = B.w7, constant sel = sel, constant in0 = In.w7
-clone prelude.DMux as DMux8 with constant a = A.w8, constant b = B.w8, constant sel = sel, constant in0 = In.w8
-clone prelude.DMux as DMux9 with constant a = A.w9, constant b = B.w9, constant sel = sel, constant in0 = In.w9
-clone prelude.DMux as DMux10 with constant a = A.w10, constant b = B.w10, constant sel = sel, constant in0 = In.w10
-clone prelude.DMux as DMux11 with constant a = A.w11, constant b = B.w11, constant sel = sel, constant in0 = In.w11
-clone prelude.DMux as DMux12 with constant a = A.w12, constant b = B.w12, constant sel = sel, constant in0 = In.w12
-clone prelude.DMux as DMux13 with constant a = A.w13, constant b = B.w13, constant sel = sel, constant in0 = In.w13
-clone prelude.DMux as DMux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant in0 = In.w14
-clone prelude.DMux as DMux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant in0 = In.w15
+clone prelude.DMux as DMux0 with constant a = A.w0, constant b = B.w0, constant sel = sel, constant in0 = In.w0, axiom .
+clone prelude.DMux as DMux1 with constant a = A.w1, constant b = B.w1, constant sel = sel, constant in0 = In.w1, axiom .
+clone prelude.DMux as DMux2 with constant a = A.w2, constant b = B.w2, constant sel = sel, constant in0 = In.w2, axiom .
+clone prelude.DMux as DMux3 with constant a = A.w3, constant b = B.w3, constant sel = sel, constant in0 = In.w3, axiom .
+clone prelude.DMux as DMux4 with constant a = A.w4, constant b = B.w4, constant sel = sel, constant in0 = In.w4, axiom .
+clone prelude.DMux as DMux5 with constant a = A.w5, constant b = B.w5, constant sel = sel, constant in0 = In.w5, axiom .
+clone prelude.DMux as DMux6 with constant a = A.w6, constant b = B.w6, constant sel = sel, constant in0 = In.w6, axiom .
+clone prelude.DMux as DMux7 with constant a = A.w7, constant b = B.w7, constant sel = sel, constant in0 = In.w7, axiom .
+clone prelude.DMux as DMux8 with constant a = A.w8, constant b = B.w8, constant sel = sel, constant in0 = In.w8, axiom .
+clone prelude.DMux as DMux9 with constant a = A.w9, constant b = B.w9, constant sel = sel, constant in0 = In.w9, axiom .
+clone prelude.DMux as DMux10 with constant a = A.w10, constant b = B.w10, constant sel = sel, constant in0 = In.w10, axiom .
+clone prelude.DMux as DMux11 with constant a = A.w11, constant b = B.w11, constant sel = sel, constant in0 = In.w11, axiom .
+clone prelude.DMux as DMux12 with constant a = A.w12, constant b = B.w12, constant sel = sel, constant in0 = In.w12, axiom .
+clone prelude.DMux as DMux13 with constant a = A.w13, constant b = B.w13, constant sel = sel, constant in0 = In.w13, axiom .
+clone prelude.DMux as DMux14 with constant a = A.w14, constant b = B.w14, constant sel = sel, constant in0 = In.w14, axiom .
+clone prelude.DMux as DMux15 with constant a = A.w15, constant b = B.w15, constant sel = sel, constant in0 = In.w15, axiom .
 
-use import prelude.DMux16
+use prelude.DMux16
 
 lemma correctness: DMux16.specification in0 sel a b
 
@@ -343,24 +343,24 @@ end
 
 theory Or8WayImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant in0: wire8
 constant out: wire
 
-clone prelude.Wire8 as In0 with constant w = in0
+clone prelude.Wire8 as In0 with constant w = in0, axiom .
 
-clone prelude.Or as Or01 with constant a = In0.w0, constant b = In0.w1
-clone prelude.Or as Or23 with constant a = In0.w2, constant b = In0.w3
-clone prelude.Or as Or45 with constant a = In0.w4, constant b = In0.w5
-clone prelude.Or as Or67 with constant a = In0.w6, constant b = In0.w7
-clone prelude.Or as Or0123 with constant a = Or01.out, constant b = Or23.out
-clone prelude.Or as Or4567 with constant a = Or45.out, constant b = Or67.out
-clone prelude.Or as Or01234567 with constant a = Or0123.out, constant b = Or4567.out, constant out = out
+clone prelude.Or as Or01 with constant a = In0.w0, constant b = In0.w1, axiom .
+clone prelude.Or as Or23 with constant a = In0.w2, constant b = In0.w3, axiom .
+clone prelude.Or as Or45 with constant a = In0.w4, constant b = In0.w5, axiom .
+clone prelude.Or as Or67 with constant a = In0.w6, constant b = In0.w7, axiom .
+clone prelude.Or as Or0123 with constant a = Or01.out, constant b = Or23.out, axiom .
+clone prelude.Or as Or4567 with constant a = Or45.out, constant b = Or67.out, axiom .
+clone prelude.Or as Or01234567 with constant a = Or0123.out, constant b = Or4567.out, constant out = out, axiom .
 
-use import prelude.Or8Way
+use prelude.Or8Way
 
 lemma correctness: Or8Way.specification in0 out
 
@@ -370,9 +370,9 @@ end
 
 theory Mux4Way16
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire16
 constant b: wire16
@@ -381,13 +381,13 @@ constant d: wire16
 constant sel: wire2
 constant out: wire16
 
-clone prelude.Wire2 as Sel with constant w = sel
-clone prelude.Mux16 as Mux_ab with constant a = a, constant b = b, constant sel = Sel.w1
-clone prelude.Mux16 as Mux_cd with constant a = c, constant b = d, constant sel = Sel.w1
-clone prelude.Mux16 as Mux_abcd with constant a = Mux_ab.out, constant b = Mux_cd.out, constant sel = Sel.w0, constant out = out
+clone prelude.Wire2 as Sel with constant w = sel, axiom .
+clone prelude.Mux16 as Mux_ab with constant a = a, constant b = b, constant sel = Sel.w1, axiom .
+clone prelude.Mux16 as Mux_cd with constant a = c, constant b = d, constant sel = Sel.w1, axiom .
+clone prelude.Mux16 as Mux_abcd with constant a = Mux_ab.out, constant b = Mux_cd.out, constant sel = Sel.w0, constant out = out, axiom .
 
 
-use import prelude.Mux4Way16
+use prelude.Mux4Way16
 
 lemma correctness: Mux4Way16.specification a b c d sel out
 
@@ -397,9 +397,9 @@ end
 
 theory Mux8Way16
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire16
 constant b: wire16
@@ -413,16 +413,16 @@ constant h: wire16
 constant sel: wire3
 constant out: wire16
 
-clone prelude.Wire3 as Sel3 with constant w = sel
-clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2
+clone prelude.Wire3 as Sel3 with constant w = sel, axiom .
+clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2, axiom .
 
-clone prelude.Mux4Way16 as Mux0 with constant a = a, constant b = b, constant c = c, constant d = d, constant sel = Sel2.w
-clone prelude.Mux4Way16 as Mux1 with constant a = e, constant b = f, constant c = g, constant d = h, constant sel = Sel2.w
+clone prelude.Mux4Way16 as Mux0 with constant a = a, constant b = b, constant c = c, constant d = d, constant sel = Sel2.w, axiom .
+clone prelude.Mux4Way16 as Mux1 with constant a = e, constant b = f, constant c = g, constant d = h, constant sel = Sel2.w, axiom .
 
-clone prelude.Mux16 as Mux3 with constant a = Mux0.out, constant b = Mux1.out, constant sel = Sel3.w0, constant out = out
+clone prelude.Mux16 as Mux3 with constant a = Mux0.out, constant b = Mux1.out, constant sel = Sel3.w0, constant out = out, axiom .
 
 
-use import prelude.Mux8Way16
+use prelude.Mux8Way16
 
 lemma correctness: Mux8Way16.specification a b c d e f g h sel out
 
@@ -432,9 +432,9 @@ end
 
 theory DMux4Way16
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant in0: wire16
 constant sel: wire2
@@ -444,13 +444,13 @@ constant b: wire16
 constant c: wire16
 constant d: wire16
 
-clone prelude.Wire2 as Sel with constant w = sel
+clone prelude.Wire2 as Sel with constant w = sel, axiom .
 
-clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel.w1
-clone prelude.DMux16 as DMux1 with constant in0 = DMux0.a, constant sel = Sel.w0, constant a = a, constant b = b
-clone prelude.DMux16 as DMux2 with constant in0 = DMux0.b, constant sel = Sel.w0, constant a = c, constant b = d
+clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel.w1, axiom .
+clone prelude.DMux16 as DMux1 with constant in0 = DMux0.a, constant sel = Sel.w0, constant a = a, constant b = b, axiom .
+clone prelude.DMux16 as DMux2 with constant in0 = DMux0.b, constant sel = Sel.w0, constant a = c, constant b = d, axiom .
 
-use import prelude.DMux4Way16
+use prelude.DMux4Way16
 
 lemma correctness: DMux4Way16.specification in0 sel a b c d
 
@@ -460,9 +460,9 @@ end
 
 theory DMux8Way16
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant in0: wire16
 constant sel: wire3
@@ -476,14 +476,14 @@ constant f: wire16
 constant g: wire16
 constant h: wire16
 
-clone prelude.Wire3 as Sel3 with constant w = sel
-clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2
+clone prelude.Wire3 as Sel3 with constant w = sel, axiom .
+clone prelude.Wire2 as Sel2 with constant w0 = Sel3.w1, constant w1 = Sel3.w2, axiom .
 
-clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel3.w0
-clone prelude.DMux4Way16 as DMux1 with constant in0 = DMux0.a, constant sel = Sel2.w, constant a = a, constant b = b, constant c = c, constant d = d
-clone prelude.DMux4Way16 as DMux2 with constant in0 = DMux0.b, constant sel = Sel2.w, constant a = e, constant b = f, constant c = g, constant d = h
+clone prelude.DMux16 as DMux0 with constant in0 = in0, constant sel = Sel3.w0, axiom .
+clone prelude.DMux4Way16 as DMux1 with constant in0 = DMux0.a, constant sel = Sel2.w, constant a = a, constant b = b, constant c = c, constant d = d, axiom .
+clone prelude.DMux4Way16 as DMux2 with constant in0 = DMux0.b, constant sel = Sel2.w, constant a = e, constant b = f, constant c = g, constant d = h, axiom .
 
-use import prelude.DMux8Way16
+use prelude.DMux8Way16
 
 lemma correctness: DMux8Way16.specification in0 sel a b c d e f g h
 
@@ -495,9 +495,9 @@ end
 
 theory HalfAdderImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 constant b: wire
@@ -507,10 +507,10 @@ constant carry: wire
 
 (**)
 
-clone prelude.Xor as Xor0 with constant a = a, constant b = b, constant out = sum
-clone prelude.And as And0 with constant a = a, constant b = b, constant out = carry
+clone prelude.Xor as Xor0 with constant a = a, constant b = b, constant out = sum, axiom .
+clone prelude.And as And0 with constant a = a, constant b = b, constant out = carry, axiom .
 
-use import prelude.HalfAdder
+use prelude.HalfAdder
 
 lemma correctness: HalfAdder.specification a b sum carry
 
@@ -521,9 +521,9 @@ end
 
 theory FullAdderImplem
 
-use import int.Int
-use import bool.Bool
-use import prelude.Prelude
+use int.Int
+use bool.Bool
+use prelude.Prelude
 
 constant a: wire
 constant b: wire
@@ -534,17 +534,17 @@ constant carry: wire
 
 (**)
 
-clone prelude.Xor as Xor0 with constant a = a, constant b = b
-clone prelude.Xor as Xor1 with constant a = Xor0.out, constant b = c, constant out = sum
+clone prelude.Xor as Xor0 with constant a = a, constant b = b, axiom .
+clone prelude.Xor as Xor1 with constant a = Xor0.out, constant b = c, constant out = sum, axiom .
 
-clone prelude.And as And0 with constant a = a, constant b = b
-clone prelude.And as And1 with constant a = a, constant b = c
-clone prelude.And as And2 with constant a = b, constant b = c
+clone prelude.And as And0 with constant a = a, constant b = b, axiom .
+clone prelude.And as And1 with constant a = a, constant b = c, axiom .
+clone prelude.And as And2 with constant a = b, constant b = c, axiom .
 
-clone prelude.Or as Or0 with constant a = And0.out, constant b = And1.out
-clone prelude.Or as Or1 with constant a = Or0.out, constant b = And2.out, constant out = carry
+clone prelude.Or as Or0 with constant a = And0.out, constant b = And1.out, axiom .
+clone prelude.Or as Or1 with constant a = Or0.out, constant b = And2.out, constant out = carry, axiom .
 
-use import prelude.FullAdder
+use prelude.FullAdder
 
 lemma correctness: FullAdder.specification a b c sum carry
 
@@ -556,8 +556,8 @@ end
 
 theory Add16Implem
 
-use import int.Int
-use import prelude.Prelude
+use int.Int
+use prelude.Prelude
 
 constant a: wire16
 constant b: wire16
@@ -567,30 +567,30 @@ constant carry: wire
 
 (**)
 
-clone prelude.Wire16 as A with constant w = a
-clone prelude.Wire16 as B with constant w = b
-clone prelude.Wire16 as Sum with constant w = sum
+clone prelude.Wire16 as A with constant w = a, axiom .
+clone prelude.Wire16 as B with constant w = b, axiom .
+clone prelude.Wire16 as Sum with constant w = sum, axiom .
 
-clone prelude.HalfAdder as HA0 with constant a = A.w0, constant b = B.w0, constant sum = Sum.w0
-clone prelude.FullAdder as FA1 with constant a = A.w1, constant b = B.w1, constant c = HA0.carry, constant sum = Sum.w1
-clone prelude.FullAdder as FA2 with constant a = A.w2, constant b = B.w2, constant c = FA1.carry, constant sum = Sum.w2
-clone prelude.FullAdder as FA3 with constant a = A.w3, constant b = B.w3, constant c = FA2.carry, constant sum = Sum.w3
-clone prelude.FullAdder as FA4 with constant a = A.w4, constant b = B.w4, constant c = FA3.carry, constant sum = Sum.w4
-clone prelude.FullAdder as FA5 with constant a = A.w5, constant b = B.w5, constant c = FA4.carry, constant sum = Sum.w5
-clone prelude.FullAdder as FA6 with constant a = A.w6, constant b = B.w6, constant c = FA5.carry, constant sum = Sum.w6
-clone prelude.FullAdder as FA7 with constant a = A.w7, constant b = B.w7, constant c = FA6.carry, constant sum = Sum.w7
-clone prelude.FullAdder as FA8 with constant a = A.w8, constant b = B.w8, constant c = FA7.carry, constant sum = Sum.w8
-clone prelude.FullAdder as FA9 with constant a = A.w9, constant b = B.w9, constant c = FA8.carry, constant sum = Sum.w9
-clone prelude.FullAdder as FA10 with constant a = A.w10, constant b = B.w10, constant c = FA9.carry, constant sum = Sum.w10
-clone prelude.FullAdder as FA11 with constant a = A.w11, constant b = B.w11, constant c = FA10.carry, constant sum = Sum.w11
-clone prelude.FullAdder as FA12 with constant a = A.w12, constant b = B.w12, constant c = FA11.carry, constant sum = Sum.w12
-clone prelude.FullAdder as FA13 with constant a = A.w13, constant b = B.w13, constant c = FA12.carry, constant sum = Sum.w13
-clone prelude.FullAdder as FA14 with constant a = A.w14, constant b = B.w14, constant c = FA13.carry, constant sum = Sum.w14
-clone prelude.FullAdder as FA15 with constant a = A.w15, constant b = B.w15, constant c = FA14.carry, constant sum = Sum.w15, constant carry = carry
+clone prelude.HalfAdder as HA0 with constant a = A.w0, constant b = B.w0, constant sum = Sum.w0, axiom .
+clone prelude.FullAdder as FA1 with constant a = A.w1, constant b = B.w1, constant c = HA0.carry, constant sum = Sum.w1, axiom .
+clone prelude.FullAdder as FA2 with constant a = A.w2, constant b = B.w2, constant c = FA1.carry, constant sum = Sum.w2, axiom .
+clone prelude.FullAdder as FA3 with constant a = A.w3, constant b = B.w3, constant c = FA2.carry, constant sum = Sum.w3, axiom .
+clone prelude.FullAdder as FA4 with constant a = A.w4, constant b = B.w4, constant c = FA3.carry, constant sum = Sum.w4, axiom .
+clone prelude.FullAdder as FA5 with constant a = A.w5, constant b = B.w5, constant c = FA4.carry, constant sum = Sum.w5, axiom .
+clone prelude.FullAdder as FA6 with constant a = A.w6, constant b = B.w6, constant c = FA5.carry, constant sum = Sum.w6, axiom .
+clone prelude.FullAdder as FA7 with constant a = A.w7, constant b = B.w7, constant c = FA6.carry, constant sum = Sum.w7, axiom .
+clone prelude.FullAdder as FA8 with constant a = A.w8, constant b = B.w8, constant c = FA7.carry, constant sum = Sum.w8, axiom .
+clone prelude.FullAdder as FA9 with constant a = A.w9, constant b = B.w9, constant c = FA8.carry, constant sum = Sum.w9, axiom .
+clone prelude.FullAdder as FA10 with constant a = A.w10, constant b = B.w10, constant c = FA9.carry, constant sum = Sum.w10, axiom .
+clone prelude.FullAdder as FA11 with constant a = A.w11, constant b = B.w11, constant c = FA10.carry, constant sum = Sum.w11, axiom .
+clone prelude.FullAdder as FA12 with constant a = A.w12, constant b = B.w12, constant c = FA11.carry, constant sum = Sum.w12, axiom .
+clone prelude.FullAdder as FA13 with constant a = A.w13, constant b = B.w13, constant c = FA12.carry, constant sum = Sum.w13, axiom .
+clone prelude.FullAdder as FA14 with constant a = A.w14, constant b = B.w14, constant c = FA13.carry, constant sum = Sum.w14, axiom .
+clone prelude.FullAdder as FA15 with constant a = A.w15, constant b = B.w15, constant c = FA14.carry, constant sum = Sum.w15, constant carry = carry, axiom .
 
 (**)
 
-use import prelude.Add16
+use prelude.Add16
 
 lemma correctness: Add16.specification a b sum carry
 
@@ -600,8 +600,8 @@ end
 
 theory Inc16
 
-use import int.Int
-use import prelude.Prelude
+use int.Int
+use prelude.Prelude
 
 constant in0: wire16
 
@@ -610,30 +610,78 @@ constant carry: wire
 
 (**)
 
-clone prelude.Wire16 as In0 with constant w = in0
-clone prelude.Wire16 as Out0 with constant w = out0
+clone prelude.Wire16 as In0 with constant w = in0, axiom .
+clone prelude.Wire16 as Out0 with constant w = out0, axiom .
 
-clone prelude.HalfAdder as HA0 with constant a = In0.w0, constant b = wtrue, constant sum = Out0.w0
-clone prelude.HalfAdder as HA1 with constant a = In0.w1, constant b = HA0.carry, constant sum = Out0.w1
-clone prelude.HalfAdder as HA2 with constant a = In0.w2, constant b = HA1.carry, constant sum = Out0.w2
-clone prelude.HalfAdder as HA3 with constant a = In0.w3, constant b = HA2.carry, constant sum = Out0.w3
-clone prelude.HalfAdder as HA4 with constant a = In0.w4, constant b = HA3.carry, constant sum = Out0.w4
-clone prelude.HalfAdder as HA5 with constant a = In0.w5, constant b = HA4.carry, constant sum = Out0.w5
-clone prelude.HalfAdder as HA6 with constant a = In0.w6, constant b = HA5.carry, constant sum = Out0.w6
-clone prelude.HalfAdder as HA7 with constant a = In0.w7, constant b = HA6.carry, constant sum = Out0.w7
-clone prelude.HalfAdder as HA8 with constant a = In0.w8, constant b = HA7.carry, constant sum = Out0.w8
-clone prelude.HalfAdder as HA9 with constant a = In0.w9, constant b = HA8.carry, constant sum = Out0.w9
-clone prelude.HalfAdder as HA10 with constant a = In0.w10, constant b = HA9.carry, constant sum = Out0.w10
-clone prelude.HalfAdder as HA11 with constant a = In0.w11, constant b = HA10.carry, constant sum = Out0.w11
-clone prelude.HalfAdder as HA12 with constant a = In0.w12, constant b = HA11.carry, constant sum = Out0.w12
-clone prelude.HalfAdder as HA13 with constant a = In0.w13, constant b = HA12.carry, constant sum = Out0.w13
-clone prelude.HalfAdder as HA14 with constant a = In0.w14, constant b = HA13.carry, constant sum = Out0.w14
-clone prelude.HalfAdder as HA15 with constant a = In0.w15, constant b = HA14.carry, constant sum = Out0.w15, constant carry = carry
+clone prelude.HalfAdder as HA0 with constant a = In0.w0, constant b = wtrue, constant sum = Out0.w0, axiom .
+clone prelude.HalfAdder as HA1 with constant a = In0.w1, constant b = HA0.carry, constant sum = Out0.w1, axiom .
+clone prelude.HalfAdder as HA2 with constant a = In0.w2, constant b = HA1.carry, constant sum = Out0.w2, axiom .
+clone prelude.HalfAdder as HA3 with constant a = In0.w3, constant b = HA2.carry, constant sum = Out0.w3, axiom .
+clone prelude.HalfAdder as HA4 with constant a = In0.w4, constant b = HA3.carry, constant sum = Out0.w4, axiom .
+clone prelude.HalfAdder as HA5 with constant a = In0.w5, constant b = HA4.carry, constant sum = Out0.w5, axiom .
+clone prelude.HalfAdder as HA6 with constant a = In0.w6, constant b = HA5.carry, constant sum = Out0.w6, axiom .
+clone prelude.HalfAdder as HA7 with constant a = In0.w7, constant b = HA6.carry, constant sum = Out0.w7, axiom .
+clone prelude.HalfAdder as HA8 with constant a = In0.w8, constant b = HA7.carry, constant sum = Out0.w8, axiom .
+clone prelude.HalfAdder as HA9 with constant a = In0.w9, constant b = HA8.carry, constant sum = Out0.w9, axiom .
+clone prelude.HalfAdder as HA10 with constant a = In0.w10, constant b = HA9.carry, constant sum = Out0.w10, axiom .
+clone prelude.HalfAdder as HA11 with constant a = In0.w11, constant b = HA10.carry, constant sum = Out0.w11, axiom .
+clone prelude.HalfAdder as HA12 with constant a = In0.w12, constant b = HA11.carry, constant sum = Out0.w12, axiom .
+clone prelude.HalfAdder as HA13 with constant a = In0.w13, constant b = HA12.carry, constant sum = Out0.w13, axiom .
+clone prelude.HalfAdder as HA14 with constant a = In0.w14, constant b = HA13.carry, constant sum = Out0.w14, axiom .
+clone prelude.HalfAdder as HA15 with constant a = In0.w15, constant b = HA14.carry, constant sum = Out0.w15, constant carry = carry, axiom .
 
 (**)
 
-use import prelude.Inc16
+use prelude.Inc16
 
 lemma correctness: Inc16.specification in0 out0 carry
+
+end
+
+(****************)
+
+theory ALUImplem
+
+use int.Int
+use prelude.Prelude
+
+constant x: wire16
+constant y: wire16
+constant zx: wire
+constant nx: wire
+constant zy: wire
+constant ny: wire
+constant f: wire
+constant no: wire
+(*
+should have also overflow for signed/unsigned
+*)
+
+constant out0: wire16
+
+(**)
+
+clone prelude.Mux16 as Mux_x_0 with constant a = w16false, constant b = x, constant sel = zx, axiom .
+clone prelude.Not16 as Notx with constant a = Mux_x_0.out, axiom .
+clone prelude.Mux16 as Mux_x_1 with constant a = Notx.out, constant b = Mux_x_0.out, constant sel = nx, axiom .
+
+clone prelude.Mux16 as Mux_y_0 with constant a = w16false, constant b = y, constant sel = zy, axiom .
+clone prelude.Not16 as Noty with constant a = Mux_y_0.out, axiom .
+clone prelude.Mux16 as Mux_y_1 with constant a = Noty.out, constant b = Mux_y_0.out, constant sel = ny, axiom .
+
+clone prelude.Add16 as Add16_xy with constant a = Mux_x_1.out, constant b = Mux_y_1.out, axiom .
+clone prelude.And16 as And16_xy with constant a = Mux_x_1.out, constant b = Mux_y_1.out, axiom .
+
+clone prelude.Mux16 as MuxF with constant a = Add16_xy.sum, constant b = And16_xy.out, axiom .
+
+clone prelude.Not16 as NotF with constant a = MuxF.out, axiom .
+clone prelude.Mux16 as MuxFF with constant a = NotF.out, constant b = MuxF.out, constant sel = no, constant out = out0, axiom .
+
+(**)
+
+use prelude.ALU
+
+lemma correctness: ALU.specification x y zx nx zy ny f no out0
+
 
 end
