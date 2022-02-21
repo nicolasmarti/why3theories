@@ -364,6 +364,71 @@ index_positions := index_positions + 1;
 done;
 step
 
+(******)
+
+let prepare_positions3 (a: array real) (lows: array int): real
+requires { length a > 1 }
+requires { forall i j. 0 <= i < j <= length a - 1 -> a[i] <. a[j] }
+requires { length lows = length a }
+ensures { result = (a[length a - 1] -. a[0]) /. (from_int (length a)) }
+ensures { forall i.
+          0 <= i < length lows ->
+          0 <= lows[i] < length a
+          }
+ensures { forall i.
+          0 <= i < length lows ->
+          a[ lows[i] ] <=. a[0] +. (from_int i) *. result <. a[ min (lows[i] + 1) (length a - 1) ] }
+         
+=
+let step = (a[length a - 1] -. a[0]) /. (int2real (length a)) in
+
+assert { 0.0 <. step <. (a[length a - 1] -. a[0]) /. (int2real (length a - 1)) };
+
+let ref index_lows = 1 in
+let ref index_positions = 0 in
+
+assert{ forall i. 0 <= i < length a -> a[0] <=. a[0] +. (int2real i) *. step <. a[length a - 1] };
+assert{ forall i. i = 0 -> a[0] = a[0] +. (int2real i) *. step };
+
+while index_positions < length a do
+variant { length a - index_positions }
+invariant{ 1 <= index_lows <= length a }
+invariant{ 0 <= index_positions <= length a }
+
+invariant { forall i.
+          0 <= i < index_positions ->
+          0 <= lows[i] < length a
+          }
+invariant { forall i.
+            0 <= i < index_positions ->
+            a[ lows[i] ] <=. a[0] +. (from_int i) *. step <. a[ min (lows[i] + 1) (length a - 1) ]
+          }
+invariant { 
+            a[ index_lows - 1 ] <=. a[0] +. (from_int index_positions) *. step
+          }
+
+let v = a[0] +. (int2real index_positions) *. step in
+
+assert{ 0 <= index_positions < length a };
+    while (index_lows < length a && a[ index_lows ] <=. v ) do
+    variant { length a - index_lows }
+    invariant { 1 <= index_lows <= length a }
+    invariant { a[ index_lows - 1 ] <=. v }
+
+        assert { (index_lows + 1) - 1 = index_lows };
+        index_lows := index_lows + 1;
+        
+        
+    done;
+lows[ index_positions ] <- index_lows - 1;
+
+assert{ a[0] +. (int2real index_positions) *. step <. a[length a - 1] };
+
+index_positions := index_positions + 1;
+
+done;
+step
+
 
 (********)
 
