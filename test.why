@@ -40,27 +40,27 @@ requires { forall i j. 0 <= i < j <= length a - 1 -> a[i] <. a[j] }
 ensures { length result = length a }
 ensures { forall i.
           0 <= i < length result ->
-          a[ result[i] ] <=. a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a))
+          a[ result[i] ] <=. a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
           }
 =
 let positions = make (length a) 0 in
-let step = (a[length a - 1] -. a[0]) /. (int2real (length a)) in
+let step = (a[length a - 1] -. a[0]) /. (int2real (length a - 1)) in
 assert { 0.0 <. step  };
 let ref index_a = 1 in
 let ref index_positions = 1 in
 
-assert{ forall i. 0 <= i < length positions -> a[0] <=. a[0] +. (int2real index_positions) *. step <=. a[length a - 1] };
+assert{ forall i. 0 <= i < length positions -> a[0] <=. a[0] +. (int2real i) *. step <=. a[length a - 1] };
 
 while index_positions < length positions do
 variant { length positions - index_positions }
 invariant { forall i.
             0 <= i < index_positions ->
-            a[ positions[i] ] <=. a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a))
+            a[ positions[i] ] <=. a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
           }
 invariant{ 1 <= index_a <= length a }
 invariant{ 1 <= index_positions <= length positions }
 invariant { 
-            a[ index_a - 1 ] <=. a[0] +. (from_int index_positions) *. (a[length a - 1] -. a[0]) /. (from_int (length a))
+            a[ index_a - 1 ] <=. a[0] +. (from_int index_positions) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
           }
     
     let v = a[0] +. (int2real index_positions) *. step in
@@ -96,11 +96,11 @@ requires { forall i j. 0 <= i < j <= length a - 1 -> a[i] <. a[j] }
 ensures { length result = length a }
 ensures { forall i.
           0 <= i < length result ->
-          a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a)) <=. a[ result[i] ]
+          a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1)) <=. a[ result[i] ]
           }
 =
 let positions = make (length a) 0 in
-let step = (a[length a - 1] -. a[0]) /. (int2real (length a)) in
+let step = (a[length a - 1] -. a[0]) /. (int2real (length a - 1)) in
 assert { 0.0 <. step  };
 let ref index_a = 1 in
 let ref index_positions = 0 in
@@ -113,12 +113,12 @@ while index_positions < length positions do
 variant { length positions - index_positions }
 invariant { forall i.
             0 <= i < index_positions ->
-            a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a)) <=. a[ positions[i] ]
+            a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1)) <=. a[ positions[i] ]
           }
 invariant{ 1 <= index_a <= length a }
 invariant{ 0 <= index_positions <= length positions }
 invariant{
-        a[ index_a - 1 ] <=. a[0] +. (from_int index_positions) *. (a[length a - 1] -. a[0]) /. (from_int (length a))
+        a[ index_a - 1 ] <=. a[0] +. (from_int index_positions) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
         }
     let v = a[0] +. (int2real index_positions) *. step in
     
@@ -144,5 +144,85 @@ done;
 
 positions
 
+(******)
+
+let prepare_positions (a: array real) (lows: array int) (highs: array int): real
+requires { length a > 1 }
+requires { forall i j. 0 <= i < j <= length a - 1 -> a[i] <. a[j] }
+requires { length lows = length a }
+requires { length highs = length a }
+ensures { forall i.
+          0 <= i < length lows ->
+          a[ lows[i] ] <=. a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
+          }
+ensures { forall i.
+          0 <= i < length highs ->
+          a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1)) <=. a[ highs[i] ]
+          }
+=
+let step = (a[length a - 1] -. a[0]) /. (int2real (length a - 1)) in
+
+assert { 0.0 <. step  };
+
+let ref index_lows = 1 in
+let ref index_highs = 1 in
+let ref index_positions = 0 in
+
+assert{ forall i. 0 <= i < length a -> a[0] <=. a[0] +. (int2real i) *. step <=. a[length a - 1] };
+assert{ forall i. i = 0 -> a[0] = a[0] +. (int2real i) *. step };
+
+while index_positions < length a do
+variant { length a - index_positions }
+invariant{ 1 <= index_lows <= length a }
+invariant{ 1 <= index_highs <= length a }
+invariant{ 0 <= index_positions <= length a }
+
+invariant { forall i.
+            0 <= i < index_positions ->
+            a[ lows[i] ] <=. a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
+          }
+invariant { 
+            a[ index_lows - 1 ] <=. a[0] +. (from_int index_positions) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
+          }
+invariant { forall i.
+            0 <= i < index_positions ->
+            a[0] +. (from_int i) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1)) <=. a[ highs[i] ]
+          }
+invariant{
+        a[ index_highs - 1 ] <=. a[0] +. (from_int index_positions) *. (a[length a - 1] -. a[0]) /. (from_int (length a - 1))
+        }
+
+let v = a[0] +. (int2real index_positions) *. step in
+
+assert{ 0 <= index_positions < length a };
+    while (index_lows < length a && a[ index_lows ] <=. v ) do
+    variant { length a - index_lows }
+    invariant { 1 <= index_lows <= length a }
+    invariant { a[ index_lows - 1 ] <=. v }
+
+        assert { (index_lows + 1) - 1 = index_lows };
+        index_lows := index_lows + 1;
+        
+        
+    done;
+lows[ index_positions ] <- index_lows - 1;
+
+    while (index_highs < length a && a[ index_highs ] <. v  ) do
+    variant { length a - index_highs }
+    invariant { 1 <= index_highs <= length a }
+    invariant { a[ index_highs - 1 ] <=. v }
+
+        index_highs := index_highs + 1;
+        
+    done;
+
+assert { v <=. a[ length highs - 1] };
+
+highs[ index_positions ] <- min index_highs (length a - 1);
+
+index_positions := index_positions + 1;
+
+done;
+step
 
 end

@@ -2,6 +2,7 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="6">
+<prover id="0" name="Z3" version="4.8.6" timelimit="5" steplimit="0" memlimit="1000"/>
 <prover id="1" name="Alt-Ergo" version="2.3.1" timelimit="5" steplimit="0" memlimit="1000"/>
 <prover id="2" name="CVC4" version="1.7" timelimit="5" steplimit="0" memlimit="1000"/>
 <file format="whyml" proved="true">
@@ -77,8 +78,8 @@
   <proof prover="1"><result status="valid" time="0.02" steps="12"/></proof>
   </goal>
   <goal name="prepare_positions_left&#39;vc.5" expl="assertion" proved="true">
-  <proof prover="1"><result status="timeout" time="5.00"/></proof>
-  <proof prover="2"><result status="valid" time="0.22" steps="34357"/></proof>
+  <proof prover="1" obsolete="true"><result status="timeout" time="5.00"/></proof>
+  <proof prover="2"><result status="valid" time="0.61" steps="97712"/></proof>
   </goal>
   <goal name="prepare_positions_left&#39;vc.6" expl="loop invariant init" proved="true">
   <proof prover="1"><result status="valid" time="0.02" steps="18"/></proof>
@@ -105,7 +106,7 @@
   <proof prover="1"><result status="valid" time="0.01" steps="29"/></proof>
   </goal>
   <goal name="prepare_positions_left&#39;vc.14" expl="loop invariant init" proved="true">
-  <proof prover="1"><result status="valid" time="0.04" steps="83"/></proof>
+  <proof prover="1"><result status="valid" time="0.04" steps="91"/></proof>
   </goal>
   <goal name="prepare_positions_left&#39;vc.15" expl="index in array bounds" proved="true">
   <proof prover="1"><result status="valid" time="0.02" steps="38"/></proof>
@@ -134,7 +135,7 @@
   <goal name="prepare_positions_left&#39;vc.23" expl="loop invariant preservation" proved="true">
   <transf name="instantiate" proved="true" arg1="LoopInvariant3" arg2="i">
    <goal name="prepare_positions_left&#39;vc.23.0" expl="loop invariant preservation" proved="true">
-   <proof prover="1"><result status="valid" time="0.13" steps="206"/></proof>
+   <proof prover="1"><result status="valid" time="0.13" steps="260"/></proof>
    </goal>
   </transf>
   </goal>
@@ -145,7 +146,7 @@
   <proof prover="1"><result status="valid" time="0.02" steps="44"/></proof>
   </goal>
   <goal name="prepare_positions_left&#39;vc.26" expl="loop invariant preservation" proved="true">
-  <proof prover="1"><result status="valid" time="0.07" steps="133"/></proof>
+  <proof prover="1"><result status="valid" time="0.07" steps="177"/></proof>
   </goal>
   <goal name="prepare_positions_left&#39;vc.27" expl="postcondition" proved="true">
   <proof prover="1"><result status="valid" time="0.01" steps="26"/></proof>
@@ -173,12 +174,12 @@
   <proof prover="1"><result status="valid" time="0.01" steps="12"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.5" expl="assertion" proved="true">
-  <proof prover="1"><result status="timeout" time="5.00"/></proof>
-  <proof prover="2"><result status="valid" time="0.45" steps="75500"/></proof>
+  <proof prover="1" obsolete="true"><result status="timeout" time="5.00"/></proof>
+  <proof prover="2"><result status="valid" time="0.45" steps="97712"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.6" expl="assertion" proved="true">
   <proof prover="1"><result status="valid" time="0.02" steps="16"/></proof>
-  <proof prover="2"><result status="valid" time="0.05" steps="8550"/></proof>
+  <proof prover="2"><result status="valid" time="0.05" steps="8579"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.7" expl="loop invariant init" proved="true">
   <proof prover="1"><result status="valid" time="0.01" steps="16"/></proof>
@@ -205,7 +206,7 @@
   <proof prover="1"><result status="valid" time="0.01" steps="30"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.15" expl="loop invariant init" proved="true">
-  <proof prover="1"><result status="valid" time="0.03" steps="90"/></proof>
+  <proof prover="1"><result status="valid" time="0.04" steps="93"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.16" expl="index in array bounds" proved="true">
   <proof prover="1"><result status="valid" time="0.02" steps="39"/></proof>
@@ -224,7 +225,7 @@
   </goal>
   <goal name="prepare_positions_right&#39;vc.21" expl="assertion" proved="true">
   <proof prover="1"><result status="valid" time="0.05" steps="40"/></proof>
-  <proof prover="2"><result status="timeout" time="5.00" steps="443466"/></proof>
+  <proof prover="2" obsolete="true"><result status="timeout" time="5.00" steps="443466"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.22" expl="index in array bounds" proved="true">
   <proof prover="1"><result status="valid" time="0.01" steps="39"/></proof>
@@ -235,7 +236,7 @@
   <goal name="prepare_positions_right&#39;vc.24" expl="loop invariant preservation" proved="true">
   <transf name="instantiate" proved="true" arg1="LoopInvariant3" arg2="i">
    <goal name="prepare_positions_right&#39;vc.24.0" expl="loop invariant preservation" proved="true">
-   <proof prover="1"><result status="valid" time="0.33" steps="278"/></proof>
+   <proof prover="1"><result status="valid" time="0.33" steps="291"/></proof>
    </goal>
   </transf>
   </goal>
@@ -246,13 +247,151 @@
   <proof prover="1"><result status="valid" time="0.02" steps="47"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.27" expl="loop invariant preservation" proved="true">
-  <proof prover="1"><result status="valid" time="0.07" steps="182"/></proof>
+  <proof prover="0"><result status="timeout" time="5.00" steps="19376364"/></proof>
+  <proof prover="1"><result status="valid" time="0.14" steps="186"/></proof>
+  <proof prover="2"><result status="timeout" time="5.00" steps="488915"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.28" expl="postcondition" proved="true">
   <proof prover="1"><result status="valid" time="0.01" steps="28"/></proof>
   </goal>
   <goal name="prepare_positions_right&#39;vc.29" expl="postcondition" proved="true">
   <proof prover="1"><result status="valid" time="0.02" steps="35"/></proof>
+  </goal>
+ </transf>
+ </goal>
+ <goal name="prepare_positions&#39;vc" expl="VC for prepare_positions" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="prepare_positions&#39;vc.0" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="12"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.1" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="12"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.2" expl="precondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="14"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.3" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="14"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.4" expl="assertion" proved="true">
+  <proof prover="1"><result status="timeout" time="5.00"/></proof>
+  <proof prover="2"><result status="valid" time="0.61" steps="101892"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.5" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="18"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.6" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="16"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.7" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="18"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.8" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="18"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.9" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="22"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.10" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="22"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.11" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="24"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.12" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.01" steps="22"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.13" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="40"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.14" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="40"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.15" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="40"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.16" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.06" steps="109"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.17" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="48"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.18" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="50"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.19" expl="loop variant decrease" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="53"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.20" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="53"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.21" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="55"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.22" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="46"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.23" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.02" steps="52"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.24" expl="loop invariant init" proved="true">
+  <proof prover="1"><result status="valid" time="0.10" steps="166"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.25" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="60"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.26" expl="loop variant decrease" proved="true">
+  <proof prover="1"><result status="valid" time="0.04" steps="64"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.27" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.04" steps="64"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.28" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="66"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.29" expl="assertion" proved="true">
+  <proof prover="1"><result status="valid" time="0.08" steps="62"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.30" expl="index in array bounds" proved="true">
+  <proof prover="1"><result status="valid" time="0.03" steps="60"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.31" expl="loop variant decrease" proved="true">
+  <proof prover="1"><result status="valid" time="0.05" steps="68"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.32" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.04" steps="68"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.33" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.04" steps="68"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.34" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.04" steps="68"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.35" expl="loop invariant preservation" proved="true">
+  <transf name="instantiate" proved="true" arg1="LoopInvariant8" arg2="i">
+   <goal name="prepare_positions&#39;vc.35.0" expl="loop invariant preservation" proved="true">
+   <proof prover="1"><result status="valid" time="0.81" steps="497"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="prepare_positions&#39;vc.36" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.39" steps="306"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.37" expl="loop invariant preservation" proved="true">
+  <transf name="instantiate" proved="true" arg1="LoopInvariant8" arg2="i">
+   <goal name="prepare_positions&#39;vc.37.0" expl="loop invariant preservation" proved="true">
+   <proof prover="1"><result status="valid" time="0.82" steps="550"/></proof>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="prepare_positions&#39;vc.38" expl="loop invariant preservation" proved="true">
+  <proof prover="1"><result status="valid" time="0.55" steps="362"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.39" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.05" steps="44"/></proof>
+  </goal>
+  <goal name="prepare_positions&#39;vc.40" expl="postcondition" proved="true">
+  <proof prover="1"><result status="valid" time="0.05" steps="44"/></proof>
   </goal>
  </transf>
  </goal>
