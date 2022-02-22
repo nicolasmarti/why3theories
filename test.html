@@ -1,0 +1,462 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<link rel="stylesheet" href="style.css" type="text/css">
+<title>test.html</title>
+</head>
+<body>
+<div class="why3doc">
+<pre><span class="keyword1">module</span> <a name="Test_">Test</a>
+
+<span class="keyword1">use</span> int.Int
+<span class="keyword1">use</span> int.<a href="int.html#MinMax_">MinMax</a>
+<span class="keyword1">use</span> int.<a href="int.html#ComputerDivision_">ComputerDivision</a>
+<span class="keyword1">use</span> <span class="keyword1">ref</span>.<a href="ref.html#Ref_">Ref</a>
+<span class="keyword1">use</span> array.<a href="array.html#Array_">Array</a>
+<span class="keyword1">use</span> real.<a href="real.html#RealInfix_">RealInfix</a>
+<span class="keyword1">use</span> real.<a href="real.html#FromInt_">FromInt</a>
+<span class="keyword1">use</span> real.<a href="real.html#Truncate_">Truncate</a>
+
+<span class="keyword1">val</span> <span class="keyword1">function</span> <a name="int2real_13">int2real</a> (i: int) : real
+<span class="keyword2">ensures</span> { result = <a href="real.html#from_int_117">from_int</a> i }
+
+<span class="keyword1">val</span> <span class="keyword1">function</span> <a name="real2int_17">real2int</a> (r: real) : int
+<span class="keyword2">ensures</span> { result = <a href="real.html#truncate_147">truncate</a> r }
+
+<span class="keyword1">let</span> <a name="left_index_22">left_index</a> (a: <a href="array.html#array_15">array</a> real) (l: int) (u: int) (x: real): int
+<span class="keyword2">requires</span> { <span class="keyword1">forall</span> i j. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> j <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1 -&gt; a[i] <a href="real.html#infix%20%3C._67">&lt;.</a> a[j] }
+<span class="keyword2">requires</span> { 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> l <a href="int.html#infix%20%3C_21">&lt;</a> u <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a /\ a[l] <a href="real.html#infix%20%3C=._65">&lt;=.</a> x <a href="real.html#infix%20%3C._67">&lt;.</a> a[u] }
+<span class="keyword2">ensures</span> { 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> l <a href="int.html#infix%20%3C=_25">&lt;=</a> result <a href="int.html#infix%20%3C_21">&lt;</a> u <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">ensures</span> { a[result] <a href="real.html#infix%20%3C=._65">&lt;=.</a> x <a href="real.html#infix%20%3C._67">&lt;.</a> a[result<a href="int.html#infix%20+_19">+</a>1] }
+=
+<span class="keyword1">let</span> <span class="keyword1">ref</span> low = l <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> high = u <span class="keyword1">in</span>
+<span class="keyword1">while</span> low <a href="int.html#infix%20+_19">+</a> 1 <a href="int.html#infix%20%3C_21">&lt;</a> high <span class="keyword1">do</span>
+<span class="keyword2">variant</span> { high <a href="int.html#infix%20-_23">-</a> low }
+<span class="keyword2">invariant</span> { 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> l <a href="int.html#infix%20%3C=_25">&lt;=</a> low <a href="int.html#infix%20%3C=_25">&lt;=</a> high <a href="int.html#infix%20%3C=_25">&lt;=</a> u <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span> {low <a href="int.html#infix%20+_19">+</a> 1 <a href="int.html#infix%20%3C_21">&lt;</a> high -&gt; a[low] <a href="real.html#infix%20%3C=._65">&lt;=.</a> x <a href="real.html#infix%20%3C._67">&lt;.</a> a[high]}
+<span class="keyword2">invariant</span> {low <a href="int.html#infix%20+_19">+</a> 1 <a href="int.html#infix%20%3E=_26">&gt;=</a> high -&gt; a[low] <a href="real.html#infix%20%3C=._65">&lt;=.</a> x <a href="real.html#infix%20%3C._67">&lt;.</a> a[low<a href="int.html#infix%20+_19">+</a>1]}
+<span class="keyword1">let</span> middle = low <a href="int.html#infix%20+_19">+</a> <a href="int.html#div_223">div</a> (high <a href="int.html#infix%20-_23">-</a> low) 2 <span class="keyword1">in</span>
+<span class="keyword2">assert</span> { 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> low <a href="int.html#infix%20%3C=_25">&lt;=</a> middle <a href="int.html#infix%20%3C=_25">&lt;=</a> high <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a };
+<span class="keyword1">if</span> a[middle] <a href="real.html#infix%20%3C=._65">&lt;=.</a> x <span class="keyword1">then</span> low <a href="ref.html#infix%20:=_20">:=</a> middle <span class="keyword1">else</span> high <a href="ref.html#infix%20:=_20">:=</a> middle
+<span class="keyword1">done</span>;
+low
+
+<span class="keyword1">let</span> <a name="prepare_positions_left_43">prepare_positions_left</a> (a: <a href="array.html#array_15">array</a> real): <a href="array.html#array_15">array</a> int
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20%3E_24">&gt;</a> 1 }
+<span class="keyword2">requires</span> { <span class="keyword1">forall</span> i j. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> j <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1 -&gt; a[i] <a href="real.html#infix%20%3C._67">&lt;.</a> a[j] }
+<span class="keyword2">ensures</span> { <a href="array.html#length_17">length</a> result = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> result -&gt;
+          a[ result[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> result -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> result[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+=
+<span class="keyword1">let</span> positions = <a href="array.html#make_59">make</a> (<a href="array.html#length_17">length</a> a) 0 <span class="keyword1">in</span>
+<span class="keyword1">let</span> step = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._70">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) <span class="keyword1">in</span>
+<span class="keyword2">assert</span> { 0.0 <a href="real.html#infix%20%3C._67">&lt;.</a> step  };
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_a = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_positions = 1 <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> positions -&gt; a[0] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+
+<span class="keyword1">while</span> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> positions <span class="keyword1">do</span>
+<span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> positions <a href="int.html#infix%20-_23">-</a> index_positions }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[ positions[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+          }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> positions }
+<span class="keyword2">invariant</span> {
+            a[ index_a <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+          }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> positions[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+
+    <span class="keyword1">let</span> v = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <span class="keyword1">in</span>
+
+    <span class="keyword2">assert</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> positions };
+
+    <span class="keyword1">while</span> (index_a <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_a ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_a }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { <span class="keyword1">old</span> index_a <a href="int.html#infix%20%3C=_25">&lt;=</a> index_a }
+    <span class="keyword2">invariant</span> { a[ index_a <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        <span class="keyword2">assert</span> { (index_a <a href="int.html#infix%20+_19">+</a> 1) <a href="int.html#infix%20-_23">-</a> 1 = index_a };
+        index_a <a href="ref.html#infix%20:=_20">:=</a> index_a <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+
+    positions[ index_positions ] &lt;- index_a <a href="int.html#infix%20-_23">-</a> 1;
+    index_positions <a href="ref.html#infix%20:=_20">:=</a> index_positions <a href="int.html#infix%20+_19">+</a> 1;
+
+<span class="keyword1">done</span>;
+
+positions
+
+<span class="keyword1">let</span> <a name="prepare_positions_right_107">prepare_positions_right</a> (a: <a href="array.html#array_15">array</a> real): <a href="array.html#array_15">array</a> int
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20%3E_24">&gt;</a> 1 }
+<span class="keyword2">requires</span> { <span class="keyword1">forall</span> i j. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> j <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1 -&gt; a[i] <a href="real.html#infix%20%3C._67">&lt;.</a> a[j] }
+<span class="keyword2">ensures</span> { <a href="array.html#length_17">length</a> result = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> result -&gt;
+          a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ result[i] ]
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> result -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> result[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+=
+<span class="keyword1">let</span> positions = <a href="array.html#make_59">make</a> (<a href="array.html#length_17">length</a> a) 0 <span class="keyword1">in</span>
+<span class="keyword1">let</span> step = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._70">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) <span class="keyword1">in</span>
+<span class="keyword2">assert</span> { 0.0 <a href="real.html#infix%20%3C._67">&lt;.</a> step  };
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_a = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_positions = 0 <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> positions -&gt; a[0] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. i = 0 -&gt; a[0] = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step };
+
+<span class="keyword1">while</span> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> positions <span class="keyword1">do</span>
+<span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> positions <a href="int.html#infix%20-_23">-</a> index_positions }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ positions[i] ]
+          }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> positions }
+<span class="keyword2">invariant</span>{
+        a[ index_a <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+        }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> positions[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+    <span class="keyword1">let</span> v = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <span class="keyword1">in</span>
+
+    <span class="keyword2">assert</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> positions };
+
+    <span class="keyword1">while</span> (index_a <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_a ] <a href="real.html#infix%20%3C._67">&lt;.</a> v  ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_a }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_a <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { <span class="keyword1">old</span> index_a <a href="int.html#infix%20%3C=_25">&lt;=</a> index_a }
+    <span class="keyword2">invariant</span> { a[ index_a <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        index_a <a href="ref.html#infix%20:=_20">:=</a> index_a <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+
+    <span class="keyword2">assert</span> { v <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+
+    positions[ index_positions ] &lt;- <a href="int.html#min_61">min</a> index_a (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1);
+    index_positions <a href="ref.html#infix%20:=_20">:=</a> index_positions <a href="int.html#infix%20+_19">+</a> 1;
+
+<span class="keyword1">done</span>;
+
+positions
+
+<span class="keyword1">let</span> <a name="prepare_positions_171">prepare_positions</a> (a: <a href="array.html#array_15">array</a> real) (lows: <a href="array.html#array_15">array</a> int) (highs: <a href="array.html#array_15">array</a> int): real
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20%3E_24">&gt;</a> 1 }
+<span class="keyword2">requires</span> { <span class="keyword1">forall</span> i j. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> j <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1 -&gt; a[i] <a href="real.html#infix%20%3C._67">&lt;.</a> a[j] }
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> lows = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> highs = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">ensures</span> { result = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> lows -&gt;
+          a[ lows[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> result  }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> highs -&gt;
+          a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> result <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ highs[i] ]
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> lows -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> lows[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> highs -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> highs[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+
+=
+<span class="keyword1">let</span> step = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._70">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span> { 0.0 <a href="real.html#infix%20%3C._67">&lt;.</a> step  };
+
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_lows = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_highs = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_positions = 0 <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a -&gt; a[0] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. i = 0 -&gt; a[0] = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step };
+
+<span class="keyword1">while</span> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a <span class="keyword1">do</span>
+<span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_positions }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_lows <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_highs <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[ lows[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+          }
+<span class="keyword2">invariant</span> {
+            a[ index_lows <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+          }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ highs[i] ]
+          }
+<span class="keyword2">invariant</span>{
+        a[ index_highs <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1))
+        }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> lows[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> highs[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+
+<span class="keyword1">let</span> v = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a };
+    <span class="keyword1">while</span> (index_lows <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_lows ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_lows }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_lows <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { a[ index_lows <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        <span class="keyword2">assert</span> { (index_lows <a href="int.html#infix%20+_19">+</a> 1) <a href="int.html#infix%20-_23">-</a> 1 = index_lows };
+        index_lows <a href="ref.html#infix%20:=_20">:=</a> index_lows <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+lows[ index_positions ] &lt;- index_lows <a href="int.html#infix%20-_23">-</a> 1;
+
+    <span class="keyword1">while</span> (index_highs <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_highs ] <a href="real.html#infix%20%3C._67">&lt;.</a> v  ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_highs }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_highs <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { a[ index_highs <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        index_highs <a href="ref.html#infix%20:=_20">:=</a> index_highs <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+
+<span class="keyword2">assert</span> { v <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ <a href="array.html#length_17">length</a> highs <a href="int.html#infix%20-_23">-</a> 1] };
+
+highs[ index_positions ] &lt;- <a href="int.html#min_61">min</a> index_highs (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1);
+
+index_positions <a href="ref.html#infix%20:=_20">:=</a> index_positions <a href="int.html#infix%20+_19">+</a> 1;
+
+<span class="keyword1">done</span>;
+step
+
+<span class="keyword1">let</span> <a name="prepare_positions2_269">prepare_positions2</a> s(a: <a href="array.html#array_15">array</a> real) (lows: <a href="array.html#array_15">array</a> int) (highs: <a href="array.html#array_15">array</a> int): real
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20%3E_24">&gt;</a> 1 }
+<span class="keyword2">requires</span> { <span class="keyword1">forall</span> i j. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> j <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1 -&gt; a[i] <a href="real.html#infix%20%3C._67">&lt;.</a> a[j] }
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> lows = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> highs = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">ensures</span> { result = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a)) }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> lows -&gt;
+          a[ lows[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> result  }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> highs -&gt;
+          a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> result <a href="real.html#infix%20%3C._67">&lt;.</a> a[ highs[i] ]
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> lows -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> lows[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> highs -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> highs[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+
+=
+<span class="keyword1">let</span> step = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._70">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a)) <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span> { 0.0 <a href="real.html#infix%20%3C._67">&lt;.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) };
+
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_lows = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_highs = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_positions = 0 <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a -&gt; a[0] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. i = 0 -&gt; a[0] = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step };
+
+<span class="keyword1">while</span> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a <span class="keyword1">do</span>
+<span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_positions }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_lows <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_highs <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[ lows[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> step
+          }
+<span class="keyword2">invariant</span> {
+            a[ index_lows <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step
+          }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> a[ highs[i] ]
+          }
+<span class="keyword2">invariant</span>{
+        a[ index_highs <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step
+        }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> lows[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> highs[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+
+<span class="keyword1">let</span> v = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a };
+    <span class="keyword1">while</span> (index_lows <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_lows ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_lows }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_lows <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { a[ index_lows <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        <span class="keyword2">assert</span> { (index_lows <a href="int.html#infix%20+_19">+</a> 1) <a href="int.html#infix%20-_23">-</a> 1 = index_lows };
+        index_lows <a href="ref.html#infix%20:=_20">:=</a> index_lows <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+lows[ index_positions ] &lt;- index_lows <a href="int.html#infix%20-_23">-</a> 1;
+
+    <span class="keyword1">while</span> (index_highs <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_highs ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v  ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_highs }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_highs <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { a[ index_highs <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        index_highs <a href="ref.html#infix%20:=_20">:=</a> index_highs <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+
+<span class="keyword2">assert</span> { v <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[ <a href="array.html#length_17">length</a> highs <a href="int.html#infix%20-_23">-</a> 1] };
+
+highs[ index_positions ] &lt;- <a href="int.html#min_61">min</a> index_highs (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1);
+
+<span class="keyword2">assert</span>{ a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+
+index_positions <a href="ref.html#infix%20:=_20">:=</a> index_positions <a href="int.html#infix%20+_19">+</a> 1;
+
+<span class="keyword1">done</span>;
+step
+
+<span class="keyword1">let</span> <a name="prepare_positions3_369">prepare_positions3</a> (a: <a href="array.html#array_15">array</a> real) (lows: <a href="array.html#array_15">array</a> int): real
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20%3E_24">&gt;</a> 1 }
+<span class="keyword2">requires</span> { <span class="keyword1">forall</span> i j. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> j <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1 -&gt; a[i] <a href="real.html#infix%20%3C._67">&lt;.</a> a[j] }
+<span class="keyword2">requires</span> { <a href="array.html#length_17">length</a> lows = <a href="array.html#length_17">length</a> a }
+<span class="keyword2">ensures</span> { result = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="real.html#from_int_117">from_int</a> (<a href="array.html#length_17">length</a> a)) }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> lows -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> lows[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+<span class="keyword2">ensures</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> lows -&gt;
+          a[ lows[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> result <a href="real.html#infix%20%3C._67">&lt;.</a> a[ <a href="int.html#min_61">min</a> (lows[i] <a href="int.html#infix%20+_19">+</a> 1) (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1) ] }
+
+=
+<span class="keyword1">let</span> step = (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._70">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a)) <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span> { 0.0 <a href="real.html#infix%20%3C._67">&lt;.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> (a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] <a href="real.html#infix%20-._58">-.</a> a[0]) <a href="real.html#infix%20/._60">/.</a> (<a href="#int2real_13">int2real</a> (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1)) };
+
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_lows = 1 <span class="keyword1">in</span>
+<span class="keyword1">let</span> <span class="keyword1">ref</span> index_positions = 0 <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a -&gt; a[0] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+<span class="keyword2">assert</span>{ <span class="keyword1">forall</span> i. i = 0 -&gt; a[0] = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> i) <a href="real.html#infix%20*._59">*.</a> step };
+
+<span class="keyword1">while</span> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a <span class="keyword1">do</span>
+<span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_positions }
+<span class="keyword2">invariant</span>{ 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_lows <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+<span class="keyword2">invariant</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+          0 <a href="int.html#infix%20%3C=_25">&lt;=</a> lows[i] <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a
+          }
+<span class="keyword2">invariant</span> { <span class="keyword1">forall</span> i.
+            0 <a href="int.html#infix%20%3C=_25">&lt;=</a> i <a href="int.html#infix%20%3C_21">&lt;</a> index_positions -&gt;
+            a[ lows[i] ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> i) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> a[ <a href="int.html#min_61">min</a> (lows[i] <a href="int.html#infix%20+_19">+</a> 1) (<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1) ]
+          }
+<span class="keyword2">invariant</span> {
+            a[ index_lows <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="real.html#from_int_117">from_int</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step
+          }
+
+<span class="keyword1">let</span> v = a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <span class="keyword1">in</span>
+
+<span class="keyword2">assert</span>{ 0 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_positions <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a };
+    <span class="keyword1">while</span> (index_lows <a href="int.html#infix%20%3C_21">&lt;</a> <a href="array.html#length_17">length</a> a &amp;&amp; a[ index_lows ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v ) <span class="keyword1">do</span>
+    <span class="keyword2">variant</span> { <a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> index_lows }
+    <span class="keyword2">invariant</span> { 1 <a href="int.html#infix%20%3C=_25">&lt;=</a> index_lows <a href="int.html#infix%20%3C=_25">&lt;=</a> <a href="array.html#length_17">length</a> a }
+    <span class="keyword2">invariant</span> { a[ index_lows <a href="int.html#infix%20-_23">-</a> 1 ] <a href="real.html#infix%20%3C=._65">&lt;=.</a> v }
+
+        <span class="keyword2">assert</span> { (index_lows <a href="int.html#infix%20+_19">+</a> 1) <a href="int.html#infix%20-_23">-</a> 1 = index_lows };
+        index_lows <a href="ref.html#infix%20:=_20">:=</a> index_lows <a href="int.html#infix%20+_19">+</a> 1;
+
+    <span class="keyword1">done</span>;
+lows[ index_positions ] &lt;- index_lows <a href="int.html#infix%20-_23">-</a> 1;
+
+<span class="keyword2">assert</span>{ a[0] <a href="real.html#infix%20+._57">+.</a> (<a href="#int2real_13">int2real</a> index_positions) <a href="real.html#infix%20*._59">*.</a> step <a href="real.html#infix%20%3C._67">&lt;.</a> a[<a href="array.html#length_17">length</a> a <a href="int.html#infix%20-_23">-</a> 1] };
+
+index_positions <a href="ref.html#infix%20:=_20">:=</a> index_positions <a href="int.html#infix%20+_19">+</a> 1;
+
+<span class="keyword1">done</span>;
+step
+
+<span class="comment">(*
+let left_index_optim (a: array real) (lows: array int) (highs: array int) (step: real) (x: real): int
+requires { length a &gt; 1 }
+requires { forall i j. 0 &lt;= i &lt; j &lt;= length a - 1 -&gt; a[i] &lt;. a[j] }
+requires { a[0] &lt;. x &lt;. a[length a - 1] }
+requires { step = (a[length a - 1] -. a[0]) /. (from_int (length a - 1)) }
+requires { length lows = length a }          
+requires { length highs = length a }          
+requires { forall i.
+          0 &lt;= i &lt; length lows -&gt;
+          a[ lows[i] ] &lt;=. a[0] +. (from_int i) *. step  }
+requires { forall i.
+          0 &lt;= i &lt; length highs -&gt;
+          a[0] +. (from_int i) *. step &lt;=. a[ highs[i] ]
+          }
+requires { forall i.
+          0 &lt;= i &lt; length lows -&gt;
+          0 &lt;= lows[i] &lt; length a
+          }
+requires { forall i.
+          0 &lt;= i &lt; length highs -&gt;
+          0 &lt;= highs[i] &lt; length a
+          }
+ensures { a[result] &lt;=. x &lt;. a[result+1] }
+=
+let bucket = (x -. a[0]) /. step in
+assert { a[0] +. (int2real (real2int bucket)) *. step &lt;=. x = a[0] +. bucket *. step };
+let low = lows[ real2int bucket ] in
+assert { a[low] &lt;=. x };
+let high = highs[ real2int bucket ] in
+assert { x &lt;. a[high] };
+left_index a low high x
+*)</span>
+
+<span class="keyword1">end</span>
+
+</pre>
+
+</div>
+<hr>
+<p>Generated by why3doc 1.4.0</p>
+</body>
+</html>
