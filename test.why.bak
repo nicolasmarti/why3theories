@@ -168,28 +168,15 @@ requires { length a > 1 }
 requires { forall i j. 0 <= i < j < length a -> a[i] <. a[j] }
 requires { length x > 1 }
 requires { forall i. 0 <= i < length x -> a[0] <=. x[i] <. a[length a - 1] }
-requires { forall i j. 0 <= i < j < length x -> x[i] <=. x[j] }
 ensures { length result = length x }
 ensures { forall i. 0 <= i < length result -> 0 <= result[i] < length a }
 (*ensures { forall i. 0 <= i < length result -> a[result[i]] <=. x[i] <. a[result[i]+1] }*)
 =
 let result = Array.make (length x) 0 in
-let ref index = 1 in
+let ref index = 0 in
 for i = 0 to length x - 1 do
-invariant { 0 < index < length a }
-invariant { forall j. 0 <= j < i -> 0 <= result[j] < length a }
-invariant { forall j. 0 <= j < i -> a[result[j]] <=. x[j] <. a[result[j] + 1] }
-invariant { a[index-1] <=. x[min i (length x - 1)] }
-          while index < length a && a[index] <=. x[i] do
-          variant { length a - index }
-          invariant { 1 <= index <= length a }
-          invariant { a[ index - 1 ] <=. x[i] }
-          index := index + 1;
-          done;
-assert { a[ index - 1 ] <=. x[i] <=. x[min (i+1) (length x - 1) ] };
-assert { index = length a - 1 \/ x[i] <. a[index]  };
-assert { index = length a - 1 -> x[i] <. a[index]  };
-result[i] <- index - 1;          
+invariant { forall j. 0 <= j < i -> a[index] <=. x[j] }
+index <- index;
 done;
 result
 
