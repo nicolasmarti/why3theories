@@ -238,7 +238,6 @@
    <proof prover="0"><result status="valid" time="0.01" steps="12"/></proof>
    </goal>
    <goal name="prepare_positions&#39;vc.3.1" expl="assertion" proved="true">
-   <proof prover="0"><result status="timeout" time="5.00"/></proof>
    <proof prover="1"><result status="valid" time="0.48" steps="87441"/></proof>
    </goal>
   </transf>
@@ -249,7 +248,6 @@
    <proof prover="0"><result status="valid" time="0.06" steps="82"/></proof>
    </goal>
    <goal name="prepare_positions&#39;vc.4.1" expl="assertion" proved="true">
-   <proof prover="0"><result status="timeout" time="5.00"/></proof>
    <proof prover="1"><result status="valid" time="0.47" steps="83398"/></proof>
    </goal>
   </transf>
@@ -446,7 +444,7 @@
   <goal name="prepare_positions&#39;vc.26" expl="loop invariant preservation" proved="true">
   <transf name="instantiate" proved="true" arg1="LoopInvariant5" arg2="i">
    <goal name="prepare_positions&#39;vc.26.0" expl="loop invariant preservation" proved="true">
-   <proof prover="0"><result status="valid" time="0.26" steps="433"/></proof>
+   <proof prover="0"><result status="valid" time="0.39" steps="433"/></proof>
    </goal>
   </transf>
   </goal>
@@ -510,7 +508,6 @@
    <proof prover="0"><result status="valid" time="0.02" steps="20"/></proof>
    </goal>
    <goal name="inffer_low_high&#39;vc.3.1" expl="assertion" proved="true">
-   <proof prover="0"><result status="timeout" time="5.00"/></proof>
    <proof prover="1"><result status="valid" time="0.48" steps="86969"/></proof>
    </goal>
   </transf>
@@ -518,7 +515,6 @@
   <goal name="inffer_low_high&#39;vc.4" expl="assertion" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="inffer_low_high&#39;vc.4.0" expl="assertion" proved="true">
-   <proof prover="0"><result status="timeout" time="5.00"/></proof>
    <proof prover="1"><result status="valid" time="0.44" steps="89333"/></proof>
    </goal>
   </transf>
@@ -553,7 +549,6 @@
   <goal name="inffer_low_high&#39;vc.8" expl="assertion" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="inffer_low_high&#39;vc.8.0" expl="assertion" proved="true">
-   <proof prover="0"><result status="timeout" time="5.00"/></proof>
    <proof prover="1"><result status="valid" time="0.59" steps="113708"/></proof>
    </goal>
   </transf>
@@ -853,10 +848,10 @@
   <goal name="left_index_sorted&#39;vc.17" expl="loop invariant preservation" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="left_index_sorted&#39;vc.17.0" expl="loop invariant preservation" proved="true">
-   <proof prover="0"><result status="valid" time="1.66" steps="1247"/></proof>
+   <proof prover="0"><result status="valid" time="1.38" steps="1247"/></proof>
    </goal>
    <goal name="left_index_sorted&#39;vc.17.1" expl="loop invariant preservation" proved="true">
-   <proof prover="0"><result status="valid" time="2.71" steps="1492"/></proof>
+   <proof prover="0"><result status="valid" time="2.15" steps="1492"/></proof>
    </goal>
   </transf>
   </goal>
