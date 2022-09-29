@@ -1,0 +1,130 @@
+(****)
+
+theory Set
+
+(* types *)
+type set 'a
+
+(* predicates *)
+predicate mem (x: 'a) (s: set 'a)
+predicate (==) (s1 s2: set 'a) = (forall x: 'a. mem x s1 <-> mem x s2)
+predicate is_empty_set (s: set 'a) = forall x: 'a. not mem x s
+
+(* extentional equality *)
+
+axiom extentional_equality: forall s1 s2: set 'a.
+                            s1 == s2 <-> s1 = s2
+
+(* constantes *)
+constant empty_set: set 'a
+axiom empty_set: is_empty_set (empty_set: set 'a)
+
+(* axiomatic functions *)
+
+(**)
+function add (x: 'a) (s: set 'a) : set 'a
+axiom add1: forall s: set 'a, x y: 'a. mem x (add y s) <-> x = y \/ mem x s
+lemma add2: forall s: set 'a, x y: 'a. not mem x (add y s) <-> x <> y /\ not mem x s
+(**)
+function sub (x: 'a) (s: set 'a) : set 'a
+axiom sub1: forall s: set 'a, x y: 'a.
+            mem x (sub y s) <-> x <> y /\ mem x s
+lemma sub2: forall s: set 'a, x y: 'a.
+            not mem x (sub y s) <-> x = y \/ not mem x s
+
+(**)
+function intersection (s1: set 'a) (s2: set 'a) : set 'a
+axiom intersection1: forall s1 s2: set 'a, x: 'a.
+                     mem x (intersection s1 s2) <-> mem x s1 /\ mem x s2
+
+lemma intersection_comm: forall s1 s2: set 'a.
+                         intersection s1 s2 = intersection s2 s1
+by intersection s1 s2 == intersection s2 s1
+
+lemma intersection_assoc: forall s1 s2 s3: set 'a.
+                          intersection s1 (intersection s2 s3) = intersection (intersection s1 s2) s3
+by intersection s1 (intersection s2 s3) == intersection (intersection s1 s2) s3
+
+
+(**)
+function union (s1: set 'a) (s2: set 'a) : set 'a
+axiom union1: forall s1 s2: set 'a, x: 'a.
+                     mem x (union s1 s2) <-> mem x s1 \/ mem x s2
+
+lemma union_comm: forall s1 s2: set 'a.
+                         union s1 s2 = union s2 s1
+by union s1 s2 == union s2 s1
+
+lemma union_assoc: forall s1 s2 s3: set 'a.
+                          union s1 (union s2 s3) = union (union s1 s2) s3
+by union s1 (union s2 s3) == union (union s1 s2) s3
+
+
+(**)
+function diff (s1: set 'a) (s2: set 'a) : set 'a
+axiom diff1: forall s1 s2: set 'a, x: 'a.
+                     mem x (diff s1 s2) <-> mem x s1 /\ not mem x s2
+
+(**)
+use int.Int
+
+function size (s: set 'a) : int
+axiom size_empty_set: size (empty_set: set 'a) = 0
+axiom size_add1: forall s: set 'a, x: 'a.
+                 not mem x s ->
+                 size (add x s) = 1 + size s
+axiom size_add2: forall s: set 'a, x: 'a.
+                 mem x s ->
+                 size (add x s) = size s
+axiom size_sub1: forall s: set 'a, x: 'a.
+                 mem x s ->
+                 size (sub x s) = size s - 1
+axiom size_sub2: forall s: set 'a, x: 'a.
+                 not mem x s ->
+                 size (sub x s) = size s
+
+
+(* defined functions *)
+function singleton (x: 'a): set 'a = add x empty_set
+
+(* for using in programs *)
+
+type set_t 'a = {
+     mutable ghost s: set 'a
+}
+
+val empty_set_t (): set_t 'a
+ensures { result.s = empty_set }
+
+exception EmptySet
+
+val pop (s: set_t 'a): 'a
+writes { s }
+requires { not is_empty_set s.s }
+ensures { s.s = sub result (old s.s)  }
+raises { EmptySet -> is_empty_set (old s.s) }
+
+end
+
+
+
+(****)
+
+theory Closure
+
+use Set
+use list.List
+
+type ty
+
+let closure
+    (root: ty)
+    (next_nodes: ty -> set_t ty)
+    (filter: ty -> bool): set_t ty
+
+=
+    empty_set_t ()
+    
+end
+
+(****)
