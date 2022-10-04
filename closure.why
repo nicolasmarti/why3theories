@@ -19,12 +19,19 @@ axiom extentional_equality: forall s1 s2: set 'a.
 constant empty_set: set 'a
 axiom empty_set: is_empty_set (empty_set: set 'a)
 
+lemma not_empty_set1: forall s: set 'a. not s = empty_set -> not is_empty_set s
+by is_empty_set s -> s = empty_set
+by s == empty_set
+
+lemma not_empty_set2: forall s: set 'a. not is_empty_set s -> s <> empty_set
+
 (* axiomatic functions *)
 
 (**)
 function add (x: 'a) (s: set 'a) : set 'a
 axiom add1: forall s: set 'a, x y: 'a. mem x (add y s) <-> x = y \/ mem x s
 lemma add2: forall s: set 'a, x y: 'a. not mem x (add y s) <-> x <> y /\ not mem x s
+
 (**)
 function sub (x: 'a) (s: set 'a) : set 'a
 axiom sub1: forall s: set 'a, x y: 'a.
@@ -45,6 +52,15 @@ lemma intersection_assoc: forall s1 s2 s3: set 'a.
                           intersection s1 (intersection s2 s3) = intersection (intersection s1 s2) s3
 by intersection s1 (intersection s2 s3) == intersection (intersection s1 s2) s3
 
+(**)
+predicate disjoint (s1 s2: set 'a) = forall x: 'a. mem x s1 -> not mem x s2
+lemma disjoint_contra: forall s1 s2: set 'a. disjoint s1 s2 -> disjoint s2 s1
+lemma disjoint_intersection: forall s1 s2: set 'a. disjoint s1 s2 -> intersection s1 s2 = empty_set
+by intersection s1 s2 == empty_set
+
+(**)
+predicate included (s1 s2: set 'a) = forall x: 'a. mem x s1 -> mem x s2
+lemma add_included: forall s1 s2: set 'a, x: 'a. included s1 s2 -> included (add x s1) (add x s2)
 
 (**)
 function union (s1: set 'a) (s2: set 'a) : set 'a
@@ -63,13 +79,13 @@ by union s1 (union s2 s3) == union (union s1 s2) s3
 (**)
 function diff (s1: set 'a) (s2: set 'a) : set 'a
 axiom diff1: forall s1 s2: set 'a, x: 'a.
-                     mem x (diff s1 s2) <-> mem x s1 /\ not mem x s2
+                     mem x (diff s1 s2) <-> not mem x s1 /\ mem x s2
 
 (**)
 use int.Int
 
 function size (s: set 'a) : int
-axiom size_empty_set: size (empty_set: set 'a) = 0
+axiom size_empty_set: forall s: set 'a. size s = 0 <-> s = empty_set
 axiom size_add1: forall s: set 'a, x: 'a.
                  not mem x s ->
                  size (add x s) = 1 + size s
@@ -82,48 +98,170 @@ axiom size_sub1: forall s: set 'a, x: 'a.
 axiom size_sub2: forall s: set 'a, x: 'a.
                  not mem x s ->
                  size (sub x s) = size s
+axiom disjoint_size: forall s1 s2: set 'a.
+                     disjoint s1 s2 ->
+                     size (union s1 s2) = size s1 + size s2
+axiom union_size1: forall s1 s2: set 'a.
+                     size (union s1 s2) >= size s1
+axiom union_size2: forall s1 s2: set 'a.
+                     size (union s1 s2) >= size s2
 
 
 (* defined functions *)
 function singleton (x: 'a): set 'a = add x empty_set
 
-(* for using in programs *)
-
-type set_t 'a = {
-     mutable ghost s: set 'a
-}
-
-val empty_set_t (): set_t 'a
-ensures { result.s = empty_set }
-
-exception EmptySet
-
-val pop (s: set_t 'a): 'a
-writes { s }
-requires { not is_empty_set s.s }
-ensures { s.s = sub result (old s.s)  }
-raises { EmptySet -> is_empty_set (old s.s) }
+(* *)
 
 end
 
+(**)
 
+(* theory FiniteType *)
+
+(* type ty *)
+
+(* constant set_ty: set ty *)
+(* axiom set_ty: forall x: ty. Set.mem x set_ty *)
+(* constant set_ty_size: int *)
+(* axiom set_ty_size: set_ty_size = Set.size set_ty *)
+
+(* end *)
+
+(* for using in programs *)
+
+theory SetImp
+
+use Set
+use int.Int
+
+type fset 'a = {
+     mutable ghost s: set 'a
+}
+
+val empty_set (): fset 'a
+ensures { result.s = Set.empty_set }
+
+val singleton (x: 'a): fset 'a
+ensures { result.s = Set.singleton x }
+
+val size (x: fset 'a): int
+ensures { result = Set.size x.s }
+ensures { result >= 0 }
+
+exception EmptySet
+
+val pop (s: fset 'a): 'a
+writes { s }
+requires { not Set.is_empty_set s.s }
+ensures { s.s = Set.sub result (old s.s) /\ mem result (old s.s) }
+(*raises { EmptySet -> Set.is_empty_set (old s.s) }*)
+
+val add (x: 'a) (s: fset 'a): unit
+writes { s }
+ensures { s.s = Set.add x (old s.s)  }
+
+val mem (x: 'a) (s: fset 'a): bool
+ensures { result = Set.mem x s.s }
+
+val insert (s1 s2: fset 'a): unit
+writes { s1 }
+ensures { s1.s = Set.union (old s1.s) s2.s }
+
+val remove (s1 s2: fset 'a): unit
+writes { s2 }
+ensures { s2.s = Set.diff s1.s (old s2.s) }
+
+val diff (s1 s2: fset 'a): fset 'a
+ensures { result.s = Set.diff s1.s (old s2.s) }
+
+
+use list.List
+use list.Mem
+val set_of_list (l: list 'a): fset 'a
+ensures { forall x: 'a. Mem.mem x l <-> Set.mem x result.s }
+
+end
 
 (****)
 
 theory Closure
 
-use Set
 use list.List
+use list.Mem
+use Set
+use SetImp
+use ref.Ref
+use int.Int
 
 type ty
 
+(* abbrev. ty is a finite type *)
+
+constant set_ty: set ty
+axiom set_ty: forall x: ty. Set.mem x set_ty
+constant set_ty_size: int
+axiom set_ty_size: set_ty_size = Set.size set_ty
+axiom set_ty_size2: forall s: set ty. Set.size s <= set_ty_size
+
+
+
+(* *)
+
+let rec filter_list (l: list 'a) (f: 'a -> bool): list 'a
+variant { l }
+ensures { forall x: 'a. Mem.mem x l -> f x -> Mem.mem x result }
+ensures { forall x: 'a. Mem.mem x result -> f x }
+=
+match l with
+| Nil -> Nil
+| Cons hd tl ->
+  if f hd then Cons hd (filter_list tl f) else filter_list tl f
+end
+
+(* *)
+
 let closure
     (root: ty)
-    (next_nodes: ty -> set_t ty)
-    (filter: ty -> bool): set_t ty
-
+    (next_nodes: ty -> list ty)
+    (filter: ty -> bool): fset ty
+requires { filter root }
 =
-    empty_set_t ()
+    let ref visited = empty_set () in
+    let ref result = empty_set () in
+    let ref to_visit = singleton root in
+    while size to_visit > 0 do
+    variant {  2 * set_ty_size - (2 * Set.size visited.s + Set.size to_visit.s) }
+    invariant { disjoint visited.s to_visit.s }
+    invariant { included result.s visited.s }
+    invariant { forall x: ty. mem x visited.s -> filter x }
+    invariant { forall x: ty. mem x to_visit.s -> filter x }
+    assert { not Set.is_empty_set to_visit.s };
+    label B in
+    let ref visiting = pop to_visit in
+    assert { Set.size to_visit.s = Set.size (to_visit.s at B) - 1 };
+    assert { filter visiting by mem visiting (to_visit.s at B) };
+    begin
+       label A in
+       add visiting visited;
+       assert { Set.size visited.s = Set.size (visited.s at B) + 1 };
+       assert { visited.s = add visiting (visited.s at A) };
+       if filter visiting then
+       begin
+           add visiting result;
+           assert { result.s = add visiting (result.s at A) };
+           let nexts = next_nodes visiting in
+           let filtered_nexts = filter_list nexts filter in
+           assert { forall x. Mem.mem x filtered_nexts -> filter x };
+           let s = set_of_list filtered_nexts in
+           assert { forall x. mem x s.s -> filter x };
+           let s2 = diff visited s in
+           assert { forall x. mem x s2.s -> filter x };
+           insert to_visit s2;
+           assert { Set.size to_visit.s >= Set.size (to_visit.s at A) by to_visit.s = Set.union (to_visit.s at A) s2.s };
+       end
+    end
+    done;
+    result
     
 end
 
