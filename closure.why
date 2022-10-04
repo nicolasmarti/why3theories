@@ -235,29 +235,33 @@ requires { filter root }
     invariant { included result.s visited.s }
     invariant { forall x: ty. mem x visited.s -> filter x }
     invariant { forall x: ty. mem x to_visit.s -> filter x }
-    assert { not Set.is_empty_set to_visit.s };
+    (*assert { not Set.is_empty_set to_visit.s };*)
     label B in
     let ref visiting = pop to_visit in
+    (*
     assert { Set.size to_visit.s = Set.size (to_visit.s at B) - 1 };
     assert { filter visiting by mem visiting (to_visit.s at B) };
+    *)
     begin
        label A in
        add visiting visited;
+       (*
        assert { Set.size visited.s = Set.size (visited.s at B) + 1 };
        assert { visited.s = add visiting (visited.s at A) };
+       *)
        if filter visiting then
        begin
            add visiting result;
-           assert { result.s = add visiting (result.s at A) };
+           (*assert { result.s = add visiting (result.s at A) };*)
            let nexts = next_nodes visiting in
            let filtered_nexts = filter_list nexts filter in
-           assert { forall x. Mem.mem x filtered_nexts -> filter x };
+           (*assert { forall x. Mem.mem x filtered_nexts -> filter x };*)
            let s = set_of_list filtered_nexts in
-           assert { forall x. mem x s.s -> filter x };
+           (*assert { forall x. mem x s.s -> filter x };*)
            let s2 = diff visited s in
-           assert { forall x. mem x s2.s -> filter x };
+           (*assert { forall x. mem x s2.s -> filter x };*)
            insert to_visit s2;
-           assert { Set.size to_visit.s >= Set.size (to_visit.s at A) by to_visit.s = Set.union (to_visit.s at A) s2.s };
+           (*assert { Set.size to_visit.s >= Set.size (to_visit.s at A) by to_visit.s = Set.union (to_visit.s at A) s2.s };*)
        end
     end
     done;
