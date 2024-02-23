@@ -1,0 +1,81 @@
+module RealArraySorted
+
+  use int.Int
+  use real.RealInfix
+  use array.Array
+  clone map.MapSorted as M with type elt = real, predicate le = (<=.)
+
+  predicate sorted_sub (a : array real) (l u : int) =
+    M.sorted_sub a.elts l u
+
+  predicate sorted (a : array real) =
+    M.sorted_sub a.elts 0 a.length
+
+  lemma sorted_sub_combination: forall a: array real, u l i: int.
+  	sorted_sub a u i -> sorted_sub a i l ->
+	a[i-1] <=. a[i] ->
+	sorted_sub a u l
+
+  lemma sorted_sub_pre: forall a: array real, u l: int.
+  	sorted_sub a (u+1) l -> 
+	a[u] <=. a[u+1] ->
+	sorted_sub a u l
+
+  lemma sorted_sub_pre2: forall a: array real, u l: int.
+  	sorted_sub a u l -> 
+	a[u-1] <=. a[u] ->
+	sorted_sub a (u-1) l
+
+  lemma sorted_sub_subarray: forall a: array real, u l u2 l2: int.
+  	sorted_sub a u l ->
+	u <= u2 <= l2 <= l ->
+	sorted_sub a u2 l2
+
+end
+
+module Sort
+
+use array.Array
+use array.ArrayPermut
+use int.Int
+use ref.Ref
+use array.Array
+use real.RealInfix
+use RealArraySorted
+use array.ArraySwap
+
+(*  *)
+
+let selection_sort ( a: array real ): unit
+requires { length a > 0 }
+ensures { [@expl: permutation] permut_all (old a) a }
+ensures { [@expl: increasing] sorted a }
+=
+let ref i = 1 in
+while i < length a do
+    variant { length a - i }
+    invariant { [@expl: outer bound] 0 < i <= length a }
+    invariant { [@expl: outer permut] permut_all (old a) a }
+    invariant { [@expl: outer sorted] sorted_sub a 0 i }
+    let ref j = i in
+    while 0 < j && a[j-1] >. a[j] do
+    	  variant { j }
+	  invariant { [@expl: inner bound] j <= i }
+	  
+	  invariant { [@expl: inner permut] permut_all (old a) a }
+	  invariant { [@expl: inner sorted1] sorted_sub a j (i+1) }
+	  invariant { [@expl: inner sorted2] sorted_sub a 0 j }
+	  invariant { [@expl: sub_arrays_order]
+	  	    forall k1: int. j < k1 <= i ->
+		    forall k2: int. 0 <= k2 < j ->
+		    a[k2] <=. a[k1]
+	  }
+	  
+	  label IL in swap a (j-1) j;
+	  (*assert { sorted_sub a j i };*)
+	  j := j - 1;
+	  	  
+    done;
+i := i + 1;
+done    
+end
