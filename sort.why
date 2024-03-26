@@ -3,13 +3,17 @@ module RealArraySorted
   use int.Int
   use real.RealInfix
   use array.Array
-  clone map.MapSorted as M with type elt = real, predicate le = (<=.)
+  use array.ArrayPermut
 
+  (* a[l, u[ *)
   predicate sorted_sub (a : array real) (l u : int) =
-    M.sorted_sub a.elts l u
+     forall k1 k2: int. u <= k1 <= k2 < l -> a[k1] <=. a[k2]
+     
+  predicate sorted_sub2 (a : array real) (l u : int) =
+     forall k1 k2: int. u <= k1 <= k2 <= l -> a[k1] <=. a[k2]
 
   predicate sorted (a : array real) =
-    M.sorted_sub a.elts 0 a.length
+    sorted_sub a 0 a.length
 
   lemma sorted_sub_combination: forall a: array real, u l i: int.
   	sorted_sub a u i -> sorted_sub a i l ->
@@ -31,6 +35,9 @@ module RealArraySorted
 	u <= u2 <= l2 <= l ->
 	sorted_sub a u2 l2
 
+  lemma sorted_sub: forall a: array real, l: int.
+  	sorted_sub a l l
+
 end
 
 module Sort
@@ -43,6 +50,7 @@ use array.Array
 use real.RealInfix
 use RealArraySorted
 use array.ArraySwap
+
 
 (*  *)
 
@@ -60,22 +68,84 @@ while i < length a do
     let ref j = i in
     while 0 < j && a[j-1] >. a[j] do
     	  variant { j }
-	  invariant { [@expl: inner bound] j <= i }
-	  
+	  invariant { [@expl: inner bound] j <= i }	  
 	  invariant { [@expl: inner permut] permut_all (old a) a }
 	  invariant { [@expl: inner sorted1] sorted_sub a j (i+1) }
 	  invariant { [@expl: inner sorted2] sorted_sub a 0 j }
-	  invariant { [@expl: sub_arrays_order]
-	  	    forall k1: int. j < k1 <= i ->
-		    forall k2: int. 0 <= k2 < j ->
-		    a[k2] <=. a[k1]
-	  }
-	  
 	  label IL in swap a (j-1) j;
 	  (*assert { sorted_sub a j i };*)
 	  j := j - 1;
 	  	  
     done;
 i := i + 1;
-done    
+done
+
+(**)
+
+let partition (a: array real) (l h: int): int
+requires { 0 < length a}
+requires { 0 <= l <= h < length a}
+ensures { [@expl: inbound] l <= result <= h }
+ensures { [@expl: permutation] permut_sub (old a) a l (h+1) }
+ensures { [@expl: pivot_down] forall k: int. l <= k < result -> a[k] <=. a[result] }
+ensures { [@expl: pivot_up] forall k: int. result < k <= h -> a[result] <=. a[k] }
+=
+  if l = h then return l;
+  let ref i = l in
+  for j = l to h - 1 do
+      invariant { l <= i <= j <= h }
+      invariant { [@expl: inner permutation] permut_sub (old a) a l (h+1) }      
+      invariant { [@expl: inner pivot_down] forall k: int. l <= k < i -> a[k] <=. a[h] }
+      invariant { [@expl: inner pivot_up] forall k: int. i <= k < j -> a[h] <=. a[k] }
+      if a[j] <=. a[h] then
+	 label IL in  swap a i j;
+	 assert { a[i] <=. a[h] }; (* ???? *)
+	 i := i + 1;	 
+  done;
+  swap a i h;
+  return i
+
+
+let rec qsort_sub (a: array real) (l h: int): unit
+requires { 0 <= l <= h < length a}
+ensures { [@expl: permutation] permut_sub (old a) a l (h+1) }
+ensures { [@expl: invariant down] forall k: int. 0 <= k < l -> (old a)[k] = a[k] }
+ensures { [@expl: invariant up] forall k: int. h < k < length a -> (old a)[k] = a[k] }
+ensures { [@expl: sorted] forall k1 k2: int. l <= k1 <= k2 <= h -> a[k1] <=. a[k2] }
+variant { h - l }
+=
+  if l = h then begin
+  
+     return;
+     
+  end else begin
+
+     label L0 in
+     let p = partition a l h in
+
+     assert { [@expl: test1] permut_sub (a at L0) a l (h+1) };
+
+     label L1 in
+     if l < p then begin
+     	qsort_sub a l (p-1);
+     end;
+
+     assert { [@expl: test2] permut_sub (a at L1) a l (h+1) };
+
+     label L2 in
+     if p < h then begin
+     	qsort_sub a (p+1) h;
+     end;
+
+     assert { [@expl: test3] permut_sub (a at L2) a l (h+1) };
+
+  end
+
+let rec qsort (a: array real): unit
+requires { 0 < length a}
+ensures { [@expl: sorted] forall k1 k2: int. 0 <= k1 <= k2 < length a -> a[k1] <=. a[k2] }
+ensures { [@expl: permuted] permut_all (old a) a }
+=
+ qsort_sub a 0 (length a - 1)
+
 end
